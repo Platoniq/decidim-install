@@ -69,6 +69,12 @@ sudo apt upgrade
 sudo apt autoremove
 ```
 
+Now, configure the proper timezone for your server:
+
+```bash
+sudo dpkg-reconfigure tzdata
+```
+
 Then, install some required packages:
 
 ```bash
@@ -160,3 +166,31 @@ decidim@decidim:~$ gem env home
 Great, now we have the basic server setup in place, next step is to install Decidim.
 
 ## 3. Installing Decidim
+
+Decidim uses Postgresql as a SQL database, we are going to install it in this machine (more advanced configurations will use a separate server for the database):
+
+```bash
+sudo apt install -y postgresql libpq-dev
+```
+
+We also need NodeJS as a dependency for the decidim generator, in ubuntu 18.04 it's fine to install from the repositories:
+
+```bash
+sudo apt install -y nodejs
+```
+Now, we use the decidim generator to create our application. Note that you still need the package `libpg-dev` in order tu run the decidim generator (in case you install postgress in another server).
+
+First, install the gem Decidim (this may take a while):
+
+```bash
+gem install decidim
+```
+Now, run the generator to create our app:
+
+```bash
+decidim decidim-app
+```
+
+At this point, we have created a new folder in `~/decidim-app` with our code. We need to setup the database now.
+
+work-in-progress!!!!
