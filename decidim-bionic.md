@@ -173,10 +173,10 @@ Decidim uses Postgresql as a SQL database, we are going to install it in this ma
 sudo apt install -y postgresql libpq-dev
 ```
 
-We also need NodeJS as a dependency for the decidim generator, in ubuntu 18.04 it's fine to install from the repositories:
+We also need NodeJS as a dependency for the decidim generator, in ubuntu 18.04 it's fine to install from the repositories (we also install imageMagick, used by Decidim):
 
 ```bash
-sudo apt install -y nodejs
+sudo apt install -y nodejs imagemagick
 ```
 Now, we use the decidim generator to create our application. Note that you still need the package `libpg-dev` in order tu run the decidim generator (in case you install postgress in another server).
 
@@ -193,4 +193,202 @@ decidim decidim-app
 
 At this point, we have created a new folder in `~/decidim-app` with our code. We need to setup the database now.
 
-work-in-progress!!!!
+To do that, first we create the user and password in the database:
+
+```bash
+sudo -u postgres psql -c "CREATE USER decidim_app WITH SUPERUSER CREATEDB NOCREATEROLE PASSWORD 'Password1'"
+```
+Choose a good password like I did ;)
+
+With the user created, it's time for configure Decidim to use that credentials.
+
+Because we don't want to directly store this sensitive data in the code itself, we are going to use an additional YAML file that will store all the secrets in one place. If, in the future, we want to create a Git repository with our application, we will exclude this file from the version control.
+
+In order to translate this file to the config system in Decidim, we are going to include the Ruby Gem "figaro" in our app to take care of it.
+
+First, let's change to the decidim's folder:
+
+```bash
+cd ~/decidim-app
+```
+
+Then, let's edit the `Gemfile`:
+```bash
+nano Gemfile
+```
+We will modify that file to add a "production" section with our extra Gems, we add this line before the first `group` declaration:
+
+```ruby
+gem "figaro"
+```
+
+And we will create another `group` section with the production settings that will also install some additional gems needed later on.
+
+Add add the end of the `Gemfile`:
+
+```ruby
+group :production do
+  gem "passenger"
+  gem 'delayed_job_active_record'
+  gem "daemons"
+end
+```
+
+The whole `Gemfile` should look similar to this:
+
+```ruby
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+ruby RUBY_VERSION
+
+gem "decidim", "0.13.0"
+# gem "decidim-consultations", "0.13.0"
+# gem "decidim-initiatives", "0.13.0"
+
+gem "bootsnap", "~> 1.3"
+
+gem "puma", "~> 3.0"
+gem "uglifier", "~> 4.1"
+
+gem "faker", "~> 1.8"
+
+gem "figaro"
+
+group :development, :test do
+  gem "byebug", "~> 10.0", platform: :mri
+  gem "decidim-dev", "0.13.0"
+end
+
+group :development do
+  gem "letter_opener_web", "~> 1.3"
+  gem "listen", "~> 3.1"
+  gem "spring", "~> 2.0"
+  gem "spring-watcher-listen", "~> 2.0"
+  gem "web-console", "~> 3.5"
+end
+
+group :production do
+  gem "passenger"
+  gem 'delayed_job_active_record'
+  gem "daemons"
+end
+```
+After that we need to update our app to include the extra gems, run the next command (inside the app folder):
+
+```bash
+bundle install
+```
+Now, it's time to create the configuration file with our custom values. We already have the database credentials (we've created the user before) and we need a random string that will be used by Decidim to encrypt cookies and other security stuff.
+
+Let's generate a random string by executing the command `rake secret` inside the app folder:
+
+```bash
+decidim@decidim:~/decidim-app$ cd ~/decidim-app
+decidim@decidim:~/decidim-app$ rake secret
+e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc5362dc885a7a15f671e81f7d77bc98fa4d8abfd048f829a78d7ffd33cd8b4b287
+```
+Copy that generated string and edit the new config file:
+
+```bash
+nano ~/decidim-app/config/application.yml
+```
+
+Paste inside this content:
+
+```yaml
+DATABASE_URL: postgres://decidim_app:Password1@localhost/decidim-prod
+
+SECRET_KEY_BASE: e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc5362dc885a7a15f671e81f7d77bc98fa4d8abfd048f829a78d7ffd33cd8b4b287
+```
+
+> Notes:
+> - I've named my database `decidim-prod`, change that value to whatever you want for your decidim app.
+> - Be aware that line with the with the SECRET_KEY_BASE keyword it's only ONE line and you MUST put your own generated secret (the one generated with the  `rake secret` command)
+
+Now we are going to change the 
+At this point Decidim should be able to start working. We need to initialize and update the database by doing this:
+
+```bash
+cd ~/decidim-app
+bin/rails db:create RAILS_ENV=production
+bin/rails db:migrate RAILS_ENV=production
+```
+
+The response should look something like this (quite long):
+
+```bash
+decidim@decidim:~/decidim-app$ bin/rails db:create RAILS_ENV=production
+Created database 'decidim-prod'
+decidim@decidim:~/decidim-app$ bin/rails db:migrate RAILS_ENV=production
+== 20180713145001 DeviseCreateDecidimUsers: migrating =========================
+-- adapter_name()
+   -> 0.0000s
+-- adapter_name()
+   -> 0.0000s
+-- adapter_name()
+   -> 0.0000s
+-- create_table(:decidim_users, {:id=>:integer})
+   -> 0.0056s
+...
+```
+
+Now we are going to log into the Decidim console Rails app and create our first admin user:
+
+```bash
+bin/rails console -e production
+```
+
+A new prompt will appear:
+
+```
+Loading production environment (Rails 5.2.0)
+irb(main):001:0> 
+```
+
+In there, write these **4** lines and press enter (put your email and some secure password, you will use these credentials to login into Decidim super-admin:
+
+```ruby
+email = "my-admin@email"
+password = "<a secure password>"
+user = Decidim::System::Admin.new(email: email, password: password, password_confirmation: password)
+user.save!
+```
+
+Write `quit` or press *CTRL+D* to exit the rails console.
+
+If everything went fine, a very basic Decidim installation is ready to be shown to the world. We only are one step away from the glory, that is to configure an http web server to proxy our ruby application and handle the user petitions.
+
+## 4. Installing Nginx
+
+As a web server we will use Nginx. To install Nginx execute the next commands (the first installs nginx, the others enables the public ports in the firewall, otherwise our webserver won't be accessible):
+
+```bash
+sudo apt -y install nginx
+sudo ufw allow http
+sudo ufw allow https
+```
+
+Nginx is a very fast and efficient web server but it doesn't handle Ruby applications by itself. We need and intermediary gateway for that, we will use [Passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/install_passenger.html).
+
+I'll summarize here all the commands to [install Passenger in Ubuntu 18.04](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/install_passenger.html) (follow the link to get into details):
+
+```bash
+sudo apt install -y dirmngr gnupg
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
+sudo apt install -y apt-transport-https ca-certificates
+sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger bionic main > /etc/apt/sources.list.d/passenger.list'
+sudo apt update
+sudo apt install -y libnginx-mod-http-passenger
+```
+
+---work-in-progress!!!--- 
+
+
+
+TODO:
+- setup passenger-nginx-decidim-folder
+- configure email
+- configure geocoder
+- add https
