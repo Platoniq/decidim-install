@@ -9,13 +9,15 @@ Use a clean installation, I'm using DigitalOcean for this example, you can get 2
 
 https://m.do.co/c/b5a36733f0df
 
-Then, create a 1G droplet:
+Then, create a 1G droplet (choose Ubuntu 18.04, the default is 16.04):
 
-![Create 1G droplet in digitalocean](assets/do-create.png)
+![Select droplet in Digitalocean](assets/do-select.png)
+
+![Create 1G droplet in Digitalocean](assets/do-create.png)
 
 > Once you've created the droplet, you will need a domain name, let's say you bought `my-decidim.org`, you'll need to point an **A** record in your DNS provider to the droplet public IP.
 
-Then I'll recommend you to follow the guide from digitalocean in order to secure your server (this is valid in other providers too):
+Then I'll recommend you to follow the guide from digitalocean in order to create a non-root user and secure your server (this is valid in other providers too):
 
 Follow these instructions using `decidim` instead of `sammy` as a user:
 https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04
@@ -26,7 +28,7 @@ To do that follow this tutorial as well:
 
 https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04
 
-From now one, I'll assume you have created a non-root user (with sudo capabilities) named `decidim` (but use whatever you want) and you are login in your machine, so you will see a bash prompt similar to this:
+From now one, I'll assume you have created a non-root user (with sudo capabilities) named `decidim` (but use whatever you want) and you are logged into your machine, so you will see a bash prompt similar to this:
 
 ```bash
 ssh decidim@my-decidim.org
@@ -80,7 +82,7 @@ Then, install some required packages:
 ```bash
 sudo apt-get install autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev
 ``` 
-Now, let's install ruby, by using the [rbenv](https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-16-04) method
+Now, let's install ruby, by using the [rbenv](https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-16-04) method.
 
 
 These are the commands you need to run if you follow the guide:
@@ -307,21 +309,26 @@ SECRET_KEY_BASE: e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc
 > - I've named my database `decidim-prod`, change that value to whatever you want for your decidim app.
 > - Be aware that line with the with the SECRET_KEY_BASE keyword it's only ONE line and you MUST put your own generated secret (the one generated with the  `rake secret` command)
 
-Now we are going to change the 
 At this point Decidim should be able to start working. We need to initialize and update the database by doing this:
 
 ```bash
 cd ~/decidim-app
 bin/rails db:create RAILS_ENV=production
-bin/rails db:migrate RAILS_ENV=production
+bin/rails assets:precompile db:migrate RAILS_ENV=production
 ```
 
-The response should look something like this (quite long):
+The response to the second command should look something like this (quite long), this command compiles the static assets to prepare our app for production and migrates the database:
 
 ```bash
 decidim@decidim:~/decidim-app$ bin/rails db:create RAILS_ENV=production
 Created database 'decidim-prod'
-decidim@decidim:~/decidim-app$ bin/rails db:migrate RAILS_ENV=production
+decidim@decidim:~/decidim-app$ bin/rails assets:precompile db:migrate RAILS_ENV=production
+Yarn executable was not detected in the system.
+Download Yarn at https://yarnpkg.com/en/docs/install
+I, [2018-07-16T13:10:56.442340 #32755]  INFO -- : Writing /home/decidim/decidim-app/public/assets/decidim/api/docs-3ca85e11b4f676d392a15494a0eb66962aaf08382c60a09ae3f1d7a6806a59ae.js
+
+...
+
 == 20180713145001 DeviseCreateDecidimUsers: migrating =========================
 -- adapter_name()
    -> 0.0000s
@@ -370,6 +377,8 @@ sudo ufw allow http
 sudo ufw allow https
 ```
 
+The last 2 commands are to allow the firewall (if we have it activated) let pass the http/https connection to the server. If you don't use a firewall, you can skip them.
+
 Nginx is a very fast and efficient web server but it doesn't handle Ruby applications by itself. We need and intermediary gateway for that, we will use [Passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/install_passenger.html).
 
 I'll summarize here all the commands to [install Passenger in Ubuntu 18.04](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/install_passenger.html) (follow the link to get into details):
@@ -383,12 +392,87 @@ sudo apt update
 sudo apt install -y libnginx-mod-http-passenger
 ```
 
----work-in-progress!!!--- 
+Next is to activate passanger, execute this (it's one line):
 
+```bash
+if [ ! -f /etc/nginx/modules-enabled/50-mod-http-passenger.conf ]; then sudo ln -s /usr/share/nginx/modules-available/mod-http-passenger.load /etc/nginx/modules-enabled/50-mod-http-passenger.conf ; fi
+```
 
+You can check if the file is created successfully by using `ls` on that file, it should be something similar to this:
+
+```bash
+decidim@decidim:~/decidim-app$ sudo ls /etc/nginx/conf.d/mod-http-passenger.conf
+/etc/nginx/conf.d/mod-http-passenger.conf
+```
+
+For additional checks, restart nginx:
+
+```bash
+sudo service nginx restart
+```
+
+If you run the command `passenger-config validate-install` it should give you an answer like this:
+
+```bash
+decidim@decidim:~/decidim-app$ sudo /usr/bin/passenger-config validate-install
+What would you like to validate?
+Use <space> to select.
+If the menu doesn't display correctly, press '!'
+
+ ‣ ⬢  Passenger itself
+   ⬡  Apache
+
+-------------------------------------------------------------------------
+
+ * Checking whether this Passenger install is in PATH... ✓
+ * Checking whether there are no other Passenger installations... ✓
+
+Everything looks good. :-)
+```
+
+Once Nginx & Passenger are installed, we'll configure nginx to point http(s) request to our copy of Decidim. To do that, we need to create an Nginx configuration file and setup a new virtual host with our domain (ie: my-decidim.org):
+
+Create/edit the new Nginx config file:
+
+```bash
+sudo nano /etc/nginx/sites-enabled/decidim.conf
+```
+
+Paste this inside (replace `my-decidim.org` with your own domain):
+
+```nginx
+server {
+    listen 80;
+    listen [::]:80 ipv6only=on;
+
+    server_name my-decidim.org;
+    client_max_body_size 32M;
+    
+    passenger_enabled on;
+    passenger_ruby /home/decidim/.rbenv/shims/ruby;
+
+    rails_env    production;
+    root         /home/decidim/decidim-app/public;
+}
+```
+
+Restart Nginx now:
+
+```bash
+sudo service nginx restart
+```
+
+**Done!** Decidim should be working now on our server, if you point your browser to your domain (ie: my-decidim.org) it will redirect you to the system admin interface (which is the web interface that will allow to create your first organization):
+
+![System login](assets/decidim-system.png)
+
+You can login into this administrator using the credentials you created when logged into the Rails console (`my-admin@email`).
+
+But before to do that, there are somethings that should be configured, because, right now, our system is not capable yet of sending emails (which is a basic thing).
+
+I'll cover this aspects in another file very soon, stay tuned!
 
 TODO:
-- setup passenger-nginx-decidim-folder
 - configure email
 - configure geocoder
-- add https
+- add https using let's encrypt
