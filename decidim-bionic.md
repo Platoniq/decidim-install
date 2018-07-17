@@ -32,7 +32,7 @@ From now one, I'll assume you have created a non-root user (with sudo capabiliti
 
 ```bash
 ssh decidim@my-decidim.org
-Welcome to Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-127-generic x86_64)
+Welcome to Ubuntu 18.04 LTS (GNU/Linux 4.15.0-23-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
  * Management:     https://landscape.canonical.com
@@ -43,8 +43,6 @@ Welcome to Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-127-generic x86_64)
 
 51 packages can be updated.
 31 updates are security updates.
-
-
 
 The programs included with the Ubuntu system are free software;
 the exact distribution terms for each program are described in the
@@ -470,9 +468,5 @@ You can login into this administrator using the credentials you created when log
 
 But before to do that, there are somethings that should be configured, because, right now, our system is not capable yet of sending emails (which is a basic thing).
 
-I'll cover this aspects in another file very soon, stay tuned!
+Continue this guide by setting up a [basic configuration](basic-config.md).
 
-TODO:
-- configure email
-- configure geocoder
-- add https using let's encrypt
