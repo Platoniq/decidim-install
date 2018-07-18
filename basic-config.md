@@ -30,7 +30,7 @@ Official instructions from Google are here:
 https://support.google.com/accounts/answer/6010255?hl=en
 
 
-**Option 2**, create application specific password. If you have 2-factor authentication on your Gmail account you must choose this option.
+**Option 2**, create an application specific password. If you have 2-factor authentication on your Gmail account you must choose this option.
 
 1. Go to https://security.google.com/settings/security/apppasswords
 and login using your Gmail account.
@@ -56,11 +56,11 @@ SMTP_ADDRESS: smtp.gmail.com
 SMTP_DOMAIN: gmail.com
 ```
 
-If you are using Gsuite, replace `gmail.com` with your own domain (except the line SMTP_ADDRESS).
+If you are using Gsuite, replace `gmail.com` with your own domain (except in the line SMTP_ADDRESS).
 
-Now, we need to add a processor to Ruby on Rails that will actually send the emails. There's several options here, as usuall we are going to use the simplest one. 
+Now, we need to add a processor to Ruby on Rails that will actually send the emails. There's several options here, as usually we are going to use the simplest one. 
 
-In our Gemfile (if you followed the previous guide), we added the Gem `delayed_job_active_record`, ensure that your `Gemfile` has it:
+In our Gemfile (if you followed the previous guide), we added the Gem `delayed_job_active_record`, ensure that your `Gemfile` has it along with the `daemons` gem:
 
 ```ruby
 group :production do
@@ -79,7 +79,7 @@ bin/rails generate delayed_job:active_record
 bin/rake db:migrate
 ```
 
-Now, if you are using IPv6 in our system, you may encounter problems sending emails via external smtp servers. If you don't need IPv6 (if you don't know chances are that you don't), I'd recommend to disable it. To do that edit the file `/etc/sysctl.conf`:
+Now, if you are using IPv6 in your system, you may encounter problems sending emails via external smtp servers (at least with Gmail). If you don't need IPv6 (if you don't know, chances are that you don't), I'd recommend to disable it. To do that edit the file `/etc/sysctl.conf`:
 
 ```nano
 sudo nano /etc/sysctl.conf
@@ -94,7 +94,7 @@ net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1
 ```
 
-Apply the changes to our system:
+Apply the changes to the system:
 
 ```bash
 sudo sysctl -p

@@ -411,7 +411,7 @@ sudo service nginx restart
 
 If you run the command `passenger-config validate-install` it should give you an answer like this:
 
-```bash
+```
 decidim@decidim:~/decidim-app$ sudo /usr/bin/passenger-config validate-install
 What would you like to validate?
 Use <space> to select.
@@ -426,6 +426,23 @@ If the menu doesn't display correctly, press '!'
  * Checking whether there are no other Passenger installations... ✓
 
 Everything looks good. :-)
+```
+
+If the output complains about having 2 copies of passenger installed, then passenger may be using the wrong copy of it.
+
+Let's ensure everything is ok by editing the file `/etc/nginx/conf.d/mod-http-passenger.conf`:
+
+```bash
+sudo nano /etc/nginx/conf.d/mod-http-passenger.conf
+```
+
+And be sure that the line that contains `passenger_ruby` points to our `.rbenv` ruby folder, the whole file should look like this:
+
+```nginx
+### Begin automatically installed Phusion Passenger config snippet ###
+passenger_root /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;
+passenger_ruby /home/decidim/.rbenv/shims/ruby;
+### End automatically installed Phusion Passenger config snippet ###
 ```
 
 Once Nginx & Passenger are installed, we'll configure nginx to point http(s) request to our copy of Decidim. To do that, we need to create an Nginx configuration file and setup a new virtual host with our domain (ie: my-decidim.org):
