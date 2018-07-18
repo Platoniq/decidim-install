@@ -112,12 +112,54 @@ Our system should be ready now, we can go to our Decidim `URL/system` login with
 
 Once created you can start using Decidim, next steps are optional (but recommended).
 
+### Debugging email problems
+
+If you're your Decidim is not sending mails you need to find out the cause. Decidim has a log file, in our case it's placed in the folder `log` in our installation folder. 
+
+You can follow "live" everything that happens using the `tail` command:
+
+```bash
+tail ~/decidim-app/log/production.log -f
+```
+(Press CTRL-C to exit)
+
+But we are interested in finding errors while sending emails, you can do it with grep:
+
+```bash
+grep ERROR ~/decidim-app/log/production.log -A3 -B3
+```
+
+If that gives you some results you may want to post an issue with the info.
+
+For example, if you see something like this:
+
+```
+----==_mimepart_5b4f1d00c0e07_4b232aceae7075f418469--
+
+E, [2018-07-18T12:57:34.801540 #19235] ERROR -- : [ActiveJob] [ActionMailer::DeliveryJob] [a0572a5f-6ed3-45dd-bc24-3568bc6f665b] Error performing ActionMailer::DeliveryJob (Job ID: a0572a5f-6ed3-45dd-bc24-3568bc6f665b) from Async(mailers) in 30203.2ms: Net::OpenTimeout (execution expired):
+/home/decidim/.rbenv/versions/2.5.1/lib/ruby/2.5.0/net/smtp.rb:539:in `initialize'
+/home/decidim/.rbenv/versions/2.5.1/lib/ruby/2.5.0/net/smtp.rb:539:in `open'
+```
+
+Then, you are probably suffering the IPv6 problem commented before.
+
+Setting up Oauth authentication
+-------------------------------
+
+By configuring OAuth, you'll be able to log into your installation of Decidim by using some well known providers, like Facebook, Google or Twitter.
+
+... coming soon ...
+
 Geolocation configuration
 -------------------------
 
+Configuring geolocation allows to specify real addresses and display the locations of meetings in maps.
+
 ... coming soon...
 
-Enabling SSL (with let's encrypt)
+Enabling SSL (with Let's encrypt)
 ---------------------------------
+
+SSL ensures that you offer a secure site to your users (URL will start with `https://`) and the browsers won't annoy you with that "insecure page" message.
 
 ... coming soon...
