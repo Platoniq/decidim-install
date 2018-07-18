@@ -152,18 +152,134 @@ Setting up Oauth authentication
 
 By configuring OAuth, you'll be able to log into your installation of Decidim by using some well known providers, like Facebook, Google or Twitter.
 
-... coming soon ...
+You can just follow the [original documentation](https://github.com/decidim/decidim/blob/master/docs/services/social_providers.md) from the core team of Decidim, but as we are using the gem `figaro` we'll modify the file `config/application.yml` instead of `config/secrets.yml`.
+
+These are the original instructions tweaked to match our configuration:
+
+### Facebook
+
+1. Navigate to [Facebook Developers Page](https://developers.facebook.com/)
+1. Follow the "Add a New App" link.
+1. Click the "Website" option.
+1. Fill in your application name and click "Create New Facebook App ID" button.
+1. Fill in the contact email info and category.
+1. Validate the captcha.
+1. Ignore the source code and fill in the URL field with `https://YOUR_DECIDIM_HOST/users/auth/facebook/callback`
+1. Navigate to the application dashboard and copy the APP_ID and APP_SECRET
+
+### Twitter
+
+1. Navigate to [Twitter Developers Page](https://dev.twitter.com/)
+1. Follow the "My apps" link.
+1. Click the "Create New App" button.
+1. Fill in the `Name`, `Description` fields.
+1. Fill in the `Website` and `Callback URL` fields with the same value. If you are working on a development app you need to use `http://127.0.0.1:3000/` instead of `http://localhost:3000/`.
+1. Check the 'Developer Agreement' checkbox and click the 'Create your Twitter application' button.
+1. Navigate to the "Keys and Access Tokens" tab and copy the API_KEY and API_SECRET.
+1. (Optional) Navigate to the "Permissions" tab and check the "Request email addresses from users" checkbox.
+
+
+### Google
+
+1. Navigate to [Google Developers Page](https://console.developers.google.com)
+1. Follow the 'Create projecte' link.
+1. Fill in the name of your app.
+1. Navigate to the projecte dashboard and click on "Enable API"
+1. Click on `Google+ API` and then "Enable"
+1. Navigate to the project credentials page and click on `OAuth consent screen`.
+1. Fill in the `Product name` field
+1. Click on `Credentials` tab and click on "Create credentials" button. Select `OAuth client ID`.
+1. Select `Web applications`. Fill in the `Authorized Javascript origins` with your url. Then fill in the `Authorized redirect URIs` with your url and append the path `/users/auth/google_oauth2/callback`.
+1. Copy the CLIENT_ID AND CLIENT_SECRET
+
+### Common steps
+
+Once you've created your desired applications in the providers you want. You need to activate the variable `enabled` in the file `config/secrets.yml` for each configured service.
+
+For instance, if we want the Facebook login, we need to edit the secion "default/ommiauth/facebook":
+
+```bash
+nano ~/decidim-app/config/secrets.yml
+```
+
+We will make sure it looks like this:
+
+```yaml
+...
+default: &default
+  omniauth:
+    facebook:
+      # It must be a boolean. Remember ENV variables doesn't support booleans.
+      enabled: true
+      app_id: <%= ENV["OMNIAUTH_FACEBOOK_APP_ID"] %>
+      app_secret: <%= ENV["OMNIAUTH_FACEBOOK_APP_SECRET"] %>
+...
+```
+
+Repeat the process for every service you want.
+
+After that we need to add the env vars to our `config/application.yml` file:
+
+```bash
+nano ~/decidim-app/config/application.yml
+```
+
+Add the lines you need according to your services:
+
+```yaml
+# if you've enable facebook:
+OMNIAUTH_FACEBOOK_APP_ID: <your-facebook-app-id>
+OMNIAUTH_FACEBOOK_APP_SECRET: <your-facebook-app-secret>
+# if twitter:
+OMNIAUTH_TWITTER_API_KEY: <your-twitter-api-key>
+OMNIAUTH_TWITTER_API_SECRET: <your-twitter-api-secret>
+# if google:
+OMNIAUTH_GOOGLE_CLIENT_ID: <your-google-client-id>
+OMNIAUTH_GOOGLE_CLIENT_SECRET: <your-google-client-secret>
+```
+
+Restart passenger and you're done:
+
+```bash
+sudo passenger-config restart-app ~/decidim-app
+```
 
 Geolocation configuration
 -------------------------
 
 Configuring geolocation allows to specify real addresses and display the locations of meetings in maps.
 
-... coming soon...
+The easiest way to setup geolocation is to create an account hi [Here Maps](https://www.here.com/en). Open next URL in your browser and register a developer account there:
+
+https://developer.here.com/?create=Evaluation&keepState=true&step=account
+
+Then obtain your API ID and Code from there, you should look for a place like this:
+
+![Here Maps Api details](assets/here-api-key.png)
+
+Now edit your `config/application.yml` again:
+
+```bash
+nano ~/decidim-app/config/application.yml
+```
+
+And place these new extra lines at the bottom of the file:
+
+```yaml
+GEOCODER_LOOKUP_APP_ID: <your-App-ID>
+GEOCODER_LOOKUP_APP_CODE: <your-App-Code>
+```
+Restart passenger and you're ready to use maps geolocation in Decidim:
+
+```bash
+sudo passenger-config restart-app ~/decidim-app
+```
 
 Enabling SSL (with Let's encrypt)
 ---------------------------------
 
 SSL ensures that you offer a secure site to your users (URL will start with `https://`) and the browsers won't annoy you with that "insecure page" message.
 
-... coming soon...
+You can follow [this guide from DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04) to configure Nginx with Let's Encrypt, here are the steps sumarized:
+
+... todo ...
