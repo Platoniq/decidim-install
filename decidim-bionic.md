@@ -226,7 +226,7 @@ gem "figaro"
 
 And we will create another `group` section with the production settings that will also install some additional gems needed later on.
 
-Add add the end of the `Gemfile`:
+Add at the end of the `Gemfile`:
 
 ```ruby
 group :production do
