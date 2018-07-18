@@ -58,6 +58,10 @@ SMTP_DOMAIN: gmail.com
 
 If you are using Gsuite, replace `gmail.com` with your own domain (except in the line SMTP_ADDRESS).
 
+> If you are using some other SMTP configuration you have more parameters to tweak under the file `config/secrets.yml`
+>
+> Check the section `production` on that file (for example, you may want to change the default port from `587` to `465`, `25`, etc)
+
 Now, we need to add a processor to Ruby on Rails that will actually send the emails. There's several options here, as usually we are going to use the simplest one. 
 
 In our Gemfile (if you followed the previous guide), we added the Gem `delayed_job_active_record`, ensure that your `Gemfile` has it along with the `daemons` gem:
