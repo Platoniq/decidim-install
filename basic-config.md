@@ -147,10 +147,113 @@ E, [2018-07-18T12:57:34.801540 #19235] ERROR -- : [ActiveJob] [ActionMailer::Del
 
 Then, you are probably suffering the IPv6 problem commented before.
 
+
+Enabling SSL (with Let's encrypt)
+---------------------------------
+
+Although this is not mandatory in order to have Decidim working, in a practical way it is: SSL will give your users trust and it's free nowadays.
+
+SSL ensures that you offer a secure site to your users (URL will start with `https://`) and the browsers won't annoy you with that "insecure page" message.
+
+You can follow [this guide from DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04) to configure Nginx with Let's Encrypt, here are the steps summarized:
+
+We are going to use the official Certbot from the [Let's Encrypt](https://letsencrypt.org/) project.
+
+First, we install the latests version with these commands:
+
+```bash
+sudo add-apt-repository -y ppa:certbot/certbot
+sudo apt install -y python-certbot-nginx
+```
+
+The original guide has now some step to check our domain name and our firewall configuration, if you've followed the [previous tutorial](decidim-bionic.md) we have this already covered.
+
+So, let's run the certbot script (change `my-decidim.org` with your own full URL):
+
+```bash
+sudo certbot --nginx -d my-decidim.org
+```
+
+You will have to answer 3 questions (write your email, accept the terms and choose if you want to be included in their newsletter). Once the script has collected your certificate, it will ask you if you want to redirect all `http` to `https`, I recommend to choose *yes* here so no further configuration will be needed in our Decidim install.
+
+The output of the full command should be like this:
+
+```
+decidim@decidim:~$ sudo certbot --nginx -d my-decidim.org
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Plugins selected: Authenticator nginx, Installer nginx
+Enter email address (used for urgent renewal and security notices) (Enter 'c' to
+cancel): ivan@platoniq.net
+
+-------------------------------------------------------------------------------
+Please read the Terms of Service at
+https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf. You must
+agree in order to register with the ACME server at
+https://acme-v01.api.letsencrypt.org/directory
+-------------------------------------------------------------------------------
+(A)gree/(C)ancel: A
+
+-------------------------------------------------------------------------------
+Would you be willing to share your email address with the Electronic Frontier
+Foundation, a founding partner of the Let's Encrypt project and the non-profit
+organization that develops Certbot? We'd like to send you email about our work
+encrypting the web, EFF news, campaigns, and ways to support digital freedom.
+-------------------------------------------------------------------------------
+(Y)es/(N)o: Y
+Obtaining a new certificate
+Performing the following challenges:
+http-01 challenge for my-decidim.org
+Waiting for verification...
+Cleaning up challenges
+Deploying Certificate to VirtualHost /etc/nginx/sites-enabled/decidim.conf
+
+Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.
+-------------------------------------------------------------------------------
+1: No redirect - Make no further changes to the webserver configuration.
+2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for
+new sites, or if you're confident your site works on HTTPS. You can undo this
+change by editing your web server's configuration.
+-------------------------------------------------------------------------------
+Select the appropriate number [1-2] then [enter] (press 'c' to cancel): 2
+Redirecting all traffic on port 80 to ssl in /etc/nginx/sites-enabled/decidim.conf
+
+-------------------------------------------------------------------------------
+Congratulations! You have successfully enabled https://my-decidim.org
+
+You should test your configuration at:
+https://www.ssllabs.com/ssltest/analyze.html?d=my-decidim.org
+-------------------------------------------------------------------------------
+
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/my-decidim.org/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/my-decidim.org/privkey.pem
+   Your cert will expire on 2018-10-17. To obtain a new or tweaked
+   version of this certificate in the future, simply run certbot again
+   with the "certonly" option. To non-interactively renew *all* of
+   your certificates, run "certbot renew"
+ - Your account credentials have been saved in your Certbot
+   configuration directory at /etc/letsencrypt. You should make a
+   secure backup of this folder now. This configuration directory will
+   also contain certificates and private keys obtained by Certbot so
+   making regular backups of this folder is ideal.
+ - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
+```
+
+The script also creates an entry in the crontab system to renew automatically the certificate every 3 months. Read the [original guide](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04) for more details.
+
+What now? nothing! that's it! you can point your browser to your URL and will see how your Decidim is served securely.
+
 Setting up Oauth authentication
 -------------------------------
 
 By configuring OAuth, you'll be able to log into your installation of Decidim by using some well known providers, like Facebook, Google or Twitter.
+
+I highly recommend to configure SSL before get into this step. You'll need to tell the providers about your full URL and that includes the `https://` part.
 
 You can just follow the [original documentation](https://github.com/decidim/decidim/blob/master/docs/services/social_providers.md) from the core team of Decidim, but as we are using the gem `figaro` we'll modify the file `config/application.yml` instead of `config/secrets.yml`.
 
@@ -274,12 +377,3 @@ Restart passenger and you're ready to use maps geolocation in Decidim:
 ```bash
 sudo passenger-config restart-app ~/decidim-app
 ```
-
-Enabling SSL (with Let's encrypt)
----------------------------------
-
-SSL ensures that you offer a secure site to your users (URL will start with `https://`) and the browsers won't annoy you with that "insecure page" message.
-
-You can follow [this guide from DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04) to configure Nginx with Let's Encrypt, here are the steps sumarized:
-
-... todo ...
