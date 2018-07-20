@@ -83,6 +83,25 @@ bin/rails generate delayed_job:active_record
 bin/rake db:migrate
 ```
 
+At this point, our system should be able to send emails, however, there's and additional file that should be configured to specify our "FROM" sender field. This is specially important if you don't use Gmail, because Gmail always overwrite that field to match the sender account.
+
+So, edit the file `config/initializers/decidim.rb` and change the values `My Application Name` and `change-me@domain.org` values to match your own ones:
+
+```bash
+cd ~/decidim-app
+nano config/initializers/decidim.rb
+```
+
+Search for these lines and change them to match your own values:
+
+```ruby
+...
+Decidim.configure do |config|
+  config.application_name = "My Application Name"
+  config.mailer_sender = "change-me@domain.org"
+...
+```
+
 Now, if you are using IPv6 in your system, you may encounter problems sending emails via external smtp servers (at least with Gmail). If you don't need IPv6 (if you don't know, chances are that you don't), I'd recommend to disable it. To do that edit the file `/etc/sysctl.conf`:
 
 ```nano

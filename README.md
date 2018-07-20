@@ -19,14 +19,20 @@ Feel free to create issues or pull requests if you encounter errors or want to m
 
 ### Official resources
 
-- [Decidim source code](https://github.com/decidim/decidim), Find here the official documentation.
+- [Decidim official documentation](https://decidim.org/docs/), Happy to say that this guide is linked there!
+
+- [Decidim source code](https://github.com/decidim/decidim), There's additional documentation here (dive into the `docs/` folder).
 
 - [Edu Decidim](https://edu.decidim.org/) Community using Decidim with resources to successfully use Decidim.
 
 - [Meta Decidim](https://meta.decidim.org) Community using Decidim to make decisions about the software itself.
 
 @Author<br>
-Ivan Vergés
+Ivan Vergés<br>
+Twitter @ivanverges
+
+@Thanks to<br>
+Robert Garrigós for testing and point improvements to this guide, Guillem Marpons and the rest of the Decidim team for their encouragement and support.
 
 @License<br>
 AGPL 3.0
