@@ -298,13 +298,13 @@ nano ~/decidim-app/config/application.yml
 Paste inside this content:
 
 ```yaml
-DATABASE_URL: postgres://decidim_app:Password1@localhost/decidim-prod
+DATABASE_URL: postgres://decidim_app:Password1@localhost/decidim_prod
 
 SECRET_KEY_BASE: e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc5362dc885a7a15f671e81f7d77bc98fa4d8abfd048f829a78d7ffd33cd8b4b287
 ```
 
 > Notes:
-> - I've named my database `decidim-prod`, change that value to whatever you want for your decidim app.
+> - I've named my database `decidim_prod`, change that value to whatever you want for your decidim app.
 > - Be aware that line with the with the SECRET_KEY_BASE keyword it's only ONE line and you MUST put your own generated secret (the one generated with the  `rake secret` command)
 
 At this point Decidim should be able to start working. We need to initialize and update the database by doing this:
@@ -319,7 +319,7 @@ The response to the second command should look something like this (quite long),
 
 ```bash
 decidim@decidim:~/decidim-app$ bin/rails db:create RAILS_ENV=production
-Created database 'decidim-prod'
+Created database 'decidim_prod'
 decidim@decidim:~/decidim-app$ bin/rails assets:precompile db:migrate RAILS_ENV=production
 Yarn executable was not detected in the system.
 Download Yarn at https://yarnpkg.com/en/docs/install
