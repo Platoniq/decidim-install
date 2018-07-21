@@ -28,7 +28,7 @@ To do that follow this tutorial as well:
 
 https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04
 
-From now one, I'll assume you have created a non-root user (with sudo capabilities) named `decidim` (but use whatever you want) and you are logged into your machine, so you will see a bash prompt similar to this:
+From now on, I'll assume you have created a non-root user (with sudo capabilities) named `decidim` (but use whatever you want) and you are logged into your machine, so you will see a bash prompt similar to this:
 
 ```bash
 ssh decidim@my-decidim.org
@@ -80,7 +80,7 @@ Then, install some required packages:
 ```bash
 sudo apt-get install autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev
 ``` 
-Now, let's install ruby, by using the [rbenv](https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-16-04) method.
+Now, let's install ruby, by using the [rbenv](https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-18-04) method.
 
 
 These are the commands you need to run if you follow the guide:
@@ -162,7 +162,33 @@ Again, you can test if everything is ok so far by running the command `gem evn h
 decidim@decidim:~$ gem env home
 /home/decidim/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0
 ```
+Once you have gems set up, you can install Rails.
 
+To install the most recent version of Rails, use the ```gem install``` command:
+
+```
+gem install rails
+```
+The ```gem``` command installs the gem you specify, as well as every dependency. Rails is a complex web development framework and has many dependencies, so the process will take some time to complete. Eventually you'll see a message stating that Rails is installed. along with its dependencies:
+
+```Output
+...
+Successfully installed rails-5.2.0
+38 gems installed
+```
+Whenever you install a new version of Ruby or a gem that provides commands, like Rails does, you should run:
+
+```rbenv rehash```
+
+Verify that Rails has been installed properly by printing its version, with this command:
+
+```rails -v```
+
+If it installed properly, you will see the version of Rails that was installed:
+
+```Output
+Rails 5.2.0
+```
 Great, now we have the basic server setup in place, next step is to install Decidim.
 
 ## 3. Installing Decidim
