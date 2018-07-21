@@ -83,7 +83,7 @@ bin/rails generate delayed_job:active_record
 bin/rake db:migrate
 ```
 
-At this point, our system should be able to send emails, however, there's and additional file that should be configured to specify our "FROM" sender field. This is specially important if you don't use Gmail, because Gmail always overwrite that field to match the sender account.
+At this point, our system should be able to send emails, however, there's and additional file that should be configured to specify our "FROM" sender field. This is specially important if you don't use Gmail, because Gmail always overwrites that field to match the sender account.
 
 So, edit the file `config/initializers/decidim.rb` and change the values `My Application Name` and `change-me@domain.org` values to match your own ones:
 
