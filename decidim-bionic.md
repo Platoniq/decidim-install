@@ -226,7 +226,7 @@ sudo -u postgres psql -c "CREATE USER decidim_app WITH SUPERUSER CREATEDB NOCREA
 ```
 Choose a good password like I did ;)
 
-With the user created, it's time for configure Decidim to use that credentials.
+With the user created, it's time for configure Decidim to use these credentials.
 
 Because we don't want to directly store this sensitive data in the code itself, we are going to use an additional YAML file that will store all the secrets in one place. If, in the future, we want to create a Git repository with our application, we will exclude this file from the version control.
 
