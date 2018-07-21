@@ -335,7 +335,7 @@ SECRET_KEY_BASE: e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc
 
 > Notes:
 > - I've named my database `decidim_prod`, change that value to whatever you want for your decidim app.
-> - Be aware that line with the with the SECRET_KEY_BASE keyword it's only ONE line and you MUST put your own generated secret (the one generated with the  `rake secret` command)
+> - Be aware that line with the with the SECRET_KEY_BASE keyword is only ONE line and you MUST put your own generated secret (the one generated with the  `rake secret` command)
 
 At this point Decidim should be able to start working. We need to initialize and update the database by doing this:
 
