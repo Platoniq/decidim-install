@@ -83,7 +83,7 @@ bin/rails generate delayed_job:active_record
 bin/rake db:migrate
 ```
 
-At this point, our system should be able to send emails, however, there's and additional file that should be configured to specify our "FROM" sender field. This is specially important if you don't use Gmail, because Gmail always overwrite that field to match the sender account.
+At this point, our system should be able to send emails, however, there's and additional file that should be configured to specify our "FROM" sender field. This is specially important if you don't use Gmail, because Gmail always overwrites that field to match the sender account.
 
 So, edit the file `config/initializers/decidim.rb` and change the values `My Application Name` and `change-me@domain.org` values to match your own ones:
 
@@ -265,7 +265,7 @@ IMPORTANT NOTES:
 
 The script also creates an entry in the crontab system to renew automatically the certificate every 3 months. Read the [original guide](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04) for more details.
 
-What now? nothing! that's it! you can point your browser to your URL and will see how your Decidim is served securely.
+What now? Nothing! That's it! You can point your browser to your URL and will see how your Decidim is served securely.
 
 Setting up Oauth authentication
 -------------------------------
@@ -349,7 +349,7 @@ nano ~/decidim-app/config/application.yml
 Add the lines you need according to your services:
 
 ```yaml
-# if you've enable facebook:
+# if you've enabled facebook:
 OMNIAUTH_FACEBOOK_APP_ID: <your-facebook-app-id>
 OMNIAUTH_FACEBOOK_APP_SECRET: <your-facebook-app-secret>
 # if twitter:
