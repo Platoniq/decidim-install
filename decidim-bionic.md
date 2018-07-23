@@ -28,7 +28,7 @@ To do that follow this tutorial as well:
 
 https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04
 
-From now one, I'll assume you have created a non-root user (with sudo capabilities) named `decidim` (but use whatever you want) and you are logged into your machine, so you will see a bash prompt similar to this:
+From now on, I'll assume you have created a non-root user (with sudo capabilities) named `decidim` (but use whatever you want) and you are logged into your machine, so you will see a bash prompt similar to this:
 
 ```bash
 ssh decidim@my-decidim.org
@@ -80,7 +80,7 @@ Then, install some required packages:
 ```bash
 sudo apt-get install autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev
 ``` 
-Now, let's install ruby, by using the [rbenv](https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-16-04) method.
+Now, let's install ruby, by using the [rbenv](https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-18-04) method.
 
 
 These are the commands you need to run if you follow the guide:
@@ -200,7 +200,7 @@ sudo -u postgres psql -c "CREATE USER decidim_app WITH SUPERUSER CREATEDB NOCREA
 ```
 Choose a good password like I did ;)
 
-With the user created, it's time for configure Decidim to use that credentials.
+With the user created, it's time for configure Decidim to use these credentials.
 
 Because we don't want to directly store this sensitive data in the code itself, we are going to use an additional YAML file that will store all the secrets in one place. If, in the future, we want to create a Git repository with our application, we will exclude this file from the version control.
 
@@ -305,7 +305,7 @@ SECRET_KEY_BASE: e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc
 
 > Notes:
 > - I've named my database `decidim_prod`, change that value to whatever you want for your decidim app.
-> - Be aware that line with the with the SECRET_KEY_BASE keyword it's only ONE line and you MUST put your own generated secret (the one generated with the  `rake secret` command)
+> - Be aware that line with the with the SECRET_KEY_BASE keyword is only ONE line and you MUST put your own generated secret (the one generated with the  `rake secret` command)
 
 At this point Decidim should be able to start working. We need to initialize and update the database by doing this:
 
