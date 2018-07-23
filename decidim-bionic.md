@@ -162,37 +162,6 @@ Again, you can test if everything is ok so far by running the command `gem evn h
 decidim@decidim:~$ gem env home
 /home/decidim/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0
 ```
-Once you have gems set up, you can install Rails.
-
-To install the most recent version of Rails, use the ```gem install``` command:
-
-```bash
-gem install rails
-```
-The ```gem``` command installs the gem you specify, as well as every dependency. Rails is a complex web development framework and has many dependencies, so the process will take some time to complete. Eventually you'll see a message stating that Rails is installed. along with its dependencies:
-
-```Output
-...
-Successfully installed rails-5.2.0
-38 gems installed
-```
-Whenever you install a new version of Ruby or a gem that provides commands, like Rails does, you should run:
-
-```bash
-rbenv rehash
-```
-
-Verify that Rails has been installed properly by printing its version, with this command:
-
-```bash
-rails -v
-```
-
-If it installed properly, you will see the version of Rails that was installed:
-
-```Output
-Rails 5.2.0
-```
 Great, now we have the basic server setup in place, next step is to install Decidim.
 
 ## 3. Installing Decidim
