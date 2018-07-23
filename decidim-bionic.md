@@ -162,6 +162,7 @@ Again, you can test if everything is ok so far by running the command `gem evn h
 decidim@decidim:~$ gem env home
 /home/decidim/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0
 ```
+
 Great, now we have the basic server setup in place, next step is to install Decidim.
 
 ## 3. Installing Decidim
