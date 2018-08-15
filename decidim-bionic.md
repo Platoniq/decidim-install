@@ -390,7 +390,7 @@ sudo apt update
 sudo apt install -y libnginx-mod-http-passenger
 ```
 
-Next is to activate passanger, execute this (it's one line):
+Next is to activate passenger, execute this (it's one line):
 
 ```bash
 if [ ! -f /etc/nginx/modules-enabled/50-mod-http-passenger.conf ]; then sudo ln -s /usr/share/nginx/modules-available/mod-http-passenger.load /etc/nginx/modules-enabled/50-mod-http-passenger.conf ; fi
