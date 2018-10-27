@@ -156,7 +156,7 @@ echo "gem: --no-document" > ~/.gemrc
 gem install bundler
 ```
 
-Again, you can test if everything is ok so far by running the command `gem evn home`
+Again, you can test if everything is ok so far by running the command `gem env home`
 
 ```bash
 decidim@decidim:~$ gem env home
