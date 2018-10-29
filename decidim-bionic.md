@@ -54,7 +54,7 @@ applicable law.
 To run a command as administrator (user "root"), use "sudo <command>".
 See "man sudo_root" for details.
 
-decidim@decidim:~$ 
+decidim@decidim:~$
 ```
 
 Great, we have our server up and running. Now we install the required packages before installing decidim:
@@ -79,7 +79,7 @@ Then, install some required packages:
 
 ```bash
 sudo apt-get install autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev
-``` 
+```
 Now, let's install ruby, by using the [rbenv](https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-18-04) method.
 
 
@@ -97,14 +97,14 @@ Now you should check if you have rbenv correctly installed, running the command 
 ```bash
 decidim@decidim:~$ type rbenv
 rbenv is a function
-rbenv () 
-{ 
+rbenv ()
+{
     local command;
     command="${1:-}";
     if [ "$#" -gt 0 ]; then
         shift;
     fi;
-    case "$command" in 
+    case "$command" in
         rehash | shell)
             eval "$(rbenv "sh-$command" "$@")"
         ;;
@@ -243,9 +243,9 @@ source "https://rubygems.org"
 
 ruby RUBY_VERSION
 
-gem "decidim", "0.13.0"
-# gem "decidim-consultations", "0.13.0"
-# gem "decidim-initiatives", "0.13.0"
+gem "decidim", "0.14.0"
+# gem "decidim-consultations", "0.14.0"
+# gem "decidim-initiatives", "0.14.0"
 
 gem "bootsnap", "~> 1.3"
 
@@ -258,7 +258,7 @@ gem "figaro"
 
 group :development, :test do
   gem "byebug", "~> 10.0", platform: :mri
-  gem "decidim-dev", "0.13.0"
+  gem "decidim-dev", "0.14.0"
 end
 
 group :development do
@@ -303,9 +303,20 @@ DATABASE_URL: postgres://decidim_app:Password1@localhost/decidim_prod
 SECRET_KEY_BASE: e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc5362dc885a7a15f671e81f7d77bc98fa4d8abfd048f829a78d7ffd33cd8b4b287
 ```
 
-> Notes:
+> **Notes:**
 > - I've named my database `decidim_prod`, change that value to whatever you want for your decidim app.
 > - Be aware that line with the with the SECRET_KEY_BASE keyword is only ONE line and you MUST put your own generated secret (the one generated with the  `rake secret` command)
+>
+> **👉 Going pro** (optional):
+> - Now it's a good time to initialize your installation as a GIT repository.
+> - This will allow to keep track of your changes and revert them is something goes wrong.
+> - This is optional, basically you need to execute:
+> ```bash
+> cd ~/decidim-app
+> git init .
+> git commit -m "Initial commit. Generated with Decidim 0.X https://decidim.org"
+> ```
+> - After that you should create commits everytime you make a relevant change.
 
 At this point Decidim should be able to start working. We need to initialize and update the database by doing this:
 
@@ -349,7 +360,7 @@ A new prompt will appear:
 
 ```
 Loading production environment (Rails 5.2.0)
-irb(main):001:0> 
+irb(main):001:0>
 ```
 
 In there, write these **4** lines and press enter (put your email and some secure password, you will use these credentials to login into Decidim super-admin:
@@ -462,7 +473,7 @@ server {
 
     server_name my-decidim.org;
     client_max_body_size 32M;
-    
+
     passenger_enabled on;
     passenger_ruby /home/decidim/.rbenv/shims/ruby;
 
