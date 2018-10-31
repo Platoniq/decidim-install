@@ -446,3 +446,38 @@ git push
 eb deploy
 ```
 
+## 6. Further configuration
+
+We've successfully deploy our Decidim copy in ElasticBeanstalk, but to really be able to use it, we need to provide fully qualified domain name and configure the most basic things. Similar as the [original guide](decidim-bionic.md) but with some particularities regarding EB ans AWS.
+
+### 6.1 Set the domain in EB
+
+There's 2 ways to go, the first (easiest) is to use the service Route53 from AWS that let's you register the domain and configure it according to [this guide](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customdomains.html).
+
+The second is to use an external provider (ie: if you already have a domain). In this case we should follow these steps:
+
+1. Login to your Domain register provider
+1. Go to your DNS records administration
+1. Add a CNAME record `www` that points to your environment just created (the same where your browser goes when you execute the command `eb open`). Something like `production.k*********.eu-west-1.elasticbeanstalk.com`
+1. Redirect the main domain to the `www` one (if you want to).
+
+If you are using [Cloudflare](https://clourflare.org) it should be something like:
+
+![Cloudflare DNS](assets/aws/cloudflare.png)
+
+### 6.2 Configure SSL
+
+TODO
+
+### 6.3 Create the first admin user
+
+TODO
+
+### 6.4 Setup email
+
+TODO
+
+### 6.5 Configure the job system with Sidekiq and Redis
+
+TODO
+
