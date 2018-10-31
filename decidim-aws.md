@@ -532,6 +532,37 @@ Done, now all petitions to `http://` will redirect to `https://`
 
 We didn't seed any data to our installation, so we need at least one system user in order to configure our first organization. Also, we cannot access our PostgreSQL database directly, so these are the steps:
 
+First we need lo log into production machine via ssh, we do that with this command:
+
+```bash
+eb ssh
+```
+
+Once inside, we change to the app working dir:
+
+```bash
+cd /var/app/current/
+```
+
+Then, log into the rails console:
+
+```bash
+bin/rails console
+```
+
+And create the user:
+
+```ruby
+email = "my-admin@email"
+password = "<a secure password>"
+user = Decidim::System::Admin.new(email: email, password: password, password_confirmation: password)
+user.save!
+```
+Write `quit` or press *CTRL+D* to exit the rails console.
+
+Write `exit` to return to your computer.
+
+You can log now with this user into your https://your-domain.com/system and create your organization.
 
 
 ### 6.4 Setup email
