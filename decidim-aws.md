@@ -467,11 +467,72 @@ If you are using [Cloudflare](https://clourflare.org) it should be something lik
 
 ### 6.2 Configure SSL
 
-TODO
+You can issue a free-SSL certificate from Amazon directly (or you can upload one you have). To do that go to:
+
+https://eu-west-1.console.aws.amazon.com/acm/home?region=eu-west-1#/wizard/
+
+And follow the steps, first introduce your domain name:
+
+![AWS Certificate domain](assets/aws/aws-ssl-1.png)
+
+Then choose a validation method:
+
+![AWS Certificate validation](assets/aws/aws-ssl-2.png)
+
+Finally, review it and finalize the process. If you've chosen the DNS validation you will need to add an additional CNAME entry in your DNS provider, copy the values from the screen, something like:
+
+![AWS Certififacte CNAME](assets/aws/aws-ssl-3.png)
+
+After a while, your domain will be validated. Then we need to configure the load balancer on ElasticBeanstalk to use it:
+
+1. Go to https://console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/applications
+1. Click on the `production` box under the `decidim-app` application
+1. Click on `Configuration` in the left menu and then scroll down until the box `Load Balancer`, click on `modify`.
+
+Then add a listener:
+
+![Loadbalancer add listener](assets/aws/aws-loadbalancer-1.png)
+
+Fill in the values, use `HTTPS` and `443` for the listener port and `80` and `HTTP` for the instance port. Also choose your generated certificate from the dropdown:
+
+![Loadbalancer settings](assets/aws/aws-loadbalancer-2.png)
+
+When the popup is closed don't forget to click on the `Apply` button at the end of the page.
+
+After a while you will be able to navigate securely to your own `https://` domain.
+
+Now, if you want to redirect all the traffic to the secure site, the easiest way to do it is to configure your copy of Decidim to do so.
+
+Edit the file `config/environments/production.rb` and uncomment the line `# config.force_ssl = true`:
+
+```bash
+nano ~/decidim-app/config/environments/production.rb
+```
+
+Remove the `#` symbol from the line:
+
+```
+...
+config.force_ssl = true
+...
+```
+
+As anytime we make a change create a commit and push and deploy:
+
+```
+git add .
+git commit -m "Force SSL"
+git push
+eb deploy
+```
+
+Done, now all petitions to `http://` will redirect to `https://`
 
 ### 6.3 Create the first admin user
 
-TODO
+We didn't seed any data to our installation, so we need at least one system user in order to configure our first organization. Also, we cannot access our PostgreSQL database directly, so these are the steps:
+
+
 
 ### 6.4 Setup email
 
