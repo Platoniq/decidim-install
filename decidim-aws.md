@@ -300,5 +300,149 @@ Everything up-to-date
 
 You may want to check the [official guide](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-ssh-unixes.html) for further info.
 
-## 4. Configure the application in ElasticBeanstalk
+## 4. Configure the environment in ElasticBeanstalk
+
+We are going to create the environment, we can create as many as we want, typically: staging, development and production. In our case we will deal with the production one.
+
+ElasticBeanstalk, let's run the command:
+
+```bash
+cd ~/decidim-app
+eb create production
+```
+
+This is going to take a while...
+The output will be something like this:
+
+```
+Starting environment deployment via CodeCommit
+--- Waiting for Application Versions to be pre-processed ---
+Finished processing application version app-b999-181030_184555
+Setting up default branch
+Environment details for: production
+  Application name: decidim-app
+  Region: eu-west-1
+
+...
+
+/opt/elasticbeanstalk/hooks/appdeploy/pre/11_asset_compilation.sh failed. For more detail, check /var/log/eb-activity.log using console or EB CLI.
+2018-10-30 17:52:12    INFO    Command execution completed on all instances. Summary: [Successful: 0, Failed: 1].
+2018-10-30 17:53:14    ERROR   Create environment operation is complete, but with errors. For more information, see troubleshooting documentation.
+```
+
+As you can see it failed while trying to deploy, but that's normal because we need to set up some environment variables. The production environment should be created anyway. We can test it by executing:
+
+```
+$ eb status
+Environment details for: production
+  Application name: decidim-app
+  Region: eu-west-1
+...
+  Status: Ready
+  Health: Red
+Current CodeCommit settings:
+  Repository: decidim-app
+  Branch: master
+```
+
+Specifically, we need to specify the rails secret in a `env` variable:
+
+```bash
+eb setenv SECRET_KEY_BASE=$(rails secret)
+```
+
+The result should be:
+
+```
+018-10-30 18:00:07    INFO    Environment update is starting.
+2018-10-30 18:00:16    INFO    Updating environment production's configuration settings.
+2018-10-30 18:01:29    INFO    Successfully deployed new configuration to environment.
+```
+
+Now, we are going to create a database tied to ElasticBeanstalk. First, let's configure our Decidim application in order to use the proper credentials for that.
+
+Edit the file `config/database.yml` in our `decidim-app` folder:
+
+```bash
+nano ~/decidim-app/config/database.yml
+```
+
+And paste this code (replace existing lines after `production:`):
+
+```ruby
+production:
+    <<: *default
+    adapter: postgresql
+    encoding: unicode
+    database: <%= ENV['RDS_DB_NAME'] %>
+    username: <%= ENV['RDS_USERNAME'] %>
+    password: <%= ENV['RDS_PASSWORD'] %>
+    host: <%= ENV['RDS_HOSTNAME'] %>
+    port: <%= ENV['RDS_PORT'] %>
+```
+
+And create a new commit:
+
+```bash
+git add .
+git commit -m "set database config for EB"
+git push
+```
+
+Now, let's create the AWS PostgreSQL database:
+
+1. Go to https://console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/applications
+1. Click on the `production` box under the `decidim-app` application
+1. Click on `Configuration` in the left menu and then scroll down until the box `Database`, click on `modify`.
+1. Create a PostgreSQL database, choose the instance (`db.t2.micro` for minimal costs), a username and a password: ![Database settings](assets/aws/aws-database.png)
+1. This is going to take a while as well...
+
+> An alternative way to create the database is to go to the RDS section in AWS and create it there outside the scope of ElasticBeanstalk.
+>
+> This way, if you destroy your EB environment, your database won't be affected.
+>
+> This approach may be safer for some.
+
+
+## 5. Deploying Decidim
+
+When the database is created, we are ready to deploy our first version of Decidim, just type the command:
+
+```bash
+eb deploy
+```
+
+Result shoud be something like:
+```
+Starting environment deployment via CodeCommit
+--- Waiting for Application Versions to be pre-processed ---
+Finished processing application version app-b5ea-181031_105343
+2018-10-31 09:53:53    INFO    Environment update is starting.
+2018-10-31 09:53:58    INFO    Deploying new version to instance(s).
+2018-10-31 09:57:36    INFO    New application version was deployed to running EC2 instances.
+2018-10-31 09:57:36    INFO    Environment update completed successfully.
+```
+
+Great!! we are up an running! We can now navigate by using our provisional URL provided by AWS.
+
+You can type in the console:
+
+```bash
+eb open
+```
+
+And your browser will open the page automatically. You will see the system login page:
+
+![System page](assets/aws/aws-system.png)
+
+Still many things need to be configured (main url, ssl email, first user, etc) though. We'll do that in the next section.
+
+On the the other hand, once we initialized and configured ElasticBeanstalk, every time we make a modification in our code, we just need to create a GIT commit and deploy to EB, summarized:
+
+```bash
+git add .
+git commit -m "My custom change"
+git push
+eb deploy
+```
 
