@@ -392,9 +392,13 @@ git push
 Now, let's create the AWS PostgreSQL database:
 
 1. Go to https://console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/applications
+
 1. Click on the `production` box under the `decidim-app` application
+
 1. Click on `Configuration` in the left menu and then scroll down until the box `Database`, click on `modify`.
+
 1. Create a PostgreSQL database, choose the instance (`db.t2.micro` for minimal costs), a username and a password: ![Database settings](assets/aws/aws-database.png)
+
 1. This is going to take a while as well...
 
 > An alternative way to create the database is to go to the RDS section in AWS and create it there outside the scope of ElasticBeanstalk.
@@ -457,8 +461,11 @@ There's 2 ways to go, the first (easiest) is to use the service Route53 from AWS
 The second is to use an external provider (ie: if you already have a domain). In this case we should follow these steps:
 
 1. Login to your Domain register provider
+
 1. Go to your DNS records administration
+
 1. Add a CNAME record `www` that points to your environment just created (the same where your browser goes when you execute the command `eb open`). Something like `production.k*********.eu-west-1.elasticbeanstalk.com`
+
 1. Redirect the main domain to the `www` one (if you want to).
 
 If you are using [Cloudflare](https://clourflare.org) it should be something like:
@@ -486,7 +493,9 @@ Finally, review it and finalize the process. If you've chosen the DNS validation
 After a while, your domain will be validated. Then we need to configure the load balancer on ElasticBeanstalk to use it:
 
 1. Go to https://console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/applications
+
 1. Click on the `production` box under the `decidim-app` application
+
 1. Click on `Configuration` in the left menu and then scroll down until the box `Load Balancer`, click on `modify`.
 
 Then add a listener:
@@ -567,9 +576,112 @@ You can log now with this user into your https://your-domain.com/system and crea
 
 ### 6.4 Setup email
 
-TODO
+As we are using Amazon Web Services, we will configure Amazon SES to send emails (of course you can use SES in other configurations, even without using any other AWS service).
+
+First, we need to configure SES and validate our FROM email.
+
+1. Go to https://eu-west-1.console.aws.amazon.com/ses/home?region=eu-west-1#
+
+1. Click on the `Email addresses` left menu item
+
+1. Click on the `Verify a New Email Address` button
+
+1. Enter your email address that will be used as FROM in your Decidim communications (it doesn't have to be on the same domain, it can be any email address)
+
+1. You should receive an email from Amazon. Open your email inbox and click on the link specified to verify your address. You can verify a whole domain as well (so all the addresses in that domain will be verified).
+
+1. You can repeat this process with many emails as you want. By default, SES is configured to work only on verified emails.
+
+1. Next step is to configure the SMTP server, go to `SMTP settings` and click the button `Create my SMTP Credentials`:<br>![SES SMTP](assets/aws/aws-ses-smtp.png)
+
+1. Next screen will show you a username that's going to be created, just accept it and click the button `Create`. Then click on the `Show User SMTP Security Credentials` and copy the generated credentials:<br>![SES Credentials](assets/aws/aws-ses-keys.png)
+
+We need now to set up the environment variables with these SMTP values. We do that with the `eb` tool (change the values according your generated settings):
+
+```bash
+eb setenv SMTP_USERNAME=AK**************A
+eb setenv SMTP_PASSWORD=Ag****************************6s
+eb setenv SMTP_ADDRESS=email-smtp.eu-west-1.amazonaws.com
+eb setenv SMTP_DOMAIN=my-domain.org
+```
+
+Done, Decidim is properly configured to send emails where the `from/to` are in the verified addresses in AWS SES. Now, remember that SES is configured in Sandbox mode by default, we should request an increase of sending limits to use it in the real world:
+
+![SES limits increase](assets/aws/aws-ses-limits.png)
+
+Also, when using SES you need to keep track of bounces and complaints, and keep them low otherwise they can ban you. More info on that [here](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/best-practices-bounces-complaints.html).
+
+And, finally, we should configure Decidim our FROM default email. We do that in the file `config/initializers/decidim.rb`, let's edit the file, create a commit, and deploy:
+
+```bash
+nano config/initializers/decidim.rb
+```
+
+Change the lines:
+
+```ruby
+  config.application_name = "My Application Name"
+  config.mailer_sender = "change-me@domain.org"
+```
+
+To match your settings (use a verified SES address). Then create the commits and deploy:
+
+```bash
+git add .
+git commit -m "Default FROM email"
+git push
+eb deploy
+```
+
+We still need to configure a Job processor in Ruby on Rails, that will actually send the emails (the email processing system creates a queue that we need to process). The next (last) step is to do that.
 
 ### 6.5 Configure the job system with Sidekiq and Redis
 
-TODO
+We going to use Sidekiq instead of the "delayed_job" method we use in the [basic config](basic-config.md). This is a more common setup for production sites and it uses Redis as a backend storage for the jobs queue.
 
+1. First, we need to create a Redis database in AWS. To do that we need to go to https://console.aws.amazon.com/elasticache/home?region=eu-west-1#redis
+
+1. Create a minimal Redis database (choose instance `t2.micro`). Configure the subnet to use our same AWS zone (eu-west-1 in this tutorial):<br>![AWS redis](assets/aws/aws-redis.png)
+
+1. Choose, under the `Security group` select, the same group where your elastic beanstalk PosgreSQL is. Otherwise, the server won't be able to access to the database. If you search for rds, you probably find that group as the first option:<br>![Redis security group](assets/aws/aws-redis-group.png)
+
+1. Press all necessary `Save` and `Create` buttons. While redis is creating, we must modify the security group to allow connections to the port Redis is using. To do that we need to go to the EC2 security mangament in https://eu-west-1.console.aws.amazon.com/ec2/v2/home?region=eu-west-1#SecurityGroups:sort=groupId. There you need to edit the same rule you just applied in the step before, In the `Inbound` tab, click `Edit` and add a rule with the port 6379 where source is exactly the same as the PostgreSQL rule:<br>![](assets/aws/aws-redis-ec2.png)
+
+
+1. Once created a endpoint will be generated with our Redis instance (something like c********.******.ng.0001.euw1.cache.amazonaws.com:6379).
+
+1. We need to add the gem `sidekit` to our Gemfile, edit the file and add a `:production` section:
+
+```bash
+nano Gemfile
+```
+
+Add the `:production` section with the needed Gem if does not exists:
+
+```ruby
+...
+group :production do
+  gem "sidekiq"
+end
+```
+
+Create a commit and deploy:
+
+```bash
+git add .
+git commit -m "Added Sidekiq"
+git push
+```
+
+Before deploy, let's add the env variable with the Redis url generated previously:
+
+```
+eb setenv REDIS_URL=redis://******.78gooe.ng.0001.euw1.cache.amazonaws.com:6379
+eb deploy
+```
+
+That should be all. From now we must be receiving emails from our Decidim installed in ElasticBeanstalk with ease.
+
+### 6.6 File storage
+
+TODO: configure carrierwave + fog for Amazon S3
