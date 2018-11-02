@@ -684,4 +684,104 @@ That should be all. From now we must be receiving emails from our Decidim instal
 
 ### 6.6 File storage
 
-TODO: configure carrierwave + fog for Amazon S3
+By default any file uploaded to our Decidim will be stored locally in our server instance create by AWS. As this instances may be ephemeral, we will configure file storage using the centralized service S3 from AWS.
+
+First, let's configure AWS S3 to add a bucket where to store our files.
+
+1. Go to https://s3.console.aws.amazon.com/s3/home?region=eu-west-1
+
+1. Press the `Create bucket` button, and create a bucket for our Decidim. Choose a name like `my-decidim`. Choose the region `EU (Ireland)` to match all configurations in this tutorial (this is important when configuring Decidim).
+
+1. Create a key/secret pair for this bucket. Go to https://console.aws.amazon.com/iam/home?#home and then to the `Policies` menu. Add a new policy, choose `S3` as service, then `All S3 actions (s3:*)`. Then in the `Resources` section, write your bucket when requested in the `bucket` and `object` subsections:
+![AWS Policy 1](assets/aws/aws-policy-1.png)
+![AWS Policy 2](assets/aws/aws-policy-2.png)
+
+1. Finish the policy (give it a nice name) and go to the `Users` section in the main menu, press the `Add user` and choose `Programmatic access` when requested.
+
+1. Choose `Attach policies directly` and then search for the policy we've made just before. Review and create the user.
+
+1. Download the credentials and, with the `eb` tool, create the env variables with those credentials:
+
+```bash
+eb setenv AWS_ACCESS_KEY_ID=************
+eb setenv AWS_SECRET_ACCESS_KEY=**************
+```
+
+Now it's time to configure our Decidim to use those values.
+
+First, let's add the Gem `fog-aws` into the `Gemfile`, section `:production`:
+
+```bash
+nano Gemfile
+```
+
+Leave it like this:
+
+```ruby
+...
+group :production do
+  gem "sidekiq"
+  gem "fog-aws"
+end
+```
+
+Now, we need to edit the file `config/initializers/carrierwave.rb` and edit the values.
+
+```bash
+nano config/initializers/carrierwave.rb
+```
+
+Remove the whole `Carrierwave.configure` section and leave it like this (change the bucket name to match yours):
+
+```ruby
+...
+if Rails.application.secrets.aws_access_key_id.present?
+  require "carrierwave/storage/fog"
+
+  CarrierWave.configure do |config|
+    config.storage = :fog
+    config.fog_provider = 'fog/aws'
+    config.fog_credentials = {
+      provider:              'AWS',
+      aws_access_key_id:     Rails.application.secrets.aws_access_key_id,
+      aws_secret_access_key: Rails.application.secrets.aws_secret_access_key,
+      region:                'eu-west-1',
+      host:                  's3.eu-west-1.amazonaws.com',
+      # endpoint:              'https://s3.example.com:8080'
+    }
+    config.fog_directory  = ENV.fetch("AWS_BUCKET_NAME", 'your-bucket-name')
+    # config.fog_public     = false
+    config.fog_attributes = {
+      'Cache-Control' => "max-age=#{365.day.to_i}",
+      'X-Content-Type-Options' => "nosniff"
+    }
+  end
+end
+```
+
+Also, edit the file `config/secrets.yml`:
+
+```bash
+nano config/secrets.yml
+```
+
+Add these 2 lines under the section `&default`:
+
+```yaml
+...
+default: &default
+  aws_access_key_id: <%= ENV["AWS_ACCESS_KEY_ID"] %>
+  aws_secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
+...
+```
+
+Create a commit and deploy:
+
+```bash
+git add .
+git commit -m "Add S3 bucket configuration"
+git push
+eb deploy
+```
+
+Done!
