@@ -348,7 +348,7 @@ Current CodeCommit settings:
 Specifically, we need to specify the rails secret in a `env` variable:
 
 ```bash
-eb setenv SECRET_KEY_BASE=$(rails secret)
+eb setenv SECRET_KEY_BASE=$(bin/rails secret)
 ```
 
 The result should be:
@@ -405,7 +405,11 @@ Now, let's create the AWS PostgreSQL database:
 >
 > This way, if you destroy your EB environment, your database won't be affected.
 >
-> This approach may be safer for some.
+> This approach may be safer for some, specially if you want to deploy your application without downtime (using 2 production environments).
+>
+> If you want to follow this approach, you need to manually create a RDS Posgress Database and manually add the security group to allow EB access to it. Then create the environment varials `RDS_*` manually with the database credentials.
+>
+> 👉 Check the appendix
 
 
 ## 5. Deploying Decidim
@@ -785,3 +789,40 @@ eb deploy
 ```
 
 Done!
+
+
+## 7. Appendix: Using an external database
+
+Using an external database provides some advantages:
+
+- First, it is more secure as you can destroy your environments an recreate them without affecting your data (otherwise your database will be destroyed as well).
+
+- Second, you can deploy you application in the so called [blue/green technique](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.CNAMESwap.html), which is, basically, having 2 production environments and activating one while the other is updating.
+
+So, in this appendix, instead of using the Elastic Beanstalk included database, we will create one manually in the RDS service of AWS. This corresponds to the end of the **step 4**.
+
+1. Go to https://eu-west-1.console.aws.amazon.com/rds/home?region=eu-west-1#
+
+1. Click on the `Create database` button, choose `PostgreSQL`, then specify the identifier of the database (not the database's name), username and password:
+![RDS credentials](assets/aws/aws-rds-1.png)
+
+1. In the next step, you need to choose the security group for the database. We should use the same security group as our created environment, you can find which security group are you using if you go to https://eu-west-1.console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/applications, choose `production`, go to `Configuration`, press on the box `Instances` and look for the checked line:
+![Instance security group](assets/aws/aws-security-group.png)
+
+1. So, choose the option `Choose existing VPC security groups` and mark the same as the instance you found before:
+![RDS security group](assets/aws/aws-rds-2.png)
+
+1. Also choose the database name and click any additional steps to complete the process. Once created, take note of the generated endpoint, it is the hostname needed for the application to connect to (something like `decidimapp.********.eu-west-1.rds.amazonaws.com`).
+
+1. Finally, you'll need to modify the security group in order to add an Inbound rule, same as we did with the REDIS section. In this case add the port 5432 (which is the PostgreSQL).
+
+Now, you need to set up the environment variables manually, run these commands with your own data:
+
+```bash
+eb setenv RDS_DB_NAME=decidimapp
+eb setenv RDS_USERNAME=decidimapp
+eb setenv RDS_PASSWORD=your-password
+eb setenv RDS_HOSTNAME=decidimapp.********.eu-west-1.rds.amazonaws.com
+eb setenv RDS_PORT=5432
+```
+
