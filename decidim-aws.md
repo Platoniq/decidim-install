@@ -304,6 +304,8 @@ You may want to check the [official guide](https://docs.aws.amazon.com/codecommi
 
 We are going to create the environment, we can create as many as we want, typically: staging, development and production. In our case we will deal with the production one.
 
+### 4.1 Creating the environment
+
 ElasticBeanstalk, let's run the command:
 
 ```bash
@@ -409,8 +411,41 @@ Now, let's create the AWS PostgreSQL database:
 >
 > If you want to follow this approach, you need to manually create a RDS Posgress Database and manually add the security group to allow EB access to it. Then create the environment varials `RDS_*` manually with the database credentials.
 >
-> 👉 Check the appendix
+> 👉 Check the appendix for how to configure an external RDS database
 
+### 4.2 Add Swap memory to the container
+
+Deploying a Ruby app may require a lot of memory, specially when gems are installed. It is highly recommended to add some swap memory to it to ensure the deploy process is going to be smooth.
+
+To do that, we need to create a custom extension that will tell EB what to do when creating a container:
+
+Create a folder named `.ebextensions` and a file named `01_swap.config` in it:
+
+```bash
+mkdir .ebextensions
+nano .ebextensions/01_swap.config
+```
+
+Paste this content in that file:
+
+```yaml
+commands:
+  01setup_swap:
+    test: test ! -e /swapfile
+    command: |
+      /bin/dd if=/dev/zero of=/swapfile bs=1M count=3072
+      /bin/chmod 600 /swapfile
+      /sbin/mkswap /swapfile
+      /sbin/swapon /swapfile
+```
+
+Create a commit:
+
+```bash
+git add .
+git commit -m "Add swap file"
+git push
+```
 
 ## 5. Deploying Decidim
 
@@ -606,7 +641,7 @@ We need now to set up the environment variables with these SMTP values. We do th
 eb setenv SMTP_USERNAME=AK**************A
 eb setenv SMTP_PASSWORD=Ag****************************6s
 eb setenv SMTP_ADDRESS=email-smtp.eu-west-1.amazonaws.com
-eb setenv SMTP_DOMAIN=my-domain.org
+eb setenv SMTP_DOMAIN=mail.my-domain.org
 ```
 
 Done, Decidim is properly configured to send emails where the `from/to` are in the verified addresses in AWS SES. Now, remember that SES is configured in Sandbox mode by default, we should request an increase of sending limits to use it in the real world:
@@ -685,13 +720,52 @@ Add at the end of the file (before the end statement):
 end
 ```
 
+Also, IYou need to specify which queues sidekiq is going to process (otherwise only the `default` queue is going to be processed), it seems that Decidim uses at last 6 queues, so we need to create a new file `config/sidekiq.yml` specifying those queues:
+
+Create the file:
+
+```bash
+nano config/sidekiq.yml
+```
+
+Put this content in it:
+
+```yaml
+:concurrency: 6
+:queues:
+  - default
+  - mailers
+  - newsletter
+  - newsletters_opt_in
+  - events
+  - metrics
+```
+
+> 👉 **Advanced tip**: you can configure a controller (accessible only to Decidim admins) to view the status of the queues used in sidekiq
+>
+> To do that edit the file `config/routes.rb` and ensure that it begins with:
+> ```ruby
+> # frozen_string_literal: true
+>
+> require "sidekiq/web"
+>
+> Rails.application.routes.draw do
+>
+>  authenticate :user, ->(u) { u.admin? } do
+>    mount Sidekiq::Web => "/sidekiq"
+>  end
+> ...
+> ```
+>
+> Now, when deployed, you will be able to access to your-domain.org/sidekiq to see the status of your queues
+
 Now, we need to ensure that the sidekiq processor starts with our instances, to do that we are going to use ElasticBeanstalk extensions, that allows us to add files and services to the instances serving our application. In our case, we need to make sure to start/restart sidekiq in every deployment.
 
-We need to create a folder named `.ebextensions`:
+We need to create a folder named `.ebextensions` (if does not exists yet)and a file named `02_sidekiq.config` inside it:
 
 ```bash
 mkdir .ebextensions
-nano .ebextensions/sidekiq.config
+nano .ebextensions/02_sidekiq.config
 ```
 
 Then, in that folder add a file `` with this content (Find the original code in https://gist.github.com/ssaunier/44bbebb9c0fa01953860):
