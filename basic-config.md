@@ -13,12 +13,12 @@ The most important thing to configure is the capability for sending emails, othe
 We'll configure here a Gmail account, which is suitable for small organizations in order to get started. Configure any other SMTP provider is analogous.
 
 > **NOTE:** Gmail has a limit of [500 recipients](https://support.google.com/mail/answer/22839?hl=en) per day (10000 per day if you are using Gsuite) and, therefore, is not recommended for medium/large production sites.
-> 
+>
 > Another drawback of using Gmail is that the "From" field of the email is going to be rewritten no matter what we configure in Decidim. This is going to affect how the end users sees the sender.
 >
-> You can use external email providers like [Amazon SES or similar](https://alternativeto.net/software/amazon-ses-simple-email-service-/). 
+> You can use external email providers like [Amazon SES or similar](https://alternativeto.net/software/amazon-ses-simple-email-service-/).
 
-First, we need to configure our Gmail account in order to allow external SMTP activation. Gmail accounts may have SMTP sending disable by default if you have disabled the option "Enable less secure applications". In that case we need to create an application password for Decidim. 
+First, we need to configure our Gmail account in order to allow external SMTP activation. Gmail accounts may have SMTP sending disable by default if you have disabled the option "Enable less secure applications". In that case we need to create an application password for Decidim.
 
 **Option 1**, enable "less secure applications".
 
@@ -62,7 +62,7 @@ If you are using Gsuite, replace `gmail.com` with your own domain (except in the
 >
 > Check the section `production` on that file (for example, you may want to change the default port from `587` to `465`, `25`, etc)
 
-Now, we need to add a processor to Ruby on Rails that will actually send the emails. There's several options here, as usually we are going to use the simplest one. 
+Now, we need to add a processor to Ruby on Rails that will actually send the emails. There's several options here, as usually we are going to use the simplest one.
 
 In our Gemfile (if you followed the previous guide), we added the Gem `delayed_job_active_record`, ensure that your `Gemfile` has it along with the `daemons` gem:
 
@@ -113,7 +113,7 @@ And add at the end of the file these lines:
 ```ini
 #disable ipv6
 net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1 
+net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1
 ```
 
@@ -137,7 +137,7 @@ Once created you can start using Decidim, next steps are optional (but recommend
 
 ### Debugging email problems
 
-If you're your Decidim is not sending mails you need to find out the cause. Decidim has a log file, in our case it's placed in the folder `log` in our installation folder. 
+If you're your Decidim is not sending mails you need to find out the cause. Decidim has a log file, in our case it's placed in the folder `log` in our installation folder.
 
 You can follow "live" everything that happens using the `tail` command:
 
@@ -291,11 +291,12 @@ These are the original instructions tweaked to match our configuration:
 
 ### Twitter
 
-1. Navigate to [Twitter Developers Page](https://dev.twitter.com/)
+1. Navigate to [Twitter Developers Page](https://developer.twitter.com/)
+1. You need to apply for a Developer's account, will be guided during the process
 1. Follow the "My apps" link.
 1. Click the "Create New App" button.
 1. Fill in the `Name`, `Description` fields.
-1. Fill in the `Website` and `Callback URL` fields with the same value. If you are working on a development app you need to use `http://127.0.0.1:3000/` instead of `http://localhost:3000/`.
+1. Fill in the `Website` field with YOUR_DECIDIM_HOST value and the `Callback URL` field with `https://YOUR_DECIDIM_HOST/users/auth/twitter/callback`. If you are working on a development app you need to use `http://127.0.0.1:3000/` instead of `http://localhost:3000/`.
 1. Check the 'Developer Agreement' checkbox and click the 'Create your Twitter application' button.
 1. Navigate to the "Keys and Access Tokens" tab and copy the API_KEY and API_SECRET.
 1. (Optional) Navigate to the "Permissions" tab and check the "Request email addresses from users" checkbox.
@@ -304,9 +305,9 @@ These are the original instructions tweaked to match our configuration:
 ### Google
 
 1. Navigate to [Google Developers Page](https://console.developers.google.com)
-1. Follow the 'Create projecte' link.
+1. Follow the 'Create project' link.
 1. Fill in the name of your app.
-1. Navigate to the projecte dashboard and click on "Enable API"
+1. Navigate to the project dashboard and click on "Enable API"
 1. Click on `Google+ API` and then "Enable"
 1. Navigate to the project credentials page and click on `OAuth consent screen`.
 1. Fill in the `Product name` field
@@ -340,7 +341,7 @@ default: &default
 
 Repeat the process for every service you want.
 
-After that we need to add the env vars to our `config/application.yml` file:
+After that we need to add the env vars to our `config/application.yml` file.
 
 ```bash
 nano ~/decidim-app/config/application.yml
@@ -366,6 +367,16 @@ Restart passenger and you're done:
 sudo passenger-config restart-app ~/decidim-app
 ```
 
+> Note if you are using ENV vars directly - as we do in AWS Elastic Beanstalk - You don't need to edit the file `config/application.yml` just create the appropiate ENV var in your instances.
+>
+> In Elastic Beanstalk the commands will be:
+>
+> ```bash
+> eb setenv OMNIAUTH_FACEBOOK_APP_ID=*****
+> eb setenv OMNIAUTH_FACEBOOK_APP_SECRET=*****
+> eb deploy
+> ```
+
 Geolocation configuration
 -------------------------
 
@@ -379,7 +390,7 @@ Then obtain your API ID and Code from there, you should look for a place like th
 
 ![Here Maps Api details](assets/here-api-key.png)
 
-Now edit your `config/application.yml` again:
+Now edit your `config/application.yml` again (or send the ENV vars in case you are not using the file `application.yml`):
 
 ```bash
 nano ~/decidim-app/config/application.yml

@@ -958,7 +958,7 @@ git push
 eb deploy
 ```
 
-Done!
+Done! You can go to the [Basic Config](basic-config.md) (skip the email step) and configure the social login and here maps. Remember to commit and deploy every time you change a a file, also, use `eb sentenv` to create environment variables in your instances.
 
 
 ## 7. Appendix: Using an external database
