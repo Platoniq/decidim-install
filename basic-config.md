@@ -402,7 +402,27 @@ And place these new extra lines at the bottom of the file:
 GEOCODER_LOOKUP_APP_ID: <your-App-ID>
 GEOCODER_LOOKUP_APP_CODE: <your-App-Code>
 ```
-Restart passenger and you're ready to use maps geolocation in Decidim:
+Either you use ENV variables or the `config/application.yml` file, you need to uncomment the following lines from the file `config/initializers/decidim.rb`:
+
+```ruby
+  # config.geocoder = {
+    #   static_map_url: "https://image.maps.cit.api.here.com/mia/1.6/mapview",
+  #   here_app_id: Rails.application.secrets.geocoder[:here_app_id],
+  #   here_app_code: Rails.application.secrets.geocoder[:here_app_code]
+  # }
+```
+leave it like:
+
+```ruby
+  config.geocoder = {
+    static_map_url: "https://image.maps.cit.api.here.com/mia/1.6/mapview",
+    here_app_id: Rails.application.secrets.geocoder[:here_app_id],
+    here_app_code: Rails.application.secrets.geocoder[:here_app_code]
+  }
+```
+> Create a commit and push to remote if you are using GIT.
+
+Restart passenger (or deploy) and you're ready to use maps geolocation in Decidim:
 
 ```bash
 sudo passenger-config restart-app ~/decidim-app
