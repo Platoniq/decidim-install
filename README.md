@@ -14,7 +14,8 @@ Start here:
 1. [Installing Decidim on Ubuntu 18.04](decidim-bionic.md)<br>This will guide you to the process of install Decidim in a clean machine and getting it up an running.
 1. [Minimal configuration of Decidim](basic-config.md)<br>This part is to configure the 3 extra aspects required run Decidim appropriately. Configure Email sending, SSL security in your server and OAuth authentication.
 1. [Installing in Amazon AWS with ElasticBeanstalk](decidim-aws.md)<br>An alternative guide to install Decidim in Amazon AWS. This is a Heroku-like PaaS deployment sistem. It auto-scales servers if needed and it may be a little cheaper than heroku.
-1. [Advanced config & tricks](advanced-config.md)<br>A work in progress file to document some common issues and how to solve it.
+1. [Advanced config & tricks](advanced-config.md)<br>A work in progress file to document some common issues and how to solve it (feel free to ask in the issues).
+1. [Decidim update guid](decidim-update.md)
 
 Feel free to create issues or pull requests if you encounter errors or want to make improvements in this guide!
 
