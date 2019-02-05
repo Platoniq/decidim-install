@@ -102,6 +102,64 @@ Decidim.configure do |config|
 ...
 ```
 
+Delayed job is an independent process that handles emails asynchronously, it needs to be up and running, use this command to start the process:
+
+```
+cd ~/decidim-app
+RAILS_ENV=production bin/delayed_job restart
+```
+
+If you face problems of non-sent emails, please check if delayed_job is running:
+
+```
+RAILS_ENV=production bin/delayed_job status
+```
+
+You should now ensure that delayed_job is started on system reboot. To ensure that we can create a custom script in the system crontab:
+
+Create a new file in your config folder:
+
+```bash
+cd ~/decidim-app
+nano config/delayed_job_cron.sh
+```
+
+Copy this content to that file, changing the APP_PATH to match your decidim app if required:
+
+```bash
+#!/bin/bash
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+APP_PATH="$HOME/decidim-app"
+
+if ! [ -s $APP_PATH/tmp/pids/delayed_job.pid ]; then
+  RAILS_ENV=production $APP_PATH/bin/delayed_job start
+fi
+
+```
+
+Exit (pressing CTRL-X and saving), then give the file execution permissions:
+
+```bash
+chmod +x config/delayed_job_cron.sh
+```
+
+Now create a crontab entry with the command:
+
+```bash
+crontab -e
+```
+
+Add the next line to it (again, change the path if you have personalized the application route):
+
+```
+*/5 * * * * /home/decidim/decidim-app/config/delayed_job_cron.sh
+```
+
+> 👉 A more robust solution is to use `sidekiq`, this involves the use of the additional simple storage database Redis.
+>  The process is described in the configuration of [Decidim using AWS](decidim-aws.md), but Redis should be installed manually if using the DigitalOcean guide.
+
 Now, if you are using IPv6 in your system, you may encounter problems sending emails via external smtp servers (at least with Gmail). If you don't need IPv6 (if you don't know, chances are that you don't), I'd recommend to disable it. To do that edit the file `/etc/sysctl.conf`:
 
 ```nano
