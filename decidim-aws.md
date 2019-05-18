@@ -858,7 +858,7 @@ That should be all. From now we must be receiving emails from our Decidim instal
 
 ### 6.6 File storage
 
-By default any file uploaded to our Decidim will be stored locally in our server instance create by AWS. As this instances may be ephemeral, we will configure file storage using the centralized service S3 from AWS.
+By default any file uploaded to our Decidim will be stored locally in our server instance created by AWS. As this instances may be ephemeral, we will configure file storage using the centralized service S3 from AWS.
 
 First, let's configure AWS S3 to add a bucket where to store our files.
 
