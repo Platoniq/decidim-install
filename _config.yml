@@ -3,7 +3,8 @@ description: A step by step guide to install Decidim for newcommers
 baseurl: "/decidim-install/" # the subpath of your site, e.g. /blog
 url: "https://platoniq.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
-theme: just-the-docs
+# theme: just-the-docs
+remote_theme: pmarsceill/just-the-docs
 
 permalink: pretty
 
