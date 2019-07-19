@@ -1,6 +1,10 @@
 Installing Decidim
 ==================
 
+> Check the formatted guide!
+> 👉 [https://platoniq.github.io/decidim-install/](https://platoniq.github.io/decidim-install/)
+
+
 A easy guide to install [Decidim](https://github.com/decidim/decidim), which is a participatory democracy framework created in Ruby on Rails.
 
 It's a very interesting piece of software but it may be challenging to install it if you are not familiar with the internals.
@@ -37,10 +41,6 @@ Feel free to [check the issues](https://github.com/Platoniq/decidim-install/issu
 Also, [give me a start](https://github.com/Platoniq/decidim-install) if you liked it!
 
 <a class="github-button" href="https://github.com/Platoniq/decidim-install" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star Platoniq/decidim-install on GitHub">Star</a>
-
-
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-
 
 ### Credits
 
