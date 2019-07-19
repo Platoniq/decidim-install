@@ -1,3 +1,9 @@
+---
+layout: default
+title: Minimal configuration of Decidim
+nav_order: 2
+---
+
 Basic configuration of Decidim
 ==============================
 

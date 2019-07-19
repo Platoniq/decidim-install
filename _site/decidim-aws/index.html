@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  
+    <title>Installing in Amazon AWS with ElasticBeanstalk - Decidim Install guide by Platoniq</title>
+
+    
+  
+
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="http://localhost:4000/assets/css/just-the-docs.css">
+
+  
+
+  
+    <script type="text/javascript" src="http://localhost:4000/assets/js/vendor/lunr.min.js"></script>
+  
+  <script type="text/javascript" src="http://localhost:4000/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Installing in Amazon AWS with ElasticBeanstalk | Decidim Install guide by Platoniq</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Installing in Amazon AWS with ElasticBeanstalk" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A step by step guide to install Decidim for newcommers" />
+<meta property="og:description" content="A step by step guide to install Decidim for newcommers" />
+<link rel="canonical" href="http://localhost:4000/decidim-aws/" />
+<meta property="og:url" content="http://localhost:4000/decidim-aws/" />
+<meta property="og:site_name" content="Decidim Install guide by Platoniq" />
+<script type="application/ld+json">
+{"description":"A step by step guide to install Decidim for newcommers","headline":"Installing in Amazon AWS with ElasticBeanstalk","@type":"WebPage","url":"http://localhost:4000/decidim-aws/","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+
+  <div class="page-wrap">
+    <div class="side-bar">
+      <a href="http://localhost:4000/" class="site-title fs-6 lh-tight">Decidim Install guide by Platoniq</a>
+      <span class="fs-3"><button class="js-main-nav-trigger navigation-list-toggle btn btn-outline" type="button" data-text-toggle="Hide">Menu</button></span>
+      <div class="navigation main-nav js-main-nav">
+        <nav role="navigation" aria-label="Main navigation">
+  <ul class="navigation-list">
+    
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/" class="navigation-list-link">Installing Decidim</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/decidim-bionic/" class="navigation-list-link">Install Decidim on Ubuntu 18.04</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/basic-config/" class="navigation-list-link">Minimal configuration of Decidim</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item active">
+            
+            <a href="http://localhost:4000/decidim-aws/" class="navigation-list-link active">Installing in Amazon AWS with ElasticBeanstalk</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/decidim-update/" class="navigation-list-link">Updating Decidim between version</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/advanced-config/" class="navigation-list-link">Advanced config & tricks</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/hacking-decidim/" class="navigation-list-link">Hacking Decidim</a>
+            
+          </li>
+        
+      
+    
+  </ul>
+</nav>
+
+<hr>
+Fork me on GitHub: <a class="github-button" href="https://github.com/Platoniq/decidim-install" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star Platoniq/decidim-install on GitHub">Star</a>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+      </div>
+      <footer role="contentinfo" class="site-footer">
+        <p class="text-small text-grey-dk-000 mb-0">This site uses <a href="https://github.com/pmarsceill/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.</p>
+      </footer>
+    </div>
+    <div class="main-content-wrap js-main-content" tabindex="0">
+      <div class="page-header">
+        <div class="main-content">
+          
+          <div class="search js-search">
+            <div class="search-input-wrap">
+              <input type="text" class="js-search-input search-input" tabindex="0" placeholder="Search Decidim Install guide by Platoniq" aria-label="Search Decidim Install guide by Platoniq" autocomplete="off">
+              <svg width="14" height="14" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" class="search-icon"><title>Search</title><g fill-rule="nonzero"><path d="M17.332 20.735c-5.537 0-10-4.6-10-10.247 0-5.646 4.463-10.247 10-10.247 5.536 0 10 4.601 10 10.247s-4.464 10.247-10 10.247zm0-4c3.3 0 6-2.783 6-6.247 0-3.463-2.7-6.247-6-6.247s-6 2.784-6 6.247c0 3.464 2.7 6.247 6 6.247z"/><path d="M11.672 13.791L.192 25.271 3.02 28.1 14.5 16.62z"/></g></svg>
+            </div>
+            <div class="js-search-results search-results-wrap"></div>
+          </div>
+          
+          
+            <ul class="list-style-none text-small mt-md-1 mb-md-1 pb-4 pb-md-0 js-aux-nav aux-nav">
+              
+                <li class="d-inline-block my-0"><a href="//github.com/Platoniq/decidim-install">Decidim Install on GitHub</a></li>
+              
+            </ul>
+          
+        </div>
+      </div>
+      <div class="main-content">
+        
+          
+        
+        <div id="main-content" class="page-content" role="main">
+          <h1 id="install-decidim-in-amazon-aws---elasticbeanstalk">Install Decidim in Amazon AWS - ElasticBeanstalk</h1>
+
+<p>AWS Elastic Beanstalk is the Amazon Web Services solution for deploying and scaling web applications and services. Several languages are supported, Ruby included.</p>
+
+<p>It’s the AWS alternative has other PaaS like Heroku (probably the most popular option for Ruby on Rails applications). As AWS provides generous discounts for <a href="https://aws.amazon.com/government-education/nonprofits/">non-profit organizations</a> this may be a very desirable cost-effective option for deploying Decidim for many organizations.</p>
+
+<p>This guide is heavily inspired in this <a href="https://hackernoon.com/how-to-setup-and-deploy-a-rails-5-app-on-aws-beanstalk-with-postgresql-redis-and-more-88a38355f1ea">nice guide</a> written by <a href="https://hackernoon.com/@rob__race">Rob Face</a> but targeting Decidim specifically, I recommend reading it as I’ll skip some comments regarding advantages/features and such from AWS.</p>
+
+<h3 id="1-create-your-decidim-app">1. Create your Decidim App</h3>
+
+<p>In the previous guide, we’ve created our Decidim app directly in the server. Although you can do that here, there’s no much point doing it because ElasticBeanstalk is going to create the hosting servers for us.</p>
+
+<p>So, the recommended way to go is to do all the subsequent commands in your local development machine (or use the docker alternative provide by Decidim). You are going to need to have everything related to ruby (and rails) installed.</p>
+
+<p>If you are using Ubuntu 18.04 you can just execute:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt install <span class="nt">-y</span> ruby postgresql libpq-dev nodejs imagemagick rubygems-integration git
+gem install decidim
+decidim decidim-app
+</code></pre></div></div>
+<p>Change to the involved folder and initialize it as GIT repository (not optional any more):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/decidim-app
+git init
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"My Decidim just created"</span>
+</code></pre></div></div>
+
+<p>Check the <a href="/decidim-bionic/">previous install guide</a> for more in-detail instructions.</p>
+
+<h2 id="2-registering-aws-and-install-the-required-tools">2. Registering AWS and install the required tools</h2>
+
+<h3 id="21-registering-in-aws">2.1 Registering in AWS</h3>
+
+<p>You are going to need an AWS account and install some command line tools in order follow this guide.</p>
+
+<ol>
+  <li>
+    <p>Go to https://portal.aws.amazon.com/billing/signup#/start and register an account un AWS. They’ll give 12 months for free on many services (including those needed for this guide).</p>
+  </li>
+  <li>
+    <p>Create a key/secret credentials that will allow the command line authenticate an perform actions in the AWS API in your behalf.<br />Go to https://console.aws.amazon.com/iam/home?#/users and create a new user with programmatic access:</p>
+  </li>
+</ol>
+
+<p><img src="/assets/aws/aws-user.png" alt="Create IAM user in AWS" /></p>
+
+<p>Attach administrative access to this user:</p>
+
+<p><img src="/assets/aws/aws-permissions.png" alt="Set permissions for user" /></p>
+
+<p>Grab your <code class="highlighter-rouge">access key ID</code> and <code class="highlighter-rouge">secret access key</code>, you’ll be asked for those values later on:</p>
+
+<p><img src="/assets/aws/aws-keys.png" alt="Key/secret generated" /></p>
+
+<p>We need to add additional permissions on that user, this is going to be needed later on as well when configuring our GIT repository:</p>
+
+<p>Go to the <code class="highlighter-rouge">Security credentials</code> tab on the user summary detail and click the <code class="highlighter-rouge">Generate</code> button under <em>HTTPS Git credentials…</em></p>
+
+<p><img src="/assets/aws/aws-git-1.png" alt="Git credentials button" /></p>
+
+<p>Again, a new pair of user/password will be generated, save theses for later:</p>
+
+<p><img src="/assets/aws/aws-git-2.png" alt="Key/secret generated" /></p>
+
+<h3 id="22-install-the-command-line-elasticbeanstalk">2.2 Install the command line elasticbeanstalk:</h3>
+
+<p>In Linux systems, use <code class="highlighter-rouge">pip</code> (the python manager, Python 2.7 required):</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install awsebcli <span class="nt">--upgrade</span> <span class="nt">--user</span>
+</code></pre></div></div>
+
+<p>In MacOS you can use <a href="https://brew.sh/">homebrew</a>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew update
+brew install aws-elasticbeanstalk
+</code></pre></div></div>
+
+<blockquote>
+  <p>If your are using Windows, I’d recommend to install to use the Windows Subsytem for Linux and use the Linux instructions when required:
+https://docs.microsoft.com/en-us/windows/wsl/install-win10</p>
+</blockquote>
+
+<p>Be sure to have the tool properly installed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>eb <span class="nt">--version</span>
+EB CLI 3.14.6 <span class="o">(</span>Python 2.7.1<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Read the <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html">official documentation</a> about this tool is you have problems.</p>
+
+<h2 id="3-initialize-elasticbeanstalk">3. Initialize ElasticBeanstalk</h2>
+
+<p>We are going to initialize ElasticBeanstalk in our Decidim copy, after that deploying will involve a simple command everytime we make a change.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/decidim-app
+eb init
+</code></pre></div></div>
+
+<p>This is going to ask many questions:</p>
+
+<p>Choose a region (Choose 1 for free SSL services)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Select a default region
+1) us-east-1 : US East (N. Virginia)
+2) us-west-1 : US West (N. California)
+3) us-west-2 : US West (Oregon)
+4) eu-west-1 : EU (Ireland)
+5) eu-central-1 : EU (Frankfurt)
+6) ap-south-1 : Asia Pacific (Mumbai)
+7) ap-southeast-1 : Asia Pacific (Singapore)
+8) ap-southeast-2 : Asia Pacific (Sydney)
+9) ap-northeast-1 : Asia Pacific (Tokyo)
+10) ap-northeast-2 : Asia Pacific (Seoul)
+11) sa-east-1 : South America (Sao Paulo)
+12) cn-north-1 : China (Beijing)
+13) cn-northwest-1 : China (Ningxia)
+14) us-east-2 : US East (Ohio)
+15) ca-central-1 : Canada (Central)
+16) eu-west-2 : EU (London)
+17) eu-west-3 : EU (Paris)
+(default is 3): 4
+</code></pre></div></div>
+
+<p>Then you’ll be asked to configure the credentials we’ve generated in the step <strong>2.1</strong>:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>You have not yet set up your credentials or your credentials are incorrect
+You must provide your credentials.
+(aws-access-id): AKI**************BTQ
+(aws-secret-key): YLvUbS****************OviQZkl
+</code></pre></div></div>
+
+<p>A name for your application in AWS (put whatever you want or leave empty for the default):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Enter Application Name
+(default is "decidim-app"):
+Application decidim-app has been created.
+</code></pre></div></div>
+
+<p>As docker is pre-configured in Decidim, EB will think it should use it, as I don’t think is ready for production sites, answer <strong>no</strong>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>It appears you are using Docker. Is this correct?
+(Y/n): n
+</code></pre></div></div>
+
+<p>Then choose the right platform (choose <code class="highlighter-rouge">Ruby</code> and <code class="highlighter-rouge">Ruby 2.5 (Passenger Standalone)</code>):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Select a platform.
+1) Node.js
+2) PHP
+3) Python
+4) Ruby
+5) Tomcat
+6) IIS
+7) Docker
+8) Multi-container Docker
+9) GlassFish
+10) Go
+11) Java
+12) Packer
+(default is 1): 4
+
+Select a platform version.
+1) Ruby 2.5 (Passenger Standalone)
+2) Ruby 2.5 (Puma)
+3) Ruby 2.4 (Passenger Standalone)
+4) Ruby 2.4 (Puma)
+5) Ruby 2.3 (Passenger Standalone)
+6) Ruby 2.3 (Puma)
+7) Ruby 2.2 (Passenger Standalone)
+8) Ruby 2.2 (Puma)
+9) Ruby 2.1 (Passenger Standalone)
+10) Ruby 2.1 (Puma)
+11) Ruby 2.0 (Passenger Standalone)
+12) Ruby 2.0 (Puma)
+13) Ruby 1.9.3
+(default is 1): 1
+</code></pre></div></div>
+
+<p>We’re are going to use the CodeCommit service as a remote origin to our GIT repository, now we are going to be asked about the creation of that repository:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Note: Elastic Beanstalk now supports AWS CodeCommit; a fully-managed source control service. To learn more, see Docs: https://aws.amazon.com/codecommit/
+Do you wish to continue with CodeCommit? (y/N) (default is n): y
+
+Enter Repository Name
+(default is "codecommit-origin"): decidim-app
+Successfully created repository: decidim-app
+
+Enter Branch Name
+***** Must have at least one commit to create a new branch with CodeCommit *****
+(default is "master"): master
+</code></pre></div></div>
+
+<p>Now we will be asked for a username to connect to the codecommit service, we are going to use the ones created in the <code class="highlighter-rouge">Security credentials</code> step, section <strong>2.1</strong> (Password won’t be visible when you paste it):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Username for 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/aws': cli-manager+1-at-9*******22
+Password for 'https://cli-manager@git-codecommit.eu-west-1.amazonaws.com/v1/repos/aws':
+Successfully created branch: master
+</code></pre></div></div>
+
+<p>Then, we need to configure SSH access to our instances, this step will generate a public/private rsa key. We are going to use this key to access the generated server without needing to type a password every time.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Do you want to set up SSH for your instances?
+(Y/n): Y
+Type a keypair name.
+(Default is aws-eb):
+Generating public/private rsa key pair.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/ivan/.ssh/aws-eb.
+Your public key has been saved in /home/ivan/.ssh/aws-eb.pub.
+The key fingerprint is:
+SHA256:PK************************************ aws-eb
+The key's randomart image is:
++---[RSA 2048]----+
+|.. .o.+          |
+|+.oo + .         |
+|++= o o . o      |
+|o= o = = B       |
+|o . +.+ S =      |
+|    o= o X o     |
+|   ...E o +      |
+|   ooo.o         |
+|   .+oo          |
++----[SHA256]-----+
+WARNING: Uploaded SSH public key for "aws-eb" into EC2 for region eu-west-1.
+</code></pre></div></div>
+
+<hr />
+
+<p>The <code class="highlighter-rouge">init</code> command will end here. Now, we could push our code to the server, but we will be asked for the password every time (because it’s being configure as a HTTPS repository). To change that, we are going to change the generated GIT configuration file so we will use SSH configuration and use the previously generated key pair.</p>
+
+<p>The generated key pair is stored in a hidden folder in your home directory (<code class="highlighter-rouge">/home/ivan/.ssh</code> in my case), to go there type:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/.ssh
+</code></pre></div></div>
+
+<p>You’ll see there 2 files (at least), <code class="highlighter-rouge">aws-eb</code> and <code class="highlighter-rouge">aws-eb.pub</code>, you need to copy the content of the second one (<code class="highlighter-rouge">aws-eb.pub</code>).</p>
+
+<p>In MacOS do:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pbcopy ~/.ssh/aws-eb.pub
+</code></pre></div></div>
+<p>In Linux:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xclip -selection clipboard ~/.ssh/aws-eb.pub
+</code></pre></div></div>
+
+<p>Then go to the IAM console of AWS (same place where we’ve created our user in section <strong>2.1</strong>) in https://console.aws.amazon.com/iam/home, edit our user under the <code class="highlighter-rouge">Secutiry credentials</code> section and click on the button <code class="highlighter-rouge">Upload SSH public key</code>. Paste the code copied and close the pop up.</p>
+
+<p><img src="/assets/aws/aws-git-3.png" alt="Upload SSH public key" /></p>
+
+<p>Once uploaded, you’ll get a new SSH Key ID, this is a username we are going to need in the next step:</p>
+
+<p><img src="/assets/aws/aws-git-4.png" alt="SSH key username" /></p>
+
+<p>Now we are going to reconfigure GIT in order to use SSH instead of HTTPS. You will need to run these 2 commands, but be aware that you may need to change the <code class="highlighter-rouge">eu-west-1</code> zone if you chose a different one in the beginning of section <strong>3</strong>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote set-url codecommit-origin ssh://git-codecommit.eu-west-1.amazonaws.com/v1/repos/decidim-app
+git remote set-url --push codecommit-origin ssh://git-codecommit.eu-west-1.amazonaws.com/v1/repos/decidim-app
+</code></pre></div></div>
+
+<p>As we’ve created a specific key pair for SSH authentication, we need to configure GIT globally in order to use those in the amazon servers. We must add these lines to the file <code class="highlighter-rouge">~/.ssh/config</code> (create the file if does not exists):</p>
+
+<p>Use the editor <code class="highlighter-rouge">nano</code> (or another):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano ~/.ssh/config
+</code></pre></div></div>
+
+<p>And paste the next lines by replacing the User code by the one created after uploading the SSH public key in the previous step:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host git-codecommit.*.amazonaws.com
+  User APK**************WPA
+  IdentityFile ~/.ssh/aws-eb
+</code></pre></div></div>
+
+<p>You can test if everything is ok by creating a new commit after EB initialization:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git add <span class="nb">.</span>
+<span class="nv">$ </span>git commit <span class="nt">-m</span> <span class="s2">"Post EB init"</span>
+<span class="o">[</span>master b999def] Post EB init
+ 1 file changed, 5 insertions<span class="o">(</span>+<span class="o">)</span>, 1 deletion<span class="o">(</span>-<span class="o">)</span>
+<span class="nv">$ </span>git push
+Everything up-to-date
+</code></pre></div></div>
+
+<p>You may want to check the <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-ssh-unixes.html">official guide</a> for further info.</p>
+
+<h2 id="4-configure-the-environment-in-elasticbeanstalk">4. Configure the environment in ElasticBeanstalk</h2>
+
+<p>We are going to create the environment, we can create as many as we want, typically: staging, development and production. In our case we will deal with the production one.</p>
+
+<h3 id="41-creating-the-environment">4.1 Creating the environment</h3>
+
+<p>ElasticBeanstalk, let’s run the command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/decidim-app
+eb create production
+</code></pre></div></div>
+
+<p>This is going to take a while…
+The output will be something like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Starting environment deployment via CodeCommit
+--- Waiting for Application Versions to be pre-processed ---
+Finished processing application version app-b999-181030_184555
+Setting up default branch
+Environment details for: production
+  Application name: decidim-app
+  Region: eu-west-1
+
+...
+
+/opt/elasticbeanstalk/hooks/appdeploy/pre/11_asset_compilation.sh failed. For more detail, check /var/log/eb-activity.log using console or EB CLI.
+2018-10-30 17:52:12    INFO    Command execution completed on all instances. Summary: [Successful: 0, Failed: 1].
+2018-10-30 17:53:14    ERROR   Create environment operation is complete, but with errors. For more information, see troubleshooting documentation.
+</code></pre></div></div>
+
+<p>As you can see it failed while trying to deploy, but that’s normal because we need to set up some environment variables. The production environment should be created anyway. We can test it by executing:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ eb status
+Environment details for: production
+  Application name: decidim-app
+  Region: eu-west-1
+...
+  Status: Ready
+  Health: Red
+Current CodeCommit settings:
+  Repository: decidim-app
+  Branch: master
+</code></pre></div></div>
+
+<p>Specifically, we need to specify the rails secret in a <code class="highlighter-rouge">env</code> variable:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eb setenv <span class="nv">SECRET_KEY_BASE</span><span class="o">=</span><span class="k">$(</span>bin/rails secret<span class="k">)</span>
+</code></pre></div></div>
+
+<p>The result should be:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>018-10-30 18:00:07    INFO    Environment update is starting.
+2018-10-30 18:00:16    INFO    Updating environment production's configuration settings.
+2018-10-30 18:01:29    INFO    Successfully deployed new configuration to environment.
+</code></pre></div></div>
+
+<p>Now, we are going to create a database tied to ElasticBeanstalk. First, let’s configure our Decidim application in order to use the proper credentials for that.</p>
+
+<p>Edit the file <code class="highlighter-rouge">config/database.yml</code> in our <code class="highlighter-rouge">decidim-app</code> folder:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano ~/decidim-app/config/database.yml
+</code></pre></div></div>
+
+<p>And paste this code (replace existing lines after <code class="highlighter-rouge">production:</code>):</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="ss">production:
+    </span><span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">default</span>
+    <span class="ss">adapter: </span><span class="n">postgresql</span>
+    <span class="ss">encoding: </span><span class="n">unicode</span>
+    <span class="ss">database: </span><span class="o">&lt;</span><span class="sx">%= ENV['RDS_DB_NAME'] %&gt;
+    username: &lt;%=</span> <span class="no">ENV</span><span class="p">[</span><span class="s1">'RDS_USERNAME'</span><span class="p">]</span> <span class="o">%&gt;</span>
+    <span class="ss">password: </span><span class="o">&lt;</span><span class="sx">%= ENV['RDS_PASSWORD'] %&gt;
+    host: &lt;%=</span> <span class="no">ENV</span><span class="p">[</span><span class="s1">'RDS_HOSTNAME'</span><span class="p">]</span> <span class="o">%&gt;</span>
+    <span class="ss">port: </span><span class="o">&lt;</span><span class="sx">%= ENV['RDS_PORT'] %&gt;
+</span></code></pre></div></div>
+
+<p>And create a new commit:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"set database config for EB"</span>
+git push
+</code></pre></div></div>
+
+<p>Now, let’s create the AWS PostgreSQL database:</p>
+
+<ol>
+  <li>
+    <p>Go to https://console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/applications</p>
+  </li>
+  <li>
+    <p>Click on the <code class="highlighter-rouge">production</code> box under the <code class="highlighter-rouge">decidim-app</code> application</p>
+  </li>
+  <li>
+    <p>Click on <code class="highlighter-rouge">Configuration</code> in the left menu and then scroll down until the box <code class="highlighter-rouge">Database</code>, click on <code class="highlighter-rouge">modify</code>.</p>
+  </li>
+  <li>
+    <p>Create a PostgreSQL database, choose the instance (<code class="highlighter-rouge">db.t2.micro</code> for minimal costs), a username and a password: <img src="/assets/aws/aws-database.png" alt="Database settings" /></p>
+  </li>
+  <li>
+    <p>This is going to take a while as well…</p>
+  </li>
+</ol>
+
+<blockquote>
+  <p>An alternative way to create the database is to go to the RDS section in AWS and create it there outside the scope of ElasticBeanstalk.</p>
+
+  <p>This way, if you destroy your EB environment, your database won’t be affected.</p>
+
+  <p>This approach may be safer for some, specially if you want to deploy your application without downtime (using 2 production environments).</p>
+
+  <p>If you want to follow this approach, you need to manually create a RDS Posgress Database and manually add the security group to allow EB access to it. Then create the environment varials <code class="highlighter-rouge">RDS_*</code> manually with the database credentials.</p>
+
+  <p>👉 Check the appendix for how to configure an external RDS database</p>
+</blockquote>
+
+<h3 id="42-add-swap-memory-to-the-container">4.2 Add Swap memory to the container</h3>
+
+<p>Deploying a Ruby app may require a lot of memory, specially when gems are installed. It is highly recommended to add some swap memory to it to ensure the deploy process is going to be smooth.</p>
+
+<p>To do that, we need to create a custom extension that will tell EB what to do when creating a container:</p>
+
+<p>Create a folder named <code class="highlighter-rouge">.ebextensions</code> and a file named <code class="highlighter-rouge">01_swap.config</code> in it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir .ebextensions
+nano .ebextensions/01_swap.config
+</code></pre></div></div>
+
+<p>Paste this content in that file:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">commands</span><span class="pi">:</span>
+  <span class="na">01setup_swap</span><span class="pi">:</span>
+    <span class="na">test</span><span class="pi">:</span> <span class="s">test ! -e /swapfile</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="pi">|</span>
+      <span class="no">/bin/dd if=/dev/zero of=/swapfile bs=1M count=3072</span>
+      <span class="no">/bin/chmod 600 /swapfile</span>
+      <span class="no">/sbin/mkswap /swapfile</span>
+      <span class="no">/sbin/swapon /swapfile</span>
+</code></pre></div></div>
+
+<p>Create a commit:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Add swap file"</span>
+git push
+</code></pre></div></div>
+
+<h3 id="43-add-required-libraries-to-elb-machines">4.3 Add required libraries to ELB machines</h3>
+
+<p>Since version 0.17, the package <code class="highlighter-rouge">libicu-dev</code> is required and is not installed by default in AWS machines. To enable it we need to create another file inside the <code class="highlighter-rouge">.ebextensions</code> folder:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir .ebextensions
+nano .ebextensions/02_packages.config
+</code></pre></div></div>
+
+<p>With this content:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">packages</span><span class="pi">:</span>
+  <span class="na">yum</span><span class="pi">:</span>
+    <span class="na">git</span><span class="pi">:</span> <span class="pi">[]</span>
+    <span class="na">libicu-devel</span><span class="pi">:</span> <span class="pi">[]</span>
+</code></pre></div></div>
+
+<p>Create a commit:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Add required libraries"</span>
+git push
+</code></pre></div></div>
+
+<h2 id="5-deploying-decidim">5. Deploying Decidim</h2>
+
+<p>When the database is created, we are ready to deploy our first version of Decidim, just type the command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eb deploy
+</code></pre></div></div>
+
+<p>Result shoud be something like:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Starting environment deployment via CodeCommit
+--- Waiting for Application Versions to be pre-processed ---
+Finished processing application version app-b5ea-181031_105343
+2018-10-31 09:53:53    INFO    Environment update is starting.
+2018-10-31 09:53:58    INFO    Deploying new version to instance(s).
+2018-10-31 09:57:36    INFO    New application version was deployed to running EC2 instances.
+2018-10-31 09:57:36    INFO    Environment update completed successfully.
+</code></pre></div></div>
+
+<p>Great!! we are up an running! We can now navigate by using our provisional URL provided by AWS.</p>
+
+<p>You can type in the console:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eb open
+</code></pre></div></div>
+
+<p>And your browser will open the page automatically. You will see the system login page:</p>
+
+<p><img src="/assets/aws/aws-system.png" alt="System page" /></p>
+
+<p>Still many things need to be configured (main url, ssl email, first user, etc) though. We’ll do that in the next section.</p>
+
+<p>On the the other hand, once we initialized and configured ElasticBeanstalk, every time we make a modification in our code, we just need to create a GIT commit and deploy to EB, summarized:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"My custom change"</span>
+git push
+eb deploy
+</code></pre></div></div>
+
+<h2 id="6-further-configuration">6. Further configuration</h2>
+
+<p>We’ve successfully deploy our Decidim copy in ElasticBeanstalk, but to really be able to use it, we need to provide fully qualified domain name and configure the most basic things. Similar as the <a href="/decidim-bionic/">original guide</a> but with some particularities regarding EB ans AWS.</p>
+
+<h3 id="61-set-the-domain-in-eb">6.1 Set the domain in EB</h3>
+
+<p>There’s 2 ways to go, the first (easiest) is to use the service Route53 from AWS that let’s you register the domain and configure it according to <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customdomains.html">this guide</a>.</p>
+
+<p>The second is to use an external provider (ie: if you already have a domain). In this case we should follow these steps:</p>
+
+<ol>
+  <li>
+    <p>Login to your Domain register provider</p>
+  </li>
+  <li>
+    <p>Go to your DNS records administration</p>
+  </li>
+  <li>
+    <p>Add a CNAME record <code class="highlighter-rouge">www</code> that points to your environment just created (the same where your browser goes when you execute the command <code class="highlighter-rouge">eb open</code>). Something like <code class="highlighter-rouge">production.k*********.eu-west-1.elasticbeanstalk.com</code></p>
+  </li>
+  <li>
+    <p>Redirect the main domain to the <code class="highlighter-rouge">www</code> one (if you want to).</p>
+  </li>
+</ol>
+
+<p>If you are using <a href="https://clourflare.org">Cloudflare</a> it should be something like:</p>
+
+<p><img src="/assets/aws/cloudflare.png" alt="Cloudflare DNS" /></p>
+
+<h3 id="62-configure-ssl">6.2 Configure SSL</h3>
+
+<p>You can issue a free-SSL certificate from Amazon directly (or you can upload one you have). To do that go to:</p>
+
+<p>https://eu-west-1.console.aws.amazon.com/acm/home?region=eu-west-1#/wizard/</p>
+
+<p>And follow the steps, first introduce your domain name:</p>
+
+<p><img src="/assets/aws/aws-ssl-1.png" alt="AWS Certificate domain" /></p>
+
+<p>Then choose a validation method:</p>
+
+<p><img src="/assets/aws/aws-ssl-2.png" alt="AWS Certificate validation" /></p>
+
+<p>Finally, review it and finalize the process. If you’ve chosen the DNS validation you will need to add an additional CNAME entry in your DNS provider, copy the values from the screen, something like:</p>
+
+<p><img src="/assets/aws/aws-ssl-3.png" alt="AWS Certififacte CNAME" /></p>
+
+<p>After a while, your domain will be validated. Then we need to configure the load balancer on ElasticBeanstalk to use it:</p>
+
+<ol>
+  <li>
+    <p>Go to https://console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/applications</p>
+  </li>
+  <li>
+    <p>Click on the <code class="highlighter-rouge">production</code> box under the <code class="highlighter-rouge">decidim-app</code> application</p>
+  </li>
+  <li>
+    <p>Click on <code class="highlighter-rouge">Configuration</code> in the left menu and then scroll down until the box <code class="highlighter-rouge">Load Balancer</code>, click on <code class="highlighter-rouge">modify</code>.</p>
+  </li>
+</ol>
+
+<p>Then add a listener:</p>
+
+<p><img src="/assets/aws/aws-loadbalancer-1.png" alt="Loadbalancer add listener" /></p>
+
+<p>Fill in the values, use <code class="highlighter-rouge">HTTPS</code> and <code class="highlighter-rouge">443</code> for the listener port and <code class="highlighter-rouge">80</code> and <code class="highlighter-rouge">HTTP</code> for the instance port. Also choose your generated certificate from the dropdown:</p>
+
+<p><img src="/assets/aws/aws-loadbalancer-2.png" alt="Loadbalancer settings" /></p>
+
+<p>When the popup is closed don’t forget to click on the <code class="highlighter-rouge">Apply</code> button at the end of the page.</p>
+
+<p>After a while you will be able to navigate securely to your own <code class="highlighter-rouge">https://</code> domain.</p>
+
+<p>Now, if you want to redirect all the traffic to the secure site, the easiest way to do it is to configure your copy of Decidim to do so.</p>
+
+<p>Edit the file <code class="highlighter-rouge">config/environments/production.rb</code> and uncomment the line <code class="highlighter-rouge"># config.force_ssl = true</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano ~/decidim-app/config/environments/production.rb
+</code></pre></div></div>
+
+<p>Remove the <code class="highlighter-rouge">#</code> symbol from the line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+config.force_ssl = true
+...
+</code></pre></div></div>
+
+<p>As anytime we make a change create a commit and push and deploy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add .
+git commit -m "Force SSL"
+git push
+eb deploy
+</code></pre></div></div>
+
+<p>Done, now all petitions to <code class="highlighter-rouge">http://</code> will redirect to <code class="highlighter-rouge">https://</code></p>
+
+<h3 id="63-create-the-first-admin-user">6.3 Create the first admin user</h3>
+
+<p>We didn’t seed any data to our installation, so we need at least one system user in order to configure our first organization. Also, we cannot access our PostgreSQL database directly, so these are the steps:</p>
+
+<p>First we need lo log into production machine via ssh, we do that with this command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eb ssh
+</code></pre></div></div>
+
+<p>Once inside, we change to the app working dir:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> /var/app/current/
+</code></pre></div></div>
+
+<p>Then, log into the rails console:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/rails console
+</code></pre></div></div>
+
+<p>And create the user:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">email</span> <span class="o">=</span> <span class="s2">"my-admin@email"</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s2">"&lt;a secure password&gt;"</span>
+<span class="n">user</span> <span class="o">=</span> <span class="no">Decidim</span><span class="o">::</span><span class="no">System</span><span class="o">::</span><span class="no">Admin</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">email: </span><span class="n">email</span><span class="p">,</span> <span class="ss">password: </span><span class="n">password</span><span class="p">,</span> <span class="ss">password_confirmation: </span><span class="n">password</span><span class="p">)</span>
+<span class="n">user</span><span class="p">.</span><span class="nf">save!</span>
+</code></pre></div></div>
+<p>Write <code class="highlighter-rouge">quit</code> or press <em>CTRL+D</em> to exit the rails console.</p>
+
+<p>Write <code class="highlighter-rouge">exit</code> to return to your computer.</p>
+
+<p>You can log now with this user into your https://your-domain.com/system and create your organization.</p>
+
+<h3 id="64-setup-email">6.4 Setup email</h3>
+
+<p>As we are using Amazon Web Services, we will configure Amazon SES to send emails (of course you can use SES in other configurations, even without using any other AWS service).</p>
+
+<p>First, we need to configure SES and validate our FROM email.</p>
+
+<ol>
+  <li>
+    <p>Go to https://eu-west-1.console.aws.amazon.com/ses/home?region=eu-west-1#</p>
+  </li>
+  <li>
+    <p>Click on the <code class="highlighter-rouge">Email addresses</code> left menu item</p>
+  </li>
+  <li>
+    <p>Click on the <code class="highlighter-rouge">Verify a New Email Address</code> button</p>
+  </li>
+  <li>
+    <p>Enter your email address that will be used as FROM in your Decidim communications (it doesn’t have to be on the same domain, it can be any email address)</p>
+  </li>
+  <li>
+    <p>You should receive an email from Amazon. Open your email inbox and click on the link specified to verify your address. You can verify a whole domain as well (so all the addresses in that domain will be verified).</p>
+  </li>
+  <li>
+    <p>You can repeat this process with many emails as you want. By default, SES is configured to work only on verified emails.</p>
+  </li>
+  <li>
+    <p>Next step is to configure the SMTP server, go to <code class="highlighter-rouge">SMTP settings</code> and click the button <code class="highlighter-rouge">Create my SMTP Credentials</code>:<br /><img src="/assets/aws/aws-ses-smtp.png" alt="SES SMTP" /></p>
+  </li>
+  <li>
+    <p>Next screen will show you a username that’s going to be created, just accept it and click the button <code class="highlighter-rouge">Create</code>. Then click on the <code class="highlighter-rouge">Show User SMTP Security Credentials</code> and copy the generated credentials:<br /><img src="/assets/aws/aws-ses-keys.png" alt="SES Credentials" /></p>
+  </li>
+</ol>
+
+<p>We need now to set up the environment variables with these SMTP values. We do that with the <code class="highlighter-rouge">eb</code> tool (change the values according your generated settings):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eb setenv <span class="nv">SMTP_USERNAME</span><span class="o">=</span>AK<span class="k">**************</span>A
+eb setenv <span class="nv">SMTP_PASSWORD</span><span class="o">=</span>Ag<span class="k">****************************</span>6s
+eb setenv <span class="nv">SMTP_ADDRESS</span><span class="o">=</span>email-smtp.eu-west-1.amazonaws.com
+eb setenv <span class="nv">SMTP_DOMAIN</span><span class="o">=</span>mail.my-domain.org
+</code></pre></div></div>
+
+<p>Done, Decidim is properly configured to send emails where the <code class="highlighter-rouge">from/to</code> are in the verified addresses in AWS SES. Now, remember that SES is configured in Sandbox mode by default, we should request an increase of sending limits to use it in the real world:</p>
+
+<p><img src="/assets/aws/aws-ses-limits.png" alt="SES limits increase" /></p>
+
+<p>Also, when using SES you need to keep track of bounces and complaints, and keep them low otherwise they can ban you. More info on that <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/best-practices-bounces-complaints.html">here</a>.</p>
+
+<p>And, finally, we should configure Decidim our FROM default email. We do that in the file <code class="highlighter-rouge">config/initializers/decidim.rb</code>, let’s edit the file, create a commit, and deploy:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano config/initializers/decidim.rb
+</code></pre></div></div>
+
+<p>Change the lines:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">config</span><span class="p">.</span><span class="nf">application_name</span> <span class="o">=</span> <span class="s2">"My Application Name"</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">mailer_sender</span> <span class="o">=</span> <span class="s2">"change-me@domain.org"</span>
+</code></pre></div></div>
+
+<p>To match your settings (use a verified SES address). Then create the commits and deploy:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Default FROM email"</span>
+git push
+eb deploy
+</code></pre></div></div>
+
+<p>We still need to configure a Job processor in Ruby on Rails, that will actually send the emails (the email processing system creates a queue that we need to process). The next (last) step is to do that.</p>
+
+<h3 id="65-configure-the-job-system-with-sidekiq-and-redis">6.5 Configure the job system with Sidekiq and Redis</h3>
+
+<p>We going to use Sidekiq instead of the “delayed_job” method we use in the <a href="/basic-config/">basic config</a>. This is a more common setup for production sites and it uses Redis as a backend storage for the jobs queue.</p>
+
+<ol>
+  <li>
+    <p>First, we need to create a Redis database in AWS. To do that we need to go to https://console.aws.amazon.com/elasticache/home?region=eu-west-1#redis</p>
+  </li>
+  <li>
+    <p>Create a minimal Redis database (choose instance <code class="highlighter-rouge">t2.micro</code>). Configure the subnet to use our same AWS zone (eu-west-1 in this tutorial):<br /><img src="/assets/aws/aws-redis.png" alt="AWS redis" /></p>
+  </li>
+  <li>
+    <p>Choose, under the <code class="highlighter-rouge">Security group</code> select, the same group where your elastic beanstalk PosgreSQL is. Otherwise, the server won’t be able to access to the database. If you search for rds, you probably find that group as the first option:<br /><img src="/assets/aws/aws-redis-group.png" alt="Redis security group" /></p>
+  </li>
+  <li>
+    <p>Press all necessary <code class="highlighter-rouge">Save</code> and <code class="highlighter-rouge">Create</code> buttons. While redis is creating, we must modify the security group to allow connections to the port Redis is using. To do that we need to go to the EC2 security mangament in https://eu-west-1.console.aws.amazon.com/ec2/v2/home?region=eu-west-1#SecurityGroups:sort=groupId. There you need to edit the same rule you just applied in the step before, In the <code class="highlighter-rouge">Inbound</code> tab, click <code class="highlighter-rouge">Edit</code> and add a rule with the port 6379 where source is exactly the same as the PostgreSQL rule:<br /><img src="/assets/aws/aws-redis-ec2.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Once created a endpoint will be generated with our Redis instance (something like c<strong>**</strong><strong>.</strong><em>**</em>.ng.0001.euw1.cache.amazonaws.com:6379).</p>
+  </li>
+  <li>
+    <p>We need to add the gem <code class="highlighter-rouge">sidekit</code> to our Gemfile, edit the file and add a <code class="highlighter-rouge">:production</code> section:</p>
+  </li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano Gemfile
+</code></pre></div></div>
+
+<p>Add the <code class="highlighter-rouge">:production</code> section with the needed Gem if does not exists:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">...</span>
+<span class="n">group</span> <span class="ss">:production</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s2">"sidekiq"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Now, we need to configure Decidim to use the sidekiq ActiveJob adapter. We need to edit the file <code class="highlighter-rouge">config/environments/production.rb</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano config/environments/production.rb
+</code></pre></div></div>
+
+<p>Add at the end of the file (before the end statement):</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">...</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">active_record</span><span class="p">.</span><span class="nf">dump_schema_after_migration</span> <span class="o">=</span> <span class="kp">false</span>
+  <span class="c1"># Specify active_job sidekiq adapter</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">active_job</span><span class="p">.</span><span class="nf">queue_adapter</span> <span class="o">=</span> <span class="ss">:sidekiq</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Also, IYou need to specify which queues sidekiq is going to process (otherwise only the <code class="highlighter-rouge">default</code> queue is going to be processed), it seems that Decidim uses at last 6 queues, so we need to create a new file <code class="highlighter-rouge">config/sidekiq.yml</code> specifying those queues:</p>
+
+<p>Create the file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano config/sidekiq.yml
+</code></pre></div></div>
+
+<p>Put this content in it:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">:concurrency</span><span class="pi">:</span> <span class="s">6</span>
+<span class="s">:queues</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">default</span>
+  <span class="pi">-</span> <span class="s">mailers</span>
+  <span class="pi">-</span> <span class="s">newsletter</span>
+  <span class="pi">-</span> <span class="s">newsletters_opt_in</span>
+  <span class="pi">-</span> <span class="s">events</span>
+  <span class="pi">-</span> <span class="s">metrics</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>👉 <strong>Advanced tip</strong>: you can configure a controller (accessible only to Decidim admins) to view the status of the queues used in sidekiq</p>
+
+  <p>To do that edit the file <code class="highlighter-rouge">config/routes.rb</code> and ensure that it begins with:</p>
+  <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># frozen_string_literal: true</span>
+
+<span class="nb">require</span> <span class="s2">"sidekiq/web"</span>
+
+<span class="no">Rails</span><span class="p">.</span><span class="nf">application</span><span class="p">.</span><span class="nf">routes</span><span class="p">.</span><span class="nf">draw</span> <span class="k">do</span>
+
+ <span class="n">authenticate</span> <span class="ss">:user</span><span class="p">,</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="p">{</span> <span class="n">u</span><span class="p">.</span><span class="nf">admin?</span> <span class="p">}</span> <span class="k">do</span>
+   <span class="n">mount</span> <span class="no">Sidekiq</span><span class="o">::</span><span class="no">Web</span> <span class="o">=&gt;</span> <span class="s2">"/sidekiq"</span>
+ <span class="k">end</span>
+<span class="o">...</span>
+</code></pre></div>  </div>
+
+  <p>Now, when deployed, you will be able to access to your-domain.org/sidekiq to see the status of your queues</p>
+</blockquote>
+
+<p>Now, we need to ensure that the sidekiq processor starts with our instances, to do that we are going to use ElasticBeanstalk extensions, that allows us to add files and services to the instances serving our application. In our case, we need to make sure to start/restart sidekiq in every deployment.</p>
+
+<p>We need to create a folder named <code class="highlighter-rouge">.ebextensions</code> (if does not exists yet)and a file named <code class="highlighter-rouge">02_sidekiq.config</code> inside it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir .ebextensions
+nano .ebextensions/02_sidekiq.config
+</code></pre></div></div>
+
+<p>Then, in that folder add a file `` with this content (Find the original code in https://gist.github.com/ssaunier/44bbebb9c0fa01953860):</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Sidekiq interaction and startup script</span>
+<span class="na">commands</span><span class="pi">:</span>
+  <span class="na">create_post_dir</span><span class="pi">:</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s2">"</span><span class="s">mkdir</span><span class="nv"> </span><span class="s">-p</span><span class="nv"> </span><span class="s">/opt/elasticbeanstalk/hooks/appdeploy/post"</span>
+    <span class="na">ignoreErrors</span><span class="pi">:</span> <span class="no">true</span>
+<span class="na">files</span><span class="pi">:</span>
+  <span class="s2">"</span><span class="s">/opt/elasticbeanstalk/hooks/appdeploy/post/50_restart_sidekiq.sh"</span><span class="pi">:</span>
+    <span class="na">mode</span><span class="pi">:</span> <span class="s2">"</span><span class="s">000755"</span>
+    <span class="na">owner</span><span class="pi">:</span> <span class="s">root</span>
+    <span class="na">group</span><span class="pi">:</span> <span class="s">root</span>
+    <span class="na">content</span><span class="pi">:</span> <span class="pi">|</span>
+      <span class="no">#!/usr/bin/env bash</span>
+      <span class="no">. /opt/elasticbeanstalk/support/envvars</span>
+
+      <span class="no">EB_APP_DEPLOY_DIR=$(/opt/elasticbeanstalk/bin/get-config container -k app_deploy_dir)</span>
+      <span class="no">EB_APP_PID_DIR=$(/opt/elasticbeanstalk/bin/get-config container -k app_pid_dir)</span>
+      <span class="no">EB_APP_USER=$(/opt/elasticbeanstalk/bin/get-config container -k app_user)</span>
+      <span class="no">EB_SCRIPT_DIR=$(/opt/elasticbeanstalk/bin/get-config container -k script_dir)</span>
+      <span class="no">EB_SUPPORT_DIR=$(/opt/elasticbeanstalk/bin/get-config container -k support_dir)</span>
+
+      <span class="no">. $EB_SUPPORT_DIR/envvars</span>
+      <span class="no">. $EB_SCRIPT_DIR/use-app-ruby.sh</span>
+
+      <span class="no">SIDEKIQ_PID=$EB_APP_PID_DIR/sidekiq.pid</span>
+      <span class="no">SIDEKIQ_CONFIG=$EB_APP_DEPLOY_DIR/config/sidekiq.yml</span>
+      <span class="no">SIDEKIQ_LOG=$EB_APP_DEPLOY_DIR/log/sidekiq.log</span>
+
+      <span class="no">cd $EB_APP_DEPLOY_DIR</span>
+
+      <span class="no">if [ -f $SIDEKIQ_PID ]</span>
+      <span class="no">then</span>
+        <span class="no">su -s /bin/bash -c "kill -TERM `cat $SIDEKIQ_PID`" $EB_APP_USER</span>
+        <span class="no">su -s /bin/bash -c "rm -rf $SIDEKIQ_PID" $EB_APP_USER</span>
+      <span class="no">fi</span>
+
+      <span class="no">. /opt/elasticbeanstalk/support/envvars.d/sysenv</span>
+
+      <span class="no">sleep 10</span>
+
+      <span class="no">su -s /bin/bash -c "bundle exec sidekiq \</span>
+        <span class="no">-e $RACK_ENV \</span>
+        <span class="no">-P $SIDEKIQ_PID \</span>
+        <span class="no">-C $SIDEKIQ_CONFIG \</span>
+        <span class="no">-L $SIDEKIQ_LOG \</span>
+        <span class="no">-d" $EB_APP_USER</span>
+
+  <span class="s2">"</span><span class="s">/opt/elasticbeanstalk/hooks/appdeploy/pre/03_mute_sidekiq.sh"</span><span class="pi">:</span>
+    <span class="na">mode</span><span class="pi">:</span> <span class="s2">"</span><span class="s">000755"</span>
+    <span class="na">owner</span><span class="pi">:</span> <span class="s">root</span>
+    <span class="na">group</span><span class="pi">:</span> <span class="s">root</span>
+    <span class="na">content</span><span class="pi">:</span> <span class="pi">|</span>
+      <span class="no">#!/usr/bin/env bash</span>
+      <span class="no">. /opt/elasticbeanstalk/support/envvars</span>
+
+      <span class="no">EB_APP_USER=$(/opt/elasticbeanstalk/bin/get-config container -k app_user)</span>
+      <span class="no">EB_SCRIPT_DIR=$(/opt/elasticbeanstalk/bin/get-config container -k script_dir)</span>
+      <span class="no">EB_SUPPORT_DIR=$(/opt/elasticbeanstalk/bin/get-config container -k support_dir)</span>
+
+      <span class="no">. $EB_SUPPORT_DIR/envvars</span>
+      <span class="no">. $EB_SCRIPT_DIR/use-app-ruby.sh</span>
+
+      <span class="no">SIDEKIQ_PID=$EB_APP_PID_DIR/sidekiq.pid</span>
+      <span class="no">if [ -f $SIDEKIQ_PID ]</span>
+      <span class="no">then</span>
+        <span class="no">su -s /bin/bash -c "kill -USR1 `cat $SIDEKIQ_PID`" $EB_APP_USER</span>
+      <span class="no">fi</span>
+</code></pre></div></div>
+
+<p>Create a commit and deploy:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Added Sidekiq"</span>
+git push
+</code></pre></div></div>
+
+<p>Before deploy, let’s add the env variable with the Redis url generated previously:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eb setenv REDIS_URL=redis://******.78gooe.ng.0001.euw1.cache.amazonaws.com:6379
+eb deploy
+</code></pre></div></div>
+
+<p>That should be all. From now we must be receiving emails from our Decidim installed in ElasticBeanstalk with ease.</p>
+
+<h3 id="66-file-storage">6.6 File storage</h3>
+
+<p>By default any file uploaded to our Decidim will be stored locally in our server instance created by AWS. As this instances may be ephemeral, we will configure file storage using the centralized service S3 from AWS.</p>
+
+<p>First, let’s configure AWS S3 to add a bucket where to store our files.</p>
+
+<ol>
+  <li>
+    <p>Go to https://s3.console.aws.amazon.com/s3/home?region=eu-west-1</p>
+  </li>
+  <li>
+    <p>Press the <code class="highlighter-rouge">Create bucket</code> button, and create a bucket for our Decidim. Choose a name like <code class="highlighter-rouge">my-decidim</code>. Choose the region <code class="highlighter-rouge">EU (Ireland)</code> to match all configurations in this tutorial (this is important when configuring Decidim).</p>
+  </li>
+  <li>
+    <p>Create a key/secret pair for this bucket. Go to https://console.aws.amazon.com/iam/home?#home and then to the <code class="highlighter-rouge">Policies</code> menu. Add a new policy, choose <code class="highlighter-rouge">S3</code> as service, then <code class="highlighter-rouge">All S3 actions (s3:*)</code>. Then in the <code class="highlighter-rouge">Resources</code> section, write your bucket when requested in the <code class="highlighter-rouge">bucket</code> and <code class="highlighter-rouge">object</code> subsections:
+<img src="/assets/aws/aws-policy-1.png" alt="AWS Policy 1" />
+<img src="/assets/aws/aws-policy-2.png" alt="AWS Policy 2" /></p>
+  </li>
+  <li>
+    <p>Finish the policy (give it a nice name) and go to the <code class="highlighter-rouge">Users</code> section in the main menu, press the <code class="highlighter-rouge">Add user</code> and choose <code class="highlighter-rouge">Programmatic access</code> when requested.</p>
+  </li>
+  <li>
+    <p>Choose <code class="highlighter-rouge">Attach policies directly</code> and then search for the policy we’ve made just before. Review and create the user.</p>
+  </li>
+  <li>
+    <p>Download the credentials and, with the <code class="highlighter-rouge">eb</code> tool, create the env variables with those credentials:</p>
+  </li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eb setenv <span class="nv">AWS_ACCESS_KEY_ID</span><span class="o">=</span><span class="k">************</span>
+eb setenv <span class="nv">AWS_SECRET_ACCESS_KEY</span><span class="o">=</span><span class="k">**************</span>
+</code></pre></div></div>
+
+<p>Now it’s time to configure our Decidim to use those values.</p>
+
+<p>First, let’s add the Gem <code class="highlighter-rouge">fog-aws</code> into the <code class="highlighter-rouge">Gemfile</code>, section <code class="highlighter-rouge">:production</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano Gemfile
+</code></pre></div></div>
+
+<p>Leave it like this:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">...</span>
+<span class="n">group</span> <span class="ss">:production</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s2">"sidekiq"</span>
+  <span class="n">gem</span> <span class="s2">"fog-aws"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Now, we need to edit the file <code class="highlighter-rouge">config/initializers/carrierwave.rb</code> and edit the values.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano config/initializers/carrierwave.rb
+</code></pre></div></div>
+
+<p>Remove the whole <code class="highlighter-rouge">Carrierwave.configure</code> section and leave it like this (change the bucket name to match yours):</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">...</span>
+<span class="k">if</span> <span class="no">Rails</span><span class="p">.</span><span class="nf">application</span><span class="p">.</span><span class="nf">secrets</span><span class="p">.</span><span class="nf">aws_access_key_id</span><span class="p">.</span><span class="nf">present?</span>
+  <span class="nb">require</span> <span class="s2">"carrierwave/storage/fog"</span>
+
+  <span class="no">CarrierWave</span><span class="p">.</span><span class="nf">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+    <span class="n">config</span><span class="p">.</span><span class="nf">storage</span> <span class="o">=</span> <span class="ss">:fog</span>
+    <span class="n">config</span><span class="p">.</span><span class="nf">fog_provider</span> <span class="o">=</span> <span class="s1">'fog/aws'</span>
+    <span class="n">config</span><span class="p">.</span><span class="nf">fog_credentials</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="ss">provider:              </span><span class="s1">'AWS'</span><span class="p">,</span>
+      <span class="ss">aws_access_key_id:     </span><span class="no">Rails</span><span class="p">.</span><span class="nf">application</span><span class="p">.</span><span class="nf">secrets</span><span class="p">.</span><span class="nf">aws_access_key_id</span><span class="p">,</span>
+      <span class="ss">aws_secret_access_key: </span><span class="no">Rails</span><span class="p">.</span><span class="nf">application</span><span class="p">.</span><span class="nf">secrets</span><span class="p">.</span><span class="nf">aws_secret_access_key</span><span class="p">,</span>
+      <span class="ss">region:                </span><span class="s1">'eu-west-1'</span><span class="p">,</span>
+      <span class="ss">host:                  </span><span class="s1">'s3.eu-west-1.amazonaws.com'</span><span class="p">,</span>
+      <span class="c1"># endpoint:              'https://s3.example.com:8080'</span>
+    <span class="p">}</span>
+    <span class="n">config</span><span class="p">.</span><span class="nf">fog_directory</span>  <span class="o">=</span> <span class="no">ENV</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="s2">"AWS_BUCKET_NAME"</span><span class="p">,</span> <span class="s1">'your-bucket-name'</span><span class="p">)</span>
+    <span class="c1"># config.fog_public     = false</span>
+    <span class="n">config</span><span class="p">.</span><span class="nf">fog_attributes</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s1">'Cache-Control'</span> <span class="o">=&gt;</span> <span class="s2">"max-age=</span><span class="si">#{</span><span class="mi">365</span><span class="p">.</span><span class="nf">day</span><span class="p">.</span><span class="nf">to_i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+      <span class="s1">'X-Content-Type-Options'</span> <span class="o">=&gt;</span> <span class="s2">"nosniff"</span>
+    <span class="p">}</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Also, edit the file <code class="highlighter-rouge">config/secrets.yml</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano config/secrets.yml
+</code></pre></div></div>
+
+<p>Add these 2 lines under the section <code class="highlighter-rouge">&amp;default</code>:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">...</span>
+<span class="na">default</span><span class="pi">:</span> <span class="nl">&amp;default</span>
+  <span class="na">aws_access_key_id</span><span class="pi">:</span> <span class="s">&lt;%= ENV["AWS_ACCESS_KEY_ID"] %&gt;</span>
+  <span class="na">aws_secret_access_key</span><span class="pi">:</span> <span class="s">&lt;%= ENV["AWS_SECRET_ACCESS_KEY"] %&gt;</span>
+<span class="nn">...</span>
+</code></pre></div></div>
+
+<p>Create a commit and deploy:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Add S3 bucket configuration"</span>
+git push
+eb deploy
+</code></pre></div></div>
+
+<p>Done! You can go to the <a href="/basic-config/">Basic Config</a> (skip the email step) and configure the social login and here maps. Remember to commit and deploy every time you change a a file, also, use <code class="highlighter-rouge">eb sentenv</code> to create environment variables in your instances.</p>
+
+<h2 id="7-appendix-using-an-external-database">7. Appendix: Using an external database</h2>
+
+<p>Using an external database provides some advantages:</p>
+
+<ul>
+  <li>
+    <p>First, it is more secure as you can destroy your environments an recreate them without affecting your data (otherwise your database will be destroyed as well).</p>
+  </li>
+  <li>
+    <p>Second, you can deploy you application in the so called <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.CNAMESwap.html">blue/green technique</a>, which is, basically, having 2 production environments and activating one while the other is updating.</p>
+  </li>
+</ul>
+
+<p>So, in this appendix, instead of using the Elastic Beanstalk included database, we will create one manually in the RDS service of AWS. This corresponds to the end of the <strong>step 4</strong>.</p>
+
+<ol>
+  <li>
+    <p>Go to https://eu-west-1.console.aws.amazon.com/rds/home?region=eu-west-1#</p>
+  </li>
+  <li>
+    <p>Click on the <code class="highlighter-rouge">Create database</code> button, choose <code class="highlighter-rouge">PostgreSQL</code>, then specify the identifier of the database (not the database’s name), username and password:
+<img src="/assets/aws/aws-rds-1.png" alt="RDS credentials" /></p>
+  </li>
+  <li>
+    <p>In the next step, you need to choose the security group for the database. We should use the same security group as our created environment, you can find which security group are you using if you go to https://eu-west-1.console.aws.amazon.com/elasticbeanstalk/home?region=eu-west-1#/applications, choose <code class="highlighter-rouge">production</code>, go to <code class="highlighter-rouge">Configuration</code>, press on the box <code class="highlighter-rouge">Instances</code> and look for the checked line:
+<img src="/assets/aws/aws-security-group.png" alt="Instance security group" /></p>
+  </li>
+  <li>
+    <p>So, choose the option <code class="highlighter-rouge">Choose existing VPC security groups</code> and mark the same as the instance you found before:
+<img src="/assets/aws/aws-rds-2.png" alt="RDS security group" /></p>
+  </li>
+  <li>
+    <p>Also choose the database name and click any additional steps to complete the process. Once created, take note of the generated endpoint, it is the hostname needed for the application to connect to (something like <code class="highlighter-rouge">decidimapp.********.eu-west-1.rds.amazonaws.com</code>).</p>
+  </li>
+  <li>
+    <p>Finally, you’ll need to modify the security group in order to add an Inbound rule, same as we did with the REDIS section. In this case add the port 5432 (which is the PostgreSQL).</p>
+  </li>
+</ol>
+
+<p>Now, you need to set up the environment variables manually, run these commands with your own data:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eb setenv <span class="nv">RDS_DB_NAME</span><span class="o">=</span>decidimapp
+eb setenv <span class="nv">RDS_USERNAME</span><span class="o">=</span>decidimapp
+eb setenv <span class="nv">RDS_PASSWORD</span><span class="o">=</span>your-password
+eb setenv <span class="nv">RDS_HOSTNAME</span><span class="o">=</span>decidimapp.<span class="k">********</span>.eu-west-1.rds.amazonaws.com
+eb setenv <span class="nv">RDS_PORT</span><span class="o">=</span>5432
+</code></pre></div></div>
+
+
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

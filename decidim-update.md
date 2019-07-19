@@ -1,3 +1,9 @@
+---
+layout: default
+title: Updating Decidim between version
+nav_order: 4
+---
+
 Updating Decidim
 ================
 

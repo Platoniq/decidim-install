@@ -1,0 +1,19 @@
+title: Decidim Install guide by Platoniq
+description: A step by step guide to install Decidim for newcommers
+baseurl: "/" # the subpath of your site, e.g. /blog
+url: "https://decidim-install.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+theme: just-the-docs
+
+permalink: pretty
+
+search_enabled: true
+
+aux_links:
+    "Decidim Install on GitHub":
+      - "//github.com/Platoniq/decidim-install"
+
+# ga_tracking: UA-XXXXXXX-10
+
+plugins:
+  - jekyll-seo-tag

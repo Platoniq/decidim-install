@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  
+    <title>Install Decidim on Ubuntu 18.04 - Decidim Install guide by Platoniq</title>
+
+    
+  
+
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="http://localhost:4000/assets/css/just-the-docs.css">
+
+  
+
+  
+    <script type="text/javascript" src="http://localhost:4000/assets/js/vendor/lunr.min.js"></script>
+  
+  <script type="text/javascript" src="http://localhost:4000/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Install Decidim on Ubuntu 18.04 | Decidim Install guide by Platoniq</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Install Decidim on Ubuntu 18.04" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A step by step guide to install Decidim for newcommers" />
+<meta property="og:description" content="A step by step guide to install Decidim for newcommers" />
+<link rel="canonical" href="http://localhost:4000/decidim-bionic/" />
+<meta property="og:url" content="http://localhost:4000/decidim-bionic/" />
+<meta property="og:site_name" content="Decidim Install guide by Platoniq" />
+<script type="application/ld+json">
+{"description":"A step by step guide to install Decidim for newcommers","headline":"Install Decidim on Ubuntu 18.04","@type":"WebPage","url":"http://localhost:4000/decidim-bionic/","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+
+  <div class="page-wrap">
+    <div class="side-bar">
+      <a href="http://localhost:4000/" class="site-title fs-6 lh-tight">Decidim Install guide by Platoniq</a>
+      <span class="fs-3"><button class="js-main-nav-trigger navigation-list-toggle btn btn-outline" type="button" data-text-toggle="Hide">Menu</button></span>
+      <div class="navigation main-nav js-main-nav">
+        <nav role="navigation" aria-label="Main navigation">
+  <ul class="navigation-list">
+    
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/" class="navigation-list-link">Installing Decidim</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item active">
+            
+            <a href="http://localhost:4000/decidim-bionic/" class="navigation-list-link active">Install Decidim on Ubuntu 18.04</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/basic-config/" class="navigation-list-link">Minimal configuration of Decidim</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/decidim-aws/" class="navigation-list-link">Installing in Amazon AWS with ElasticBeanstalk</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/decidim-update/" class="navigation-list-link">Updating Decidim between version</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/advanced-config/" class="navigation-list-link">Advanced config & tricks</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/hacking-decidim/" class="navigation-list-link">Hacking Decidim</a>
+            
+          </li>
+        
+      
+    
+  </ul>
+</nav>
+
+<hr>
+Fork me on GitHub: <a class="github-button" href="https://github.com/Platoniq/decidim-install" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star Platoniq/decidim-install on GitHub">Star</a>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+      </div>
+      <footer role="contentinfo" class="site-footer">
+        <p class="text-small text-grey-dk-000 mb-0">This site uses <a href="https://github.com/pmarsceill/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.</p>
+      </footer>
+    </div>
+    <div class="main-content-wrap js-main-content" tabindex="0">
+      <div class="page-header">
+        <div class="main-content">
+          
+          <div class="search js-search">
+            <div class="search-input-wrap">
+              <input type="text" class="js-search-input search-input" tabindex="0" placeholder="Search Decidim Install guide by Platoniq" aria-label="Search Decidim Install guide by Platoniq" autocomplete="off">
+              <svg width="14" height="14" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" class="search-icon"><title>Search</title><g fill-rule="nonzero"><path d="M17.332 20.735c-5.537 0-10-4.6-10-10.247 0-5.646 4.463-10.247 10-10.247 5.536 0 10 4.601 10 10.247s-4.464 10.247-10 10.247zm0-4c3.3 0 6-2.783 6-6.247 0-3.463-2.7-6.247-6-6.247s-6 2.784-6 6.247c0 3.464 2.7 6.247 6 6.247z"/><path d="M11.672 13.791L.192 25.271 3.02 28.1 14.5 16.62z"/></g></svg>
+            </div>
+            <div class="js-search-results search-results-wrap"></div>
+          </div>
+          
+          
+            <ul class="list-style-none text-small mt-md-1 mb-md-1 pb-4 pb-md-0 js-aux-nav aux-nav">
+              
+                <li class="d-inline-block my-0"><a href="//github.com/Platoniq/decidim-install">Decidim Install on GitHub</a></li>
+              
+            </ul>
+          
+        </div>
+      </div>
+      <div class="main-content">
+        
+          
+        
+        <div id="main-content" class="page-content" role="main">
+          <h1 id="install-decidim-on-ubuntu-1804">Install Decidim on Ubuntu 18.04</h1>
+
+<p>These instruction should work in any clean installation of Ubuntu 18.04. You may have to adapt some of the step in other cases.</p>
+
+<h2 id="1-setup-a-clean-server">1. Setup a clean server</h2>
+
+<p>Use a clean installation, I’m using DigitalOcean for this example, you can get a 50$, 30-day credit to spend in any machine (we use a 1G memory simple droplet here) if you register with this referral:</p>
+
+<p><a href="https://m.do.co/c/b5a36733f0df">https://m.do.co/c/b5a36733f0df</a></p>
+
+<p>Then, create a 1G droplet, choose Ubuntu 18.04:</p>
+
+<p><img src="/assets/do-select.png" alt="Select droplet in Digitalocean" /></p>
+
+<p><img src="/assets/do-create.png" alt="Create 1G droplet in Digitalocean" /></p>
+
+<blockquote>
+  <p>Once you’ve created the droplet, you will need a domain name, let’s say you bought <code class="highlighter-rouge">my-decidim.org</code>, you’ll need to point an <strong>A</strong> record in your DNS provider to the droplet public IP.</p>
+</blockquote>
+
+<p>Then I’ll recommend you to follow the guide from digitalocean in order to create a non-root user and secure your server (this is valid in other providers too):</p>
+
+<p>Follow these instructions using <code class="highlighter-rouge">decidim</code> instead of <code class="highlighter-rouge">sammy</code> as a user:
+https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04</p>
+
+<p>After that, I’d recommend to add some swap memory in your server (this is not necessary if you create a bigger memory droplet). For low-memory droplets it seems to work better with swap.</p>
+
+<p>To do that follow this tutorial as well:</p>
+
+<p>https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04</p>
+
+<p>From now on, I’ll assume you have created a non-root user (with sudo capabilities) named <code class="highlighter-rouge">decidim</code> (but use whatever you want) and you are logged into your machine, so you will see a bash prompt similar to this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh decidim@my-decidim.org
+Welcome to Ubuntu 18.04 LTS <span class="o">(</span>GNU/Linux 4.15.0-23-generic x86_64<span class="o">)</span>
+
+ <span class="k">*</span> Documentation:  https://help.ubuntu.com
+ <span class="k">*</span> Management:     https://landscape.canonical.com
+ <span class="k">*</span> Support:        https://ubuntu.com/advantage
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+51 packages can be updated.
+31 updates are security updates.
+
+The programs included with the Ubuntu system are free software<span class="p">;</span>
+the exact distribution terms <span class="k">for </span>each program are described <span class="k">in </span>the
+individual files <span class="k">in</span> /usr/share/doc/<span class="k">*</span>/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+To run a <span class="nb">command </span>as administrator <span class="o">(</span>user <span class="s2">"root"</span><span class="o">)</span>, use <span class="s2">"sudo &lt;command&gt;"</span><span class="nb">.</span>
+See <span class="s2">"man sudo_root"</span> <span class="k">for </span>details.
+
+decidim@decidim:~<span class="err">$</span>
+</code></pre></div></div>
+
+<p>Great, we have our server up and running. Now we install the required packages before installing decidim:</p>
+
+<h2 id="2-installing-necessary-software">2. Installing necessary software</h2>
+
+<p>First, let’s keep our system up to date:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt upgrade
+<span class="nb">sudo </span>apt autoremove
+</code></pre></div></div>
+
+<p>Now, configure the proper timezone for your server:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>dpkg-reconfigure tzdata
+</code></pre></div></div>
+
+<p>Then, install some required packages:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt install autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev
+</code></pre></div></div>
+<p>Now, let’s install ruby, by using the <a href="https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-18-04">rbenv</a> method.</p>
+
+<p>These are the commands you need to run if you follow the guide:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+<span class="nb">echo</span> <span class="s1">'export PATH="$HOME/.rbenv/bin:$PATH"'</span> <span class="o">&gt;&gt;</span> ~/.bashrc
+<span class="nb">echo</span> <span class="s1">'eval "$(rbenv init -)"'</span> <span class="o">&gt;&gt;</span> ~/.bashrc
+<span class="nb">source</span> ~/.bashrc
+</code></pre></div></div>
+
+<p>Now you should check if you have rbenv correctly installed, running the command <code class="highlighter-rouge">type rbenv</code> should give you this answer:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decidim@decidim:~<span class="nv">$ </span><span class="nb">type </span>rbenv
+rbenv is a <span class="k">function
+</span>rbenv <span class="o">()</span>
+<span class="o">{</span>
+    <span class="nb">local command</span><span class="p">;</span>
+    <span class="nb">command</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">1</span><span class="k">:-}</span><span class="s2">"</span><span class="p">;</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">"$#"</span> <span class="nt">-gt</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
+        </span><span class="nb">shift</span><span class="p">;</span>
+    <span class="k">fi</span><span class="p">;</span>
+    <span class="k">case</span> <span class="s2">"</span><span class="nv">$command</span><span class="s2">"</span> <span class="k">in
+        </span>rehash <span class="p">|</span> shell<span class="p">)</span>
+            <span class="nb">eval</span> <span class="s2">"</span><span class="k">$(</span>rbenv <span class="s2">"sh-</span><span class="nv">$command</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
+        <span class="p">;;</span>
+        <span class="k">*</span><span class="p">)</span>
+            <span class="nb">command </span>rbenv <span class="s2">"</span><span class="nv">$command</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+        <span class="p">;;</span>
+    <span class="k">esac</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>We still need to install ruby-build to simplify the installation of ruby:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+</code></pre></div></div>
+
+<p>At this point, you should be able to run the command <code class="highlighter-rouge">rbenv install -l</code> that will give you all ruby versions available:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decidim@decidim:~<span class="nv">$ </span>rbenv install <span class="nt">-l</span>
+Available versions:
+  1.8.5-p52
+  1.8.5-p113
+...
+  topaz-dev
+  truffleruby-1.0.0-rc2
+  truffleruby-1.0.0-rc3
+</code></pre></div></div>
+
+<p>We are going to use version 2.6.3, so run these commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rbenv install 2.6.3
+rbenv global 2.6.3
+</code></pre></div></div>
+<p>Now you can verify we have everything in order by running the command <code class="highlighter-rouge">ruby -v</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decidim@decidim:~<span class="nv">$ </span>ruby <span class="nt">-v</span>
+ruby 2.6.3p62 <span class="o">(</span>2019-04-16 revision 67580<span class="o">)</span> <span class="o">[</span>x86_64-linux]
+</code></pre></div></div>
+
+<p>If everything is ok, we need to setup Gems, the package manager for Ruby, after that we will be ready to install Decidim.</p>
+
+<p>To setup Gem, execute:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"gem: --no-document"</span> <span class="o">&gt;</span> ~/.gemrc
+gem install bundler
+</code></pre></div></div>
+
+<p>Again, you can test if everything is ok so far by running the command <code class="highlighter-rouge">gem env home</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decidim@decidim:~<span class="nv">$ </span>gem env home
+/home/decidim/.rbenv/versions/2.6.3/lib/ruby/gems/2.6.0
+</code></pre></div></div>
+
+<p>Great, now we have the basic server setup in place, next step is to install Decidim.</p>
+
+<h2 id="3-installing-decidim">3. Installing Decidim</h2>
+
+<p>Decidim uses Postgresql as a SQL database, we are going to install it in this machine (more advanced configurations will use a separate server for the database):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt install <span class="nt">-y</span> postgresql libpq-dev
+</code></pre></div></div>
+
+<p>We also need NodeJS as a dependency for the decidim generator, in ubuntu 18.04 it’s fine to install from the repositories (we also install imageMagick and a library needed since version 0.17, used by Decidim):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt install <span class="nt">-y</span> nodejs imagemagick libicu-dev
+</code></pre></div></div>
+<p>Now, we use the decidim generator to create our application. Note that you still need the package <code class="highlighter-rouge">libpg-dev</code> in order tu run the decidim generator (in case you install postgress in another server).</p>
+
+<p>First, install the gem Decidim (this may take a while):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install decidim
+</code></pre></div></div>
+<p>Now, run the generator to create our app:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decidim decidim-app
+</code></pre></div></div>
+
+<p>At this point, we have created a new folder in <code class="highlighter-rouge">~/decidim-app</code> with our code. We need to setup the database now.</p>
+
+<p>To do that, first we create the user and password in the database:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo</span> <span class="nt">-u</span> postgres psql <span class="nt">-c</span> <span class="s2">"CREATE USER decidim_app WITH SUPERUSER CREATEDB NOCREATEROLE PASSWORD 'Password1'"</span>
+</code></pre></div></div>
+<p>Choose a good password like I did ;)</p>
+
+<p>With the user created, it’s time for configure Decidim to use these credentials.</p>
+
+<p>Because we don’t want to directly store this sensitive data in the code itself, we are going to use an additional YAML file that will store all the secrets in one place. If, in the future, we want to create a Git repository with our application, we will exclude this file from the version control.</p>
+
+<p>In order to translate this file to the config system in Decidim, we are going to include the Ruby Gem “figaro” in our app to take care of it.</p>
+
+<p>First, let’s change to the decidim’s folder:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/decidim-app
+</code></pre></div></div>
+
+<p>Then, let’s edit the <code class="highlighter-rouge">Gemfile</code>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano Gemfile
+</code></pre></div></div>
+<p>We will modify that file to add a “production” section with our extra Gems, we add this line before the first <code class="highlighter-rouge">group</code> declaration:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gem</span> <span class="s2">"figaro"</span>
+</code></pre></div></div>
+
+<p>And we will create another <code class="highlighter-rouge">group</code> section with the production settings that will also install some additional gems needed later on.</p>
+
+<p>Add at the end of the <code class="highlighter-rouge">Gemfile</code>:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">group</span> <span class="ss">:production</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s2">"passenger"</span>
+  <span class="n">gem</span> <span class="s1">'delayed_job_active_record'</span>
+  <span class="n">gem</span> <span class="s2">"daemons"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>The whole <code class="highlighter-rouge">Gemfile</code> should look similar to this:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># frozen_string_literal: true</span>
+
+<span class="n">source</span> <span class="s2">"https://rubygems.org"</span>
+
+<span class="n">ruby</span> <span class="no">RUBY_VERSION</span>
+
+<span class="n">gem</span> <span class="s2">"decidim"</span><span class="p">,</span> <span class="s2">"0.14.0"</span>
+<span class="c1"># gem "decidim-consultations", "0.14.0"</span>
+<span class="c1"># gem "decidim-initiatives", "0.14.0"</span>
+
+<span class="n">gem</span> <span class="s2">"bootsnap"</span><span class="p">,</span> <span class="s2">"~&gt; 1.3"</span>
+
+<span class="n">gem</span> <span class="s2">"puma"</span><span class="p">,</span> <span class="s2">"~&gt; 3.0"</span>
+<span class="n">gem</span> <span class="s2">"uglifier"</span><span class="p">,</span> <span class="s2">"~&gt; 4.1"</span>
+
+<span class="n">gem</span> <span class="s2">"faker"</span><span class="p">,</span> <span class="s2">"~&gt; 1.8"</span>
+
+<span class="n">gem</span> <span class="s2">"figaro"</span>
+
+<span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s2">"byebug"</span><span class="p">,</span> <span class="s2">"~&gt; 10.0"</span><span class="p">,</span> <span class="ss">platform: :mri</span>
+  <span class="n">gem</span> <span class="s2">"decidim-dev"</span><span class="p">,</span> <span class="s2">"0.14.0"</span>
+<span class="k">end</span>
+
+<span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s2">"letter_opener_web"</span><span class="p">,</span> <span class="s2">"~&gt; 1.3"</span>
+  <span class="n">gem</span> <span class="s2">"listen"</span><span class="p">,</span> <span class="s2">"~&gt; 3.1"</span>
+  <span class="n">gem</span> <span class="s2">"spring"</span><span class="p">,</span> <span class="s2">"~&gt; 2.0"</span>
+  <span class="n">gem</span> <span class="s2">"spring-watcher-listen"</span><span class="p">,</span> <span class="s2">"~&gt; 2.0"</span>
+  <span class="n">gem</span> <span class="s2">"web-console"</span><span class="p">,</span> <span class="s2">"~&gt; 3.5"</span>
+<span class="k">end</span>
+
+<span class="n">group</span> <span class="ss">:production</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s2">"passenger"</span>
+  <span class="n">gem</span> <span class="s1">'delayed_job_active_record'</span>
+  <span class="n">gem</span> <span class="s2">"daemons"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+<p>After that we need to update our app to include the extra gems, run the next command (inside the app folder):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle install
+</code></pre></div></div>
+<p>Now, it’s time to create the configuration file with our custom values. We already have the database credentials (we’ve created the user before) and we need a random string that will be used by Decidim to encrypt cookies and other security stuff.</p>
+
+<p>Let’s generate a random string by executing the command <code class="highlighter-rouge">rake secret</code> inside the app folder:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decidim@decidim:~/decidim-app<span class="nv">$ </span><span class="nb">cd</span> ~/decidim-app
+decidim@decidim:~/decidim-app<span class="nv">$ </span>rake secret
+e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc5362dc885a7a15f671e81f7d77bc98fa4d8abfd048f829a78d7ffd33cd8b4b287
+</code></pre></div></div>
+<p>Copy that generated string and edit the new config file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano ~/decidim-app/config/application.yml
+</code></pre></div></div>
+
+<p>Paste inside this content:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">DATABASE_URL</span><span class="pi">:</span> <span class="s">postgres://decidim_app:Password1@localhost/decidim_prod</span>
+
+<span class="na">SECRET_KEY_BASE</span><span class="pi">:</span> <span class="s">e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc5362dc885a7a15f671e81f7d77bc98fa4d8abfd048f829a78d7ffd33cd8b4b287</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>Notes:</strong></p>
+  <ul>
+    <li>I’ve named my database <code class="highlighter-rouge">decidim_prod</code>, change that value to whatever you want for your decidim app.</li>
+    <li>Be aware that line with the with the SECRET_KEY_BASE keyword is only ONE line and you MUST put your own generated secret (the one generated with the  <code class="highlighter-rouge">rake secret</code> command)</li>
+  </ul>
+
+  <p><strong>👉 Going pro</strong> (optional):</p>
+  <ul>
+    <li>Now it’s a good time to initialize your installation as a GIT repository.</li>
+    <li>This will allow to keep track of your changes and revert them is something goes wrong.</li>
+    <li>This is optional, basically you need to execute:
+      <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/decidim-app
+git init <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Initial commit. Generated with Decidim 0.X https://decidim.org"</span>
+</code></pre></div>      </div>
+    </li>
+    <li>After that you should create commits everytime you make a relevant change.</li>
+  </ul>
+</blockquote>
+
+<p>At this point Decidim should be able to start working. We need to initialize and update the database by doing this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/decidim-app
+bin/rails db:create <span class="nv">RAILS_ENV</span><span class="o">=</span>production
+bin/rails assets:precompile db:migrate <span class="nv">RAILS_ENV</span><span class="o">=</span>production
+</code></pre></div></div>
+
+<p>The response to the second command should look something like this (quite long), this command compiles the static assets to prepare our app for production and migrates the database:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decidim@decidim:~/decidim-app<span class="nv">$ </span>bin/rails db:create <span class="nv">RAILS_ENV</span><span class="o">=</span>production
+Created database <span class="s1">'decidim_prod'</span>
+decidim@decidim:~/decidim-app<span class="nv">$ </span>bin/rails assets:precompile db:migrate <span class="nv">RAILS_ENV</span><span class="o">=</span>production
+Yarn executable was not detected <span class="k">in </span>the system.
+Download Yarn at https://yarnpkg.com/en/docs/install
+I, <span class="o">[</span>2018-07-16T13:10:56.442340 <span class="c">#32755]  INFO -- : Writing /home/decidim/decidim-app/public/assets/decidim/api/docs-3ca85e11b4f676d392a15494a0eb66962aaf08382c60a09ae3f1d7a6806a59ae.js</span>
+
+...
+
+<span class="o">==</span> 20180713145001 DeviseCreateDecidimUsers: migrating <span class="o">=========================</span>
+<span class="nt">--</span> adapter_name<span class="o">()</span>
+   -&gt; 0.0000s
+<span class="nt">--</span> adapter_name<span class="o">()</span>
+   -&gt; 0.0000s
+<span class="nt">--</span> adapter_name<span class="o">()</span>
+   -&gt; 0.0000s
+<span class="nt">--</span> create_table<span class="o">(</span>:decidim_users, <span class="o">{</span>:id<span class="o">=&gt;</span>:integer<span class="o">})</span>
+   -&gt; 0.0056s
+...
+</code></pre></div></div>
+
+<p>Now we are going to log into the Decidim console Rails app and create our first admin user:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/rails console <span class="nt">-e</span> production
+</code></pre></div></div>
+
+<p>A new prompt will appear:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Loading production environment (Rails 5.2.0)
+irb(main):001:0&gt;
+</code></pre></div></div>
+
+<p>In there, write these <strong>4</strong> lines and press enter (put your email and some secure password, you will use these credentials to login into Decidim super-admin:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">email</span> <span class="o">=</span> <span class="s2">"my-admin@email"</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s2">"&lt;a secure password&gt;"</span>
+<span class="n">user</span> <span class="o">=</span> <span class="no">Decidim</span><span class="o">::</span><span class="no">System</span><span class="o">::</span><span class="no">Admin</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">email: </span><span class="n">email</span><span class="p">,</span> <span class="ss">password: </span><span class="n">password</span><span class="p">,</span> <span class="ss">password_confirmation: </span><span class="n">password</span><span class="p">)</span>
+<span class="n">user</span><span class="p">.</span><span class="nf">save!</span>
+</code></pre></div></div>
+
+<p>Write <code class="highlighter-rouge">quit</code> or press <em>CTRL+D</em> to exit the rails console.</p>
+
+<p>If everything went fine, a very basic Decidim installation is ready to be shown to the world. We only are one step away from the glory, that is to configure an http web server to proxy our ruby application and handle the user petitions.</p>
+
+<h2 id="4-installing-nginx">4. Installing Nginx</h2>
+
+<p>As a web server we will use Nginx. To install Nginx execute the next commands (the first installs nginx, the others enables the public ports in the firewall, otherwise our webserver won’t be accessible):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nt">-y</span> install nginx
+<span class="nb">sudo </span>ufw allow http
+<span class="nb">sudo </span>ufw allow https
+</code></pre></div></div>
+
+<p>The last 2 commands are to allow the firewall (if we have it activated) let pass the http/https connection to the server. If you don’t use a firewall, you can skip them.</p>
+
+<p>Nginx is a very fast and efficient web server but it doesn’t handle Ruby applications by itself. We need and intermediary gateway for that, we will use <a href="https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/install_passenger.html">Passenger</a>.</p>
+
+<p>I’ll summarize here all the commands to <a href="https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/install_passenger.html">install Passenger in Ubuntu 18.04</a> (follow the link to get into details):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt install <span class="nt">-y</span> dirmngr gnupg
+<span class="nb">sudo </span>apt-key adv <span class="nt">--keyserver</span> hkp://keyserver.ubuntu.com:80 <span class="nt">--recv-keys</span> 561F9B9CAC40B2F7
+<span class="nb">sudo </span>apt install <span class="nt">-y</span> apt-transport-https ca-certificates
+<span class="nb">sudo </span>sh <span class="nt">-c</span> <span class="s1">'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger bionic main &gt; /etc/apt/sources.list.d/passenger.list'</span>
+<span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt install <span class="nt">-y</span> libnginx-mod-http-passenger
+</code></pre></div></div>
+
+<p>Next is to activate passenger, execute this (it’s one line):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-f</span> /etc/nginx/modules-enabled/50-mod-http-passenger.conf <span class="o">]</span><span class="p">;</span> <span class="k">then </span><span class="nb">sudo </span>ln <span class="nt">-s</span> /usr/share/nginx/modules-available/mod-http-passenger.load /etc/nginx/modules-enabled/50-mod-http-passenger.conf <span class="p">;</span> <span class="k">fi</span>
+</code></pre></div></div>
+
+<p>You can check if the file is created successfully by using <code class="highlighter-rouge">ls</code> on that file, it should be something similar to this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decidim@decidim:~/decidim-app<span class="nv">$ </span><span class="nb">sudo ls</span> /etc/nginx/conf.d/mod-http-passenger.conf
+/etc/nginx/conf.d/mod-http-passenger.conf
+</code></pre></div></div>
+
+<p>For additional checks, restart nginx:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>service nginx restart
+</code></pre></div></div>
+
+<p>If you run the command <code class="highlighter-rouge">passenger-config validate-install</code> it should give you an answer like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decidim@decidim:~/decidim-app$ sudo /usr/bin/passenger-config validate-install
+What would you like to validate?
+Use &lt;space&gt; to select.
+If the menu doesn't display correctly, press '!'
+
+ ‣ ⬢  Passenger itself
+   ⬡  Apache
+
+-------------------------------------------------------------------------
+
+ * Checking whether this Passenger install is in PATH... ✓
+ * Checking whether there are no other Passenger installations... ✓
+
+Everything looks good. :-)
+</code></pre></div></div>
+
+<p>If the output complains about having 2 copies of passenger installed, then passenger may be using the wrong copy of it.</p>
+
+<p>Let’s ensure everything is ok by editing the file <code class="highlighter-rouge">/etc/nginx/conf.d/mod-http-passenger.conf</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nano /etc/nginx/conf.d/mod-http-passenger.conf
+</code></pre></div></div>
+
+<p>And be sure that the line that contains <code class="highlighter-rouge">passenger_ruby</code> points to our <code class="highlighter-rouge">.rbenv</code> ruby folder, the whole file should look like this:</p>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">### Begin automatically installed Phusion Passenger config snippet ###
+</span><span class="k">passenger_root</span> <span class="n">/usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini</span><span class="p">;</span>
+<span class="k">passenger_ruby</span> <span class="n">/home/decidim/.rbenv/shims/ruby</span><span class="p">;</span>
+<span class="c1">### End automatically installed Phusion Passenger config snippet ###
+</span></code></pre></div></div>
+
+<p>Once Nginx &amp; Passenger are installed, we’ll configure nginx to point http(s) request to our copy of Decidim. To do that, we need to create an Nginx configuration file and setup a new virtual host with our domain (ie: my-decidim.org):</p>
+
+<p>Create/edit the new Nginx config file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nano /etc/nginx/sites-enabled/decidim.conf
+</code></pre></div></div>
+
+<p>Paste this inside (replace <code class="highlighter-rouge">my-decidim.org</code> with your own domain):</p>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+    <span class="kn">listen</span> <span class="s">[::]:80</span> <span class="s">ipv6only=on</span><span class="p">;</span>
+
+    <span class="kn">server_name</span> <span class="s">my-decidim.org</span><span class="p">;</span>
+    <span class="kn">client_max_body_size</span> <span class="mi">32M</span><span class="p">;</span>
+
+    <span class="kn">passenger_enabled</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">passenger_ruby</span> <span class="n">/home/decidim/.rbenv/shims/ruby</span><span class="p">;</span>
+
+    <span class="kn">rails_env</span>    <span class="s">production</span><span class="p">;</span>
+    <span class="kn">root</span>         <span class="n">/home/decidim/decidim-app/public</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Restart Nginx now:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>service nginx restart
+</code></pre></div></div>
+
+<p><strong>Done!</strong> Decidim should be working now on our server, if you point your browser to your domain (ie: my-decidim.org) it will redirect you to the system admin interface (which is the web interface that will allow to create your first organization):</p>
+
+<p><img src="/assets/decidim-system.png" alt="System login" /></p>
+
+<p>You can login into this administrator using the credentials you created when logged into the Rails console (<code class="highlighter-rouge">my-admin@email</code>).</p>
+
+<p>But before to do that, there are somethings that should be configured, because, right now, our system is not capable yet of sending emails (which is a basic thing).</p>
+
+<p>Continue this guide by setting up a <a href="/basic-config/">basic configuration</a>.</p>
+
+
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

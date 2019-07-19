@@ -1,3 +1,9 @@
+---
+layout: default
+title: Installing in Amazon AWS with ElasticBeanstalk
+nav_order: 3
+---
+
 Install Decidim in Amazon AWS - ElasticBeanstalk
 ================================================
 
@@ -444,6 +450,32 @@ Create a commit:
 ```bash
 git add .
 git commit -m "Add swap file"
+git push
+```
+
+### 4.3 Add required libraries to ELB machines
+
+Since version 0.17, the package `libicu-dev` is required and is not installed by default in AWS machines. To enable it we need to create another file inside the `.ebextensions` folder:
+
+```bash
+mkdir .ebextensions
+nano .ebextensions/02_packages.config
+```
+
+With this content:
+
+```yaml
+packages:
+  yum:
+    git: []
+    libicu-devel: []
+```
+
+Create a commit:
+
+```bash
+git add .
+git commit -m "Add required libraries"
 git push
 ```
 

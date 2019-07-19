@@ -1,3 +1,9 @@
+---
+layout: default
+title: Advanced config & tricks
+nav_order: 5
+---
+
 Advanced configuration of Decidim
 =================================
 
@@ -79,3 +85,5 @@ irb(main):007:0>
 ```
 
 Done! your new locales should be available in your URL.
+
+> **NOTE:** It's difficult to **remove** languages as some content is cached in some places once generated. Removing languages can lead easily to generation of 500 errors.

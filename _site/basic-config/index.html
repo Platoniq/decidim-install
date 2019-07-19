@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  
+    <title>Minimal configuration of Decidim - Decidim Install guide by Platoniq</title>
+
+    
+  
+
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="http://localhost:4000/assets/css/just-the-docs.css">
+
+  
+
+  
+    <script type="text/javascript" src="http://localhost:4000/assets/js/vendor/lunr.min.js"></script>
+  
+  <script type="text/javascript" src="http://localhost:4000/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Minimal configuration of Decidim | Decidim Install guide by Platoniq</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Minimal configuration of Decidim" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A step by step guide to install Decidim for newcommers" />
+<meta property="og:description" content="A step by step guide to install Decidim for newcommers" />
+<link rel="canonical" href="http://localhost:4000/basic-config/" />
+<meta property="og:url" content="http://localhost:4000/basic-config/" />
+<meta property="og:site_name" content="Decidim Install guide by Platoniq" />
+<script type="application/ld+json">
+{"description":"A step by step guide to install Decidim for newcommers","headline":"Minimal configuration of Decidim","@type":"WebPage","url":"http://localhost:4000/basic-config/","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+
+  <div class="page-wrap">
+    <div class="side-bar">
+      <a href="http://localhost:4000/" class="site-title fs-6 lh-tight">Decidim Install guide by Platoniq</a>
+      <span class="fs-3"><button class="js-main-nav-trigger navigation-list-toggle btn btn-outline" type="button" data-text-toggle="Hide">Menu</button></span>
+      <div class="navigation main-nav js-main-nav">
+        <nav role="navigation" aria-label="Main navigation">
+  <ul class="navigation-list">
+    
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/" class="navigation-list-link">Installing Decidim</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/decidim-bionic/" class="navigation-list-link">Install Decidim on Ubuntu 18.04</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item active">
+            
+            <a href="http://localhost:4000/basic-config/" class="navigation-list-link active">Minimal configuration of Decidim</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/decidim-aws/" class="navigation-list-link">Installing in Amazon AWS with ElasticBeanstalk</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/decidim-update/" class="navigation-list-link">Updating Decidim between version</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/advanced-config/" class="navigation-list-link">Advanced config & tricks</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/hacking-decidim/" class="navigation-list-link">Hacking Decidim</a>
+            
+          </li>
+        
+      
+    
+  </ul>
+</nav>
+
+<hr>
+Fork me on GitHub: <a class="github-button" href="https://github.com/Platoniq/decidim-install" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star Platoniq/decidim-install on GitHub">Star</a>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+      </div>
+      <footer role="contentinfo" class="site-footer">
+        <p class="text-small text-grey-dk-000 mb-0">This site uses <a href="https://github.com/pmarsceill/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.</p>
+      </footer>
+    </div>
+    <div class="main-content-wrap js-main-content" tabindex="0">
+      <div class="page-header">
+        <div class="main-content">
+          
+          <div class="search js-search">
+            <div class="search-input-wrap">
+              <input type="text" class="js-search-input search-input" tabindex="0" placeholder="Search Decidim Install guide by Platoniq" aria-label="Search Decidim Install guide by Platoniq" autocomplete="off">
+              <svg width="14" height="14" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" class="search-icon"><title>Search</title><g fill-rule="nonzero"><path d="M17.332 20.735c-5.537 0-10-4.6-10-10.247 0-5.646 4.463-10.247 10-10.247 5.536 0 10 4.601 10 10.247s-4.464 10.247-10 10.247zm0-4c3.3 0 6-2.783 6-6.247 0-3.463-2.7-6.247-6-6.247s-6 2.784-6 6.247c0 3.464 2.7 6.247 6 6.247z"/><path d="M11.672 13.791L.192 25.271 3.02 28.1 14.5 16.62z"/></g></svg>
+            </div>
+            <div class="js-search-results search-results-wrap"></div>
+          </div>
+          
+          
+            <ul class="list-style-none text-small mt-md-1 mb-md-1 pb-4 pb-md-0 js-aux-nav aux-nav">
+              
+                <li class="d-inline-block my-0"><a href="//github.com/Platoniq/decidim-install">Decidim Install on GitHub</a></li>
+              
+            </ul>
+          
+        </div>
+      </div>
+      <div class="main-content">
+        
+          
+        
+        <div id="main-content" class="page-content" role="main">
+          <h1 id="basic-configuration-of-decidim">Basic configuration of Decidim</h1>
+
+<p>In this document, we’ll finish the configuration of our installation of Decidim in order to make it capable of the most basic things, like sending emails. This configuration is independent of the operating system, that’s why it’s in a different file.</p>
+
+<p>I’ll assume here that you have a <a href="/decidim-bionic/">running copy of Decidim</a> with empty content, no users or organizations created yet (a part from the system user admin created in the previous tutorial).</p>
+
+<h2 id="email-configuration">Email configuration</h2>
+
+<p>The most important thing to configure is the capability for sending emails, otherwise users won’t be able to register.</p>
+
+<p>We’ll configure here a Gmail account, which is suitable for small organizations in order to get started. Configure any other SMTP provider is analogous.</p>
+
+<blockquote>
+  <p><strong>NOTE:</strong> Gmail has a limit of <a href="https://support.google.com/mail/answer/22839?hl=en">500 recipients</a> per day (10000 per day if you are using Gsuite) and, therefore, is not recommended for medium/large production sites.</p>
+
+  <p>Another drawback of using Gmail is that the “From” field of the email is going to be rewritten no matter what we configure in Decidim. This is going to affect how the end users sees the sender.</p>
+
+  <p>You can use external email providers like <a href="https://alternativeto.net/software/amazon-ses-simple-email-service-/">Amazon SES or similar</a>.</p>
+</blockquote>
+
+<p>First, we need to configure our Gmail account in order to allow external SMTP activation. Gmail accounts may have SMTP sending disable by default if you have disabled the option “Enable less secure applications”. In that case we need to create an application password for Decidim.</p>
+
+<p><strong>Option 1</strong>, enable “less secure applications”.</p>
+
+<p>Go to this link (logged into your Gmail account), and activate the checkbox “Allow less secure apps”:</p>
+
+<p>https://myaccount.google.com/lesssecureapps</p>
+
+<p>Official instructions from Google are here:
+https://support.google.com/accounts/answer/6010255?hl=en</p>
+
+<p><strong>Option 2</strong>, create an application specific password. If you have 2-factor authentication on your Gmail account you must choose this option.</p>
+
+<ol>
+  <li>Go to https://security.google.com/settings/security/apppasswords
+and login using your Gmail account.</li>
+  <li>Create a new application password by selecting the option “Other” in the section “Device”:<br /><br /><img src="/assets/gmail-app-pass1.png" alt="" /></li>
+  <li>A new window will appear with your password, copy it because you won’t be able to read that password anymore once you close that window (you can always generate a news app password though).<br /><br /><img src="/assets/gmail-app-pass2.png" alt="" /><br /><br />Official documentation from Google is here:
+https://support.google.com/mail/answer/185833?hl=en</li>
+</ol>
+
+<p>We can now proceed to configure Decidim to use our credentials.</p>
+
+<p>Let’s edit our <code class="highlighter-rouge">application.yml</code> file and add some constants in that file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano ~/decidim-app/config/application.yml
+</code></pre></div></div>
+
+<p>Add these lines at the end, by using your own Gmail (or Gsuite) account and using your Gmail password if choosed the <em>Option 1</em> or the generated password in case of <em>Option 2</em></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">SMTP_USERNAME</span><span class="pi">:</span> <span class="s">my-decidim@gmail.com</span>
+<span class="na">SMTP_PASSWORD</span><span class="pi">:</span> <span class="s">suwbyijyxoppiwwz</span>
+<span class="na">SMTP_ADDRESS</span><span class="pi">:</span> <span class="s">smtp.gmail.com</span>
+<span class="na">SMTP_DOMAIN</span><span class="pi">:</span> <span class="s">gmail.com</span>
+</code></pre></div></div>
+
+<p>If you are using Gsuite, replace <code class="highlighter-rouge">gmail.com</code> with your own domain (except in the line SMTP_ADDRESS).</p>
+
+<blockquote>
+  <p>If you are using some other SMTP configuration you have more parameters to tweak under the file <code class="highlighter-rouge">config/secrets.yml</code></p>
+
+  <p>Check the section <code class="highlighter-rouge">production</code> on that file (for example, you may want to change the default port from <code class="highlighter-rouge">587</code> to <code class="highlighter-rouge">465</code>, <code class="highlighter-rouge">25</code>, etc)</p>
+</blockquote>
+
+<p>Now, we need to add a processor to Ruby on Rails that will actually send the emails. There’s several options here, as usually we are going to use the simplest one.</p>
+
+<p>In our Gemfile (if you followed the previous guide), we added the Gem <code class="highlighter-rouge">delayed_job_active_record</code>, ensure that your <code class="highlighter-rouge">Gemfile</code> has it along with the <code class="highlighter-rouge">daemons</code> gem:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">group</span> <span class="ss">:production</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s2">"passenger"</span>
+  <span class="n">gem</span> <span class="s1">'delayed_job_active_record'</span>
+  <span class="n">gem</span> <span class="s2">"daemons"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>We need to setup the delayed_job gem, run these commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/decidim-app
+bundle install
+bin/rails generate delayed_job:active_record
+bin/rake db:migrate
+</code></pre></div></div>
+
+<p>At this point, our system should be able to send emails, however, there’s and additional file that should be configured to specify our “FROM” sender field. This is specially important if you don’t use Gmail, because Gmail always overwrites that field to match the sender account.</p>
+
+<p>So, edit the file <code class="highlighter-rouge">config/initializers/decidim.rb</code> and change the values <code class="highlighter-rouge">My Application Name</code> and <code class="highlighter-rouge">change-me@domain.org</code> values to match your own ones:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/decidim-app
+nano config/initializers/decidim.rb
+</code></pre></div></div>
+
+<p>Search for these lines and change them to match your own values:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">...</span>
+<span class="no">Decidim</span><span class="p">.</span><span class="nf">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">application_name</span> <span class="o">=</span> <span class="s2">"My Application Name"</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">mailer_sender</span> <span class="o">=</span> <span class="s2">"change-me@domain.org"</span>
+<span class="o">...</span>
+</code></pre></div></div>
+
+<p>Delayed job is an independent process that handles emails asynchronously, it needs to be up and running, use this command to start the process:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/decidim-app
+RAILS_ENV=production bin/delayed_job restart
+</code></pre></div></div>
+
+<p>If you face problems of non-sent emails, please check if delayed_job is running:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RAILS_ENV=production bin/delayed_job status
+</code></pre></div></div>
+
+<p>You should now ensure that delayed_job is started on system reboot. To ensure that we can create a custom script in the system crontab:</p>
+
+<p>Create a new file in your config folder:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/decidim-app
+nano config/delayed_job_cron.sh
+</code></pre></div></div>
+
+<p>Copy this content to that file, changing the APP_PATH to match your decidim app if required:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.rbenv/bin:</span><span class="nv">$PATH</span><span class="s2">"</span>
+<span class="nb">eval</span> <span class="s2">"</span><span class="k">$(</span>rbenv init -<span class="k">)</span><span class="s2">"</span>
+<span class="nv">APP_PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/decidim-app"</span>
+
+<span class="k">if</span> <span class="o">!</span> <span class="o">[</span> <span class="nt">-s</span> <span class="nv">$APP_PATH</span>/tmp/pids/delayed_job.pid <span class="o">]</span><span class="p">;</span> <span class="k">then
+  </span><span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">$APP_PATH</span>/bin/delayed_job start
+<span class="k">fi</span>
+
+</code></pre></div></div>
+
+<p>Exit (pressing CTRL-X and saving), then give the file execution permissions:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod +x config/delayed_job_cron.sh
+</code></pre></div></div>
+
+<p>Now create a crontab entry with the command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab <span class="nt">-e</span>
+</code></pre></div></div>
+
+<p>Add the next line to it (again, change the path if you have personalized the application route):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*/5 * * * * /home/decidim/decidim-app/config/delayed_job_cron.sh
+</code></pre></div></div>
+
+<blockquote>
+  <p>👉 A more robust solution is to use <code class="highlighter-rouge">sidekiq</code>, this involves the use of the additional simple storage database Redis.
+ The process is described in the configuration of <a href="/decidim-aws/">Decidim using AWS</a>, but Redis should be installed manually if using the DigitalOcean guide.</p>
+</blockquote>
+
+<p>Now, if you are using IPv6 in your system, you may encounter problems sending emails via external smtp servers (at least with Gmail). If you don’t need IPv6 (if you don’t know, chances are that you don’t), I’d recommend to disable it. To do that edit the file <code class="highlighter-rouge">/etc/sysctl.conf</code>:</p>
+
+<pre><code class="language-nano">sudo nano /etc/sysctl.conf
+</code></pre>
+
+<p>And add at the end of the file these lines:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#disable ipv6
+</span><span class="py">net.ipv6.conf.all.disable_ipv6</span> <span class="p">=</span> <span class="s">1</span>
+<span class="py">net.ipv6.conf.default.disable_ipv6</span> <span class="p">=</span> <span class="s">1</span>
+<span class="py">net.ipv6.conf.lo.disable_ipv6</span> <span class="p">=</span> <span class="s">1</span>
+</code></pre></div></div>
+
+<p>Apply the changes to the system:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>sysctl <span class="nt">-p</span>
+</code></pre></div></div>
+
+<p>Finally, reload passenger with this command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>passenger-config restart-app ~/decidim-app
+</code></pre></div></div>
+
+<p>Our system should be ready now, we can go to our Decidim <code class="highlighter-rouge">URL/system</code> login with our system manager user created in the previous tutorial and create our first organization. You’ll see a window similar to this:</p>
+
+<p><img src="/assets/decidim-create-org.png" alt="Create organization in decidim" /></p>
+
+<p>Once created you can start using Decidim, next steps are optional (but recommended).</p>
+
+<h3 id="debugging-email-problems">Debugging email problems</h3>
+
+<p>If you’re your Decidim is not sending mails you need to find out the cause. Decidim has a log file, in our case it’s placed in the folder <code class="highlighter-rouge">log</code> in our installation folder.</p>
+
+<p>You can follow “live” everything that happens using the <code class="highlighter-rouge">tail</code> command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tail ~/decidim-app/log/production.log <span class="nt">-f</span>
+</code></pre></div></div>
+<p>(Press CTRL-C to exit)</p>
+
+<p>But we are interested in finding errors while sending emails, you can do it with grep:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">grep </span>ERROR ~/decidim-app/log/production.log <span class="nt">-A3</span> <span class="nt">-B3</span>
+</code></pre></div></div>
+
+<p>If that gives you some results you may want to post an issue with the info.</p>
+
+<p>For example, if you see something like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>----==_mimepart_5b4f1d00c0e07_4b232aceae7075f418469--
+
+E, [2018-07-18T12:57:34.801540 #19235] ERROR -- : [ActiveJob] [ActionMailer::DeliveryJob] [a0572a5f-6ed3-45dd-bc24-3568bc6f665b] Error performing ActionMailer::DeliveryJob (Job ID: a0572a5f-6ed3-45dd-bc24-3568bc6f665b) from Async(mailers) in 30203.2ms: Net::OpenTimeout (execution expired):
+/home/decidim/.rbenv/versions/2.5.1/lib/ruby/2.5.0/net/smtp.rb:539:in `initialize'
+/home/decidim/.rbenv/versions/2.5.1/lib/ruby/2.5.0/net/smtp.rb:539:in `open'
+</code></pre></div></div>
+
+<p>Then, you are probably suffering the IPv6 problem commented before.</p>
+
+<h2 id="enabling-ssl-with-lets-encrypt">Enabling SSL (with Let’s encrypt)</h2>
+
+<p>Although this is not mandatory in order to have Decidim working, in a practical way it is: SSL will give your users trust and it’s free nowadays.</p>
+
+<p>SSL ensures that you offer a secure site to your users (URL will start with <code class="highlighter-rouge">https://</code>) and the browsers won’t annoy you with that “insecure page” message.</p>
+
+<p>You can follow <a href="https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04">this guide from DigitalOcean</a> to configure Nginx with Let’s Encrypt, here are the steps summarized:</p>
+
+<p>We are going to use the official Certbot from the <a href="https://letsencrypt.org/">Let’s Encrypt</a> project.</p>
+
+<p>First, we install the latests version with these commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>add-apt-repository <span class="nt">-y</span> ppa:certbot/certbot
+<span class="nb">sudo </span>apt install <span class="nt">-y</span> python-certbot-nginx
+</code></pre></div></div>
+
+<p>The original guide has now some step to check our domain name and our firewall configuration, if you’ve followed the <a href="/decidim-bionic/">previous tutorial</a> we have this already covered.</p>
+
+<p>So, let’s run the certbot script (change <code class="highlighter-rouge">my-decidim.org</code> with your own full URL):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>certbot <span class="nt">--nginx</span> <span class="nt">-d</span> my-decidim.org
+</code></pre></div></div>
+
+<p>You will have to answer 3 questions (write your email, accept the terms and choose if you want to be included in their newsletter). Once the script has collected your certificate, it will ask you if you want to redirect all <code class="highlighter-rouge">http</code> to <code class="highlighter-rouge">https</code>, I recommend to choose <em>yes</em> here so no further configuration will be needed in our Decidim install.</p>
+
+<p>The output of the full command should be like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decidim@decidim:~$ sudo certbot --nginx -d my-decidim.org
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Plugins selected: Authenticator nginx, Installer nginx
+Enter email address (used for urgent renewal and security notices) (Enter 'c' to
+cancel): ivan@platoniq.net
+
+-------------------------------------------------------------------------------
+Please read the Terms of Service at
+https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf. You must
+agree in order to register with the ACME server at
+https://acme-v01.api.letsencrypt.org/directory
+-------------------------------------------------------------------------------
+(A)gree/(C)ancel: A
+
+-------------------------------------------------------------------------------
+Would you be willing to share your email address with the Electronic Frontier
+Foundation, a founding partner of the Let's Encrypt project and the non-profit
+organization that develops Certbot? We'd like to send you email about our work
+encrypting the web, EFF news, campaigns, and ways to support digital freedom.
+-------------------------------------------------------------------------------
+(Y)es/(N)o: Y
+Obtaining a new certificate
+Performing the following challenges:
+http-01 challenge for my-decidim.org
+Waiting for verification...
+Cleaning up challenges
+Deploying Certificate to VirtualHost /etc/nginx/sites-enabled/decidim.conf
+
+Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.
+-------------------------------------------------------------------------------
+1: No redirect - Make no further changes to the webserver configuration.
+2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for
+new sites, or if you're confident your site works on HTTPS. You can undo this
+change by editing your web server's configuration.
+-------------------------------------------------------------------------------
+Select the appropriate number [1-2] then [enter] (press 'c' to cancel): 2
+Redirecting all traffic on port 80 to ssl in /etc/nginx/sites-enabled/decidim.conf
+
+-------------------------------------------------------------------------------
+Congratulations! You have successfully enabled https://my-decidim.org
+
+You should test your configuration at:
+https://www.ssllabs.com/ssltest/analyze.html?d=my-decidim.org
+-------------------------------------------------------------------------------
+
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/my-decidim.org/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/my-decidim.org/privkey.pem
+   Your cert will expire on 2018-10-17. To obtain a new or tweaked
+   version of this certificate in the future, simply run certbot again
+   with the "certonly" option. To non-interactively renew *all* of
+   your certificates, run "certbot renew"
+ - Your account credentials have been saved in your Certbot
+   configuration directory at /etc/letsencrypt. You should make a
+   secure backup of this folder now. This configuration directory will
+   also contain certificates and private keys obtained by Certbot so
+   making regular backups of this folder is ideal.
+ - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
+</code></pre></div></div>
+
+<p>The script also creates an entry in the crontab system to renew automatically the certificate every 3 months. Read the <a href="https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04">original guide</a> for more details.</p>
+
+<p>What now? Nothing! That’s it! You can point your browser to your URL and will see how your Decidim is served securely.</p>
+
+<h2 id="setting-up-oauth-authentication">Setting up Oauth authentication</h2>
+
+<p>By configuring OAuth, you’ll be able to log into your installation of Decidim by using some well known providers, like Facebook, Google or Twitter.</p>
+
+<p>I highly recommend to configure SSL before get into this step. You’ll need to tell the providers about your full URL and that includes the <code class="highlighter-rouge">https://</code> part.</p>
+
+<p>You can just follow the <a href="https://github.com/decidim/decidim/blob/master/docs/services/social_providers.md">original documentation</a> from the core team of Decidim, but as we are using the gem <code class="highlighter-rouge">figaro</code> we’ll modify the file <code class="highlighter-rouge">config/application.yml</code> instead of <code class="highlighter-rouge">config/secrets.yml</code>.</p>
+
+<p>These are the original instructions tweaked to match our configuration:</p>
+
+<h3 id="facebook">Facebook</h3>
+
+<ol>
+  <li>Navigate to <a href="https://developers.facebook.com/">Facebook Developers Page</a></li>
+  <li>Follow the “Add a New App” link.</li>
+  <li>Click the “Website” option.</li>
+  <li>Fill in your application name and click “Create New Facebook App ID” button.</li>
+  <li>Fill in the contact email info and category.</li>
+  <li>Validate the captcha.</li>
+  <li>Ignore the source code and fill in the URL field with <code class="highlighter-rouge">https://YOUR_DECIDIM_HOST/users/auth/facebook/callback</code></li>
+  <li>Navigate to the application dashboard and copy the APP_ID and APP_SECRET</li>
+</ol>
+
+<h3 id="twitter">Twitter</h3>
+
+<ol>
+  <li>Navigate to <a href="https://developer.twitter.com/">Twitter Developers Page</a></li>
+  <li>You need to apply for a Developer’s account, will be guided during the process</li>
+  <li>Follow the “My apps” link.</li>
+  <li>Click the “Create New App” button.</li>
+  <li>Fill in the <code class="highlighter-rouge">Name</code>, <code class="highlighter-rouge">Description</code> fields.</li>
+  <li>Fill in the <code class="highlighter-rouge">Website</code> field with YOUR_DECIDIM_HOST value and the <code class="highlighter-rouge">Callback URL</code> field with <code class="highlighter-rouge">https://YOUR_DECIDIM_HOST/users/auth/twitter/callback</code>. If you are working on a development app you need to use <code class="highlighter-rouge">http://127.0.0.1:3000/</code> instead of <code class="highlighter-rouge">http://localhost:3000/</code>.</li>
+  <li>Check the ‘Developer Agreement’ checkbox and click the ‘Create your Twitter application’ button.</li>
+  <li>Navigate to the “Keys and Access Tokens” tab and copy the API_KEY and API_SECRET.</li>
+  <li>(Optional) Navigate to the “Permissions” tab and check the “Request email addresses from users” checkbox.</li>
+</ol>
+
+<h3 id="google">Google</h3>
+
+<ol>
+  <li>Navigate to <a href="https://console.developers.google.com">Google Developers Page</a></li>
+  <li>Follow the ‘Create project’ link.</li>
+  <li>Fill in the name of your app.</li>
+  <li>Navigate to the project dashboard and click on “Enable API”</li>
+  <li>Click on <code class="highlighter-rouge">Google+ API</code> and then “Enable”</li>
+  <li>Navigate to the project credentials page and click on <code class="highlighter-rouge">OAuth consent screen</code>.</li>
+  <li>Fill in the <code class="highlighter-rouge">Product name</code> field</li>
+  <li>Click on <code class="highlighter-rouge">Credentials</code> tab and click on “Create credentials” button. Select <code class="highlighter-rouge">OAuth client ID</code>.</li>
+  <li>Select <code class="highlighter-rouge">Web applications</code>. Fill in the <code class="highlighter-rouge">Authorized Javascript origins</code> with your url. Then fill in the <code class="highlighter-rouge">Authorized redirect URIs</code> with your url and append the path <code class="highlighter-rouge">/users/auth/google_oauth2/callback</code>.</li>
+  <li>Copy the CLIENT_ID AND CLIENT_SECRET</li>
+</ol>
+
+<h3 id="common-steps">Common steps</h3>
+
+<p>Once you’ve created your desired applications in the providers you want. You need to activate the variable <code class="highlighter-rouge">enabled</code> in the file <code class="highlighter-rouge">config/secrets.yml</code> for each configured service.</p>
+
+<p>For instance, if we want the Facebook login, we need to edit the secion “default/ommiauth/facebook”:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano ~/decidim-app/config/secrets.yml
+</code></pre></div></div>
+
+<p>We will make sure it looks like this:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">...</span>
+<span class="na">default</span><span class="pi">:</span> <span class="nl">&amp;default</span>
+  <span class="na">omniauth</span><span class="pi">:</span>
+    <span class="na">facebook</span><span class="pi">:</span>
+      <span class="c1"># It must be a boolean. Remember ENV variables doesn't support booleans.</span>
+      <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span>
+      <span class="na">app_id</span><span class="pi">:</span> <span class="s">&lt;%= ENV["OMNIAUTH_FACEBOOK_APP_ID"] %&gt;</span>
+      <span class="na">app_secret</span><span class="pi">:</span> <span class="s">&lt;%= ENV["OMNIAUTH_FACEBOOK_APP_SECRET"] %&gt;</span>
+<span class="nn">...</span>
+</code></pre></div></div>
+
+<p>Repeat the process for every service you want.</p>
+
+<p>After that we need to add the env vars to our <code class="highlighter-rouge">config/application.yml</code> file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano ~/decidim-app/config/application.yml
+</code></pre></div></div>
+
+<p>Add the lines you need according to your services:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># if you've enabled facebook:</span>
+<span class="na">OMNIAUTH_FACEBOOK_APP_ID</span><span class="pi">:</span> <span class="s">&lt;your-facebook-app-id&gt;</span>
+<span class="na">OMNIAUTH_FACEBOOK_APP_SECRET</span><span class="pi">:</span> <span class="s">&lt;your-facebook-app-secret&gt;</span>
+<span class="c1"># if twitter:</span>
+<span class="na">OMNIAUTH_TWITTER_API_KEY</span><span class="pi">:</span> <span class="s">&lt;your-twitter-api-key&gt;</span>
+<span class="na">OMNIAUTH_TWITTER_API_SECRET</span><span class="pi">:</span> <span class="s">&lt;your-twitter-api-secret&gt;</span>
+<span class="c1"># if google:</span>
+<span class="na">OMNIAUTH_GOOGLE_CLIENT_ID</span><span class="pi">:</span> <span class="s">&lt;your-google-client-id&gt;</span>
+<span class="na">OMNIAUTH_GOOGLE_CLIENT_SECRET</span><span class="pi">:</span> <span class="s">&lt;your-google-client-secret&gt;</span>
+</code></pre></div></div>
+
+<p>Restart passenger and you’re done:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>passenger-config restart-app ~/decidim-app
+</code></pre></div></div>
+
+<blockquote>
+  <p>Note if you are using ENV vars directly - as we do in AWS Elastic Beanstalk - You don’t need to edit the file <code class="highlighter-rouge">config/application.yml</code> just create the appropiate ENV var in your instances.</p>
+
+  <p>In Elastic Beanstalk the commands will be:</p>
+
+  <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eb setenv <span class="nv">OMNIAUTH_FACEBOOK_APP_ID</span><span class="o">=</span><span class="k">*****</span>
+eb setenv <span class="nv">OMNIAUTH_FACEBOOK_APP_SECRET</span><span class="o">=</span><span class="k">*****</span>
+eb deploy
+</code></pre></div>  </div>
+</blockquote>
+
+<h2 id="geolocation-configuration">Geolocation configuration</h2>
+
+<p>Configuring geolocation allows to specify real addresses and display the locations of meetings in maps.</p>
+
+<p>The easiest way to setup geolocation is to create an account hi <a href="https://www.here.com/en">Here Maps</a>. Open next URL in your browser and register a developer account there:</p>
+
+<p>https://developer.here.com/?create=Evaluation&amp;keepState=true&amp;step=account</p>
+
+<p>Then obtain your API ID and Code from there, you should look for a place like this:</p>
+
+<p><img src="/assets/here-api-key.png" alt="Here Maps Api details" /></p>
+
+<p>Now edit your <code class="highlighter-rouge">config/application.yml</code> again (or send the ENV vars in case you are not using the file <code class="highlighter-rouge">application.yml</code>):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano ~/decidim-app/config/application.yml
+</code></pre></div></div>
+
+<p>And place these new extra lines at the bottom of the file:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">GEOCODER_LOOKUP_APP_ID</span><span class="pi">:</span> <span class="s">&lt;your-App-ID&gt;</span>
+<span class="na">GEOCODER_LOOKUP_APP_CODE</span><span class="pi">:</span> <span class="s">&lt;your-App-Code&gt;</span>
+</code></pre></div></div>
+<p>Either you use ENV variables or the <code class="highlighter-rouge">config/application.yml</code> file, you need to uncomment the following lines from the file <code class="highlighter-rouge">config/initializers/decidim.rb</code>:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1"># config.geocoder = {</span>
+    <span class="c1">#   static_map_url: "https://image.maps.cit.api.here.com/mia/1.6/mapview",</span>
+  <span class="c1">#   here_app_id: Rails.application.secrets.geocoder[:here_app_id],</span>
+  <span class="c1">#   here_app_code: Rails.application.secrets.geocoder[:here_app_code]</span>
+  <span class="c1"># }</span>
+</code></pre></div></div>
+<p>leave it like:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">config</span><span class="p">.</span><span class="nf">geocoder</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="ss">static_map_url: </span><span class="s2">"https://image.maps.cit.api.here.com/mia/1.6/mapview"</span><span class="p">,</span>
+    <span class="ss">here_app_id: </span><span class="no">Rails</span><span class="p">.</span><span class="nf">application</span><span class="p">.</span><span class="nf">secrets</span><span class="p">.</span><span class="nf">geocoder</span><span class="p">[</span><span class="ss">:here_app_id</span><span class="p">],</span>
+    <span class="ss">here_app_code: </span><span class="no">Rails</span><span class="p">.</span><span class="nf">application</span><span class="p">.</span><span class="nf">secrets</span><span class="p">.</span><span class="nf">geocoder</span><span class="p">[</span><span class="ss">:here_app_code</span><span class="p">]</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+<blockquote>
+  <p>Create a commit and push to remote if you are using GIT.</p>
+</blockquote>
+
+<p>Restart passenger (or deploy) and you’re ready to use maps geolocation in Decidim:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>passenger-config restart-app ~/decidim-app
+</code></pre></div></div>
+
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

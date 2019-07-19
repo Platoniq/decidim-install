@@ -1,3 +1,9 @@
+---
+layout: default
+title: Install Decidim on Ubuntu 18.04
+nav_order: 1
+---
+
 Install Decidim on Ubuntu 18.04
 ===============================
 
@@ -5,11 +11,11 @@ These instruction should work in any clean installation of Ubuntu 18.04. You may
 
 ## 1. Setup a clean server
 
-Use a clean installation, I'm using DigitalOcean for this example, you can get 2 months free for a 1G memory machine (used here) if you register with this referral:
+Use a clean installation, I'm using DigitalOcean for this example, you can get a 50$, 30-day credit to spend in any machine (we use a 1G memory simple droplet here) if you register with this referral:
 
-https://m.do.co/c/b5a36733f0df
+[https://m.do.co/c/b5a36733f0df](https://m.do.co/c/b5a36733f0df)
 
-Then, create a 1G droplet (choose Ubuntu 18.04, the default is 16.04):
+Then, create a 1G droplet, choose Ubuntu 18.04:
 
 ![Select droplet in Digitalocean](assets/do-select.png)
 
@@ -78,7 +84,7 @@ sudo dpkg-reconfigure tzdata
 Then, install some required packages:
 
 ```bash
-sudo apt-get install autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev
+sudo apt install autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev
 ```
 Now, let's install ruby, by using the [rbenv](https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-18-04) method.
 
@@ -134,17 +140,17 @@ Available versions:
   truffleruby-1.0.0-rc3
 ```
 
-We are going to use version 2.5.1, so run these commands:
+We are going to use version 2.6.3, so run these commands:
 
 ```bash
-rbenv install 2.5.1
-rbenv global 2.5.1
+rbenv install 2.6.3
+rbenv global 2.6.3
 ```
 Now you can verify we have everything in order by running the command `ruby -v`:
 
 ```bash
 decidim@decidim:~$ ruby -v
-ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux]
+ruby 2.6.3p62 (2019-04-16 revision 67580) [x86_64-linux]
 ```
 
 If everything is ok, we need to setup Gems, the package manager for Ruby, after that we will be ready to install Decidim.
@@ -160,7 +166,7 @@ Again, you can test if everything is ok so far by running the command `gem env h
 
 ```bash
 decidim@decidim:~$ gem env home
-/home/decidim/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0
+/home/decidim/.rbenv/versions/2.6.3/lib/ruby/gems/2.6.0
 ```
 
 Great, now we have the basic server setup in place, next step is to install Decidim.
@@ -173,10 +179,10 @@ Decidim uses Postgresql as a SQL database, we are going to install it in this ma
 sudo apt install -y postgresql libpq-dev
 ```
 
-We also need NodeJS as a dependency for the decidim generator, in ubuntu 18.04 it's fine to install from the repositories (we also install imageMagick, used by Decidim):
+We also need NodeJS as a dependency for the decidim generator, in ubuntu 18.04 it's fine to install from the repositories (we also install imageMagick and a library needed since version 0.17, used by Decidim):
 
 ```bash
-sudo apt install -y nodejs imagemagick
+sudo apt install -y nodejs imagemagick libicu-dev
 ```
 Now, we use the decidim generator to create our application. Note that you still need the package `libpg-dev` in order tu run the decidim generator (in case you install postgress in another server).
 
