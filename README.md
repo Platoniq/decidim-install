@@ -38,7 +38,7 @@ Feel free to create issues or pull requests if you encounter errors or want to m
 
 Feel free to [check the issues](https://github.com/Platoniq/decidim-install/issues) or [open a new one](https://github.com/Platoniq/decidim-install/issues/new) if you have questions or something is wrong. Pull-request are always wellcome.
 
-Also, [give me a start](https://github.com/Platoniq/decidim-install) if you liked it!
+Also, [give me a star](https://github.com/Platoniq/decidim-install) if you liked it!
 
 <a class="github-button" href="https://github.com/Platoniq/decidim-install" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star Platoniq/decidim-install on GitHub">Star</a>
 
