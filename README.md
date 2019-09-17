@@ -20,6 +20,7 @@ Start here:
 1. [Installing in Amazon AWS with ElasticBeanstalk](decidim-aws.md)<br>An alternative guide to install Decidim in Amazon AWS. This is a Heroku-like PaaS deployment system. It auto-scales servers if needed and it may be a little cheaper than heroku.
 1. [Decidim update guide](decidim-update.md)<br>Check this to upgrade Decidim to a new version.
 1. [Advanced config & tricks](advanced-config.md)<br>A work in progress file to document some common issues and how to solve it (feel free to ask in the issues).
+1. [Ansible playbook for Arch Linux](https://github.com/JuliusTZM/decidim_on_arch)<br>The repository contains an Ansible playbook to support Decidim installation with all dependencies on Arch Linux.
 
 Feel free to create issues or pull requests if you encounter errors or want to make improvements in this guide!
 
