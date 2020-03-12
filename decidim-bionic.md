@@ -210,7 +210,8 @@ With the user created, it's time for configure Decidim to use these credentials.
 
 Because we don't want to directly store this sensitive data in the code itself, we are going to use an additional YAML file that will store all the secrets in one place. If, in the future, we want to create a Git repository with our application, we will exclude this file from the version control.
 
-In order to translate this file to the config system in Decidim, we are going to include the Ruby Gem "figaro" in our app to take care of it.
+In order to translate this file to the config system in Decidim, we are going to include the Ruby Gem "
+" in our app to take care of it.
 
 First, let's change to the decidim's folder:
 
@@ -286,7 +287,14 @@ After that we need to update our app to include the extra gems, run the next com
 ```bash
 bundle install
 ```
-Now, it's time to create the configuration file with our custom values. We already have the database credentials (we've created the user before) and we need a random string that will be used by Decidim to encrypt cookies and other security stuff.
+
+We also need to have the new figaro gem generate a scaffold `/config/application.yml` file and add it to `.gitignore`
+
+```bash
+bundle exec figaro install
+```
+
+Now, it's time to edit the configuration file and add our custom values. We already have the database credentials (we've created the user before) and we need a random string that will be used by Decidim to encrypt cookies and other security stuff.
 
 Let's generate a random string by executing the command `rake secret` inside the app folder:
 
