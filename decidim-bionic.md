@@ -485,6 +485,28 @@ server {
 
     rails_env    production;
     root         /home/decidim/decidim-app/public;
+    
+    location ~ /(assets|upload|favicon|apple-touch) {
+                root    /home/decidim/decidim-app/public;
+                access_log /var/log/nginx/nginx-access.log combined buffer=64K flush=1s ;
+                error_log  /var/log/nginx/nginx-error.log;
+		expires	1h;
+
+                gzip                    on;
+                gzip_disable            "msie6";
+
+                gzip_vary               on;
+                gzip_proxied            any;
+                gzip_comp_level         6;
+                gzip_buffers            16 8k;
+                gzip_http_version       1.1;
+                gzip_types              text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript image/svg+xml;
+                gzip_min_length         1024;
+
+		gzip_static  on;
+		gzip_proxied expired no-cache no-store private auth;
+
+        }
 }
 ```
 
