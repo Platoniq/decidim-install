@@ -14,8 +14,8 @@ I'll assume here that you have a [running copy of Decidim](decidim-bionic.md) wi
 Email configuration
 -------------------
 
-> **UPDATE** In recents version of Decidim you can complete all these passwords through the `/system/` administrator, and change it to every tenant.
-> If you follow the next steps they will be used as fallback.
+> **UPDATE** In recent version of Decidim you can configure the SMTP server through the `/system/` administrator, and use a different one for every tenant.
+> If you follow the next steps, this will be used as a fallback.
 
 The most important thing to configure is the capability for sending emails, otherwise users won't be able to register.
 
@@ -469,7 +469,7 @@ And place these new extra lines at the bottom of the file:
 GEOCODER_LOOKUP_API_KEY: <your-App-Code>
 ```
 
-Also, ensure that the file `~/decidim-app/config/secrets.yml` has the appropiate variable configured, it should look like this:
+Also, ensure that the file `~/decidim-app/config/secrets.yml` has the appropiate variables configured, it should look like this:
 ```yaml
 ...
   geocoder:
