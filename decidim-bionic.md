@@ -249,22 +249,22 @@ source "https://rubygems.org"
 
 ruby RUBY_VERSION
 
-gem "decidim", "0.14.0"
-# gem "decidim-consultations", "0.14.0"
-# gem "decidim-initiatives", "0.14.0"
+gem "decidim", "0.21.0"
+# gem "decidim-consultations", "0.21.0"
+# gem "decidim-initiatives", "0.21.0"
 
-gem "bootsnap", "~> 1.3"
+gem "bootsnap", "~> 1.4"
 
-gem "puma", "~> 3.0"
+gem "puma", "~> 4.3"
 gem "uglifier", "~> 4.1"
 
-gem "faker", "~> 1.8"
+gem "faker", "~> 1.9"
 
 gem "figaro"
 
 group :development, :test do
-  gem "byebug", "~> 10.0", platform: :mri
-  gem "decidim-dev", "0.14.0"
+  gem "byebug", "~> 11.0", platform: :mri
+  gem "decidim-dev", "0.21.0"
 end
 
 group :development do

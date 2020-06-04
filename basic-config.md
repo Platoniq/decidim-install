@@ -14,6 +14,9 @@ I'll assume here that you have a [running copy of Decidim](decidim-bionic.md) wi
 Email configuration
 -------------------
 
+> **UPDATE** In recents version of Decidim you can complete all these passwords through the `/system/` administrator, and change it to every tenant.
+> If you follow the next steps they will be used as fallback.
+
 The most important thing to configure is the capability for sending emails, otherwise users won't be able to register.
 
 We'll configure here a Gmail account, which is suitable for small organizations in order to get started. Configure any other SMTP provider is analogous.
@@ -463,25 +466,31 @@ nano ~/decidim-app/config/application.yml
 And place these new extra lines at the bottom of the file:
 
 ```yaml
-GEOCODER_LOOKUP_APP_ID: <your-App-ID>
-GEOCODER_LOOKUP_APP_CODE: <your-App-Code>
+GEOCODER_LOOKUP_API_KEY: <your-App-Code>
 ```
+
+Also, ensure that the file `~/decidim-app/config/secrets.yml` has the appropiate variable configured, it should look like this:
+```yaml
+...
+  geocoder:
+    here_api_key: <%= ENV["GEOCODER_LOOKUP_API_KEY"] %>
+...
+```
+
 Either you use ENV variables or the `config/application.yml` file, you need to uncomment the following lines from the file `config/initializers/decidim.rb`:
 
 ```ruby
   # config.geocoder = {
-    #   static_map_url: "https://image.maps.cit.api.here.com/mia/1.6/mapview",
-  #   here_app_id: Rails.application.secrets.geocoder[:here_app_id],
-  #   here_app_code: Rails.application.secrets.geocoder[:here_app_code]
+  #  static_map_url: "https://image.maps.ls.hereapi.com/mia/1.6/mapview",
+  #  here_api_key: Rails.application.secrets.geocoder[:here_api_key]
   # }
 ```
 leave it like:
 
 ```ruby
   config.geocoder = {
-    static_map_url: "https://image.maps.cit.api.here.com/mia/1.6/mapview",
-    here_app_id: Rails.application.secrets.geocoder[:here_app_id],
-    here_app_code: Rails.application.secrets.geocoder[:here_app_code]
+    static_map_url: "https://image.maps.ls.hereapi.com/mia/1.6/mapview",
+    here_api_key: Rails.application.secrets.geocoder[:here_api_key]
   }
 ```
 > Create a commit and push to remote if you are using GIT.
