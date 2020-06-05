@@ -20,7 +20,7 @@ Decidim installation script
 Copy the script somewhere and run it:
 
 ```
-wget -O decidim-install.sh https://raw.githubusercontent.com/Platoniq/decidim-install/master/script/decidim-install.sh
+wget -O install-decidim.sh https://raw.githubusercontent.com/Platoniq/decidim-install/master/script/install-decidim.sh
 chmod +x decidim-install.sh
 ./install-decidim.sh -h
 ```
