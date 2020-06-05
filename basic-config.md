@@ -500,3 +500,99 @@ Restart passenger (or deploy) and you're ready to use maps geolocation in Decidi
 ```bash
 sudo passenger-config restart-app ~/decidim-app
 ```
+
+CRON JOBS
+---------
+
+It is nice to have stats in your website, such as number of users, numbers of proposals, etc. Decidim has a system to generate various metrics to know the status of the platform at any specific day.
+
+These stats, however, should be generated in a specific job that must be run periodically in your server (once a day).
+
+Similarly, there are other processes that need background processing as well.
+
+In order to ensure our Decidim installation is fully working, we could use several options available to run cronjobs. We will use the gem [Whenever](https://github.com/javan/whenever) to take care of this (but there are several other methods available).
+
+After that you just need to edit the `Gemfile`, add this content:
+
+```bash
+nano ~/decidim-app/Gemfile
+```
+
+Add the line with `whenever`, such as:
+
+```ruby
+...
+gem "figaro"
+gem "whenever", require: false
+
+group :development, :test do
+...
+```
+
+Then run `bundle update` in the app's folder:
+
+```bash
+cd ~/decidim-app
+bundle update
+```
+
+Now, we need to create the cron schedule file that the gem will use to know when to run the background task. 
+Just create a new file in `config/schedule.rb` with this content:
+
+```bash
+nano ~/decidim-app/config/schedule.rb
+```
+
+```ruby
+env :PATH, ENV['PATH']
+
+every :sunday, at: '5:00 am' do
+  rake "decidim:delete_data_portability_files"
+end
+
+every :sunday, at: '4:00 am' do
+  rake "decidim:open_data:export"
+end
+
+every 1.day, at: '3:00 am' do
+  rake "decidim:metrics:all"
+end
+```
+
+
+Check if whenever is reading correctly everything correctly:
+
+```bash
+cd ~/decidim-app
+bundle exec whenever
+```
+
+It should show something like this:
+
+```
+PATH=/home/decidim/.rbenv/versions/2.6.3/lib/ruby/gems/2.6.0/bin:/home/decidim/.rbenv/versions/2.6.3/bin:/home/decidim/.rbenv/libexec:/home/decidim/.rbenv/plugins/ruby-build/bin:/home/decidim/.rbenv/plugins/rbenv-vars/bin:/home/decidim/.rbenv/shims:/home/decidim/.rbenv/bin:/home/decidim/.local/bin:/home/decidim/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+0 5 * * 0 /bin/bash -l -c 'cd /home/decidim/decidim-app && RAILS_ENV=production bundle exec rake decidim:delete_data_portability_files --silent'
+
+0 4 * * 0 /bin/bash -l -c 'cd /home/decidim/decidim-app && RAILS_ENV=production bundle exec rake decidim:open_data:export --silent'
+
+0 3 * * * /bin/bash -l -c 'cd /home/decidim/decidim-app && RAILS_ENV=production bundle exec rake decidim:metrics:all --silent'
+
+## [message] Above is your schedule file converted to cron syntax; your crontab file was not updated.
+## [message] Run `whenever --help' for more options.
+
+```
+
+Now, it is just a matter of adding it to the server's crontab, just execute:
+
+```
+whenever --update-crontab
+```
+
+It is recommended to restart the server as well because we've modified the Gemfile:
+
+```bash
+sudo passenger-config restart-app ~/decidim-app
+```
+
+That will be all! Happy metrics!
