@@ -309,6 +309,15 @@ DATABASE_URL: postgres://decidim_app:Password1@localhost/decidim_prod
 SECRET_KEY_BASE: e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc5362dc885a7a15f671e81f7d77bc98fa4d8abfd048f829a78d7ffd33cd8b4b287
 ```
 
+Now, just for safety, include this file in the `.gitignore` file, in case in the future you want to use GIT to manage your app.
+
+Just execute:
+
+```
+echo "/config/application.yml" >> ~/decidim-app/.gitignore
+```
+
+
 > **Notes:**
 > - I've named my database `decidim_prod`, change that value to whatever you want for your decidim app.
 > - Be aware that line with the with the SECRET_KEY_BASE keyword is only ONE line and you MUST put your own generated secret (the one generated with the  `rake secret` command)
