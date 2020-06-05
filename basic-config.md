@@ -586,7 +586,7 @@ PATH=/home/decidim/.rbenv/versions/2.6.3/lib/ruby/gems/2.6.0/bin:/home/decidim/.
 Now, it is just a matter of adding it to the server's crontab, just execute:
 
 ```
-whenever --update-crontab
+bundle exec whenever --update-crontab
 ```
 
 It is recommended to restart the server as well because we've modified the Gemfile:

@@ -290,10 +290,9 @@ step_decidim() {
 	cd_folder
 
 	if grep -FA1 'BUNDLED WITH' Gemfile.lock | grep -Fq "1.17.3" ; then
-		yellow "Removing current Gemfile.lock file to use system bundler"
+		yellow "Removing current Gemfile.lock file to use a more modern bundler"
 		rm -f Gemfile.lock
 	fi
-
 
 	if grep -Fq 'gem "figaro"' Gemfile ; then
 		info "Gem figaro already installed"
@@ -315,8 +314,34 @@ step_decidim() {
 	else
 		bundle add daemons --group $ENVIRONMENT --skip-install
 	fi
+	if grep -Fq 'gem "whenever"' Gemfile ; then
+		info "Gem whenever already installed"
+	else
+		echo 'gem "whenever", require: false' >> Gemfile
+	fi
+
 	bundle install
 
+	if [ -f "./config/schedule.rb" ]; then
+		yellow "config/schedule.rb already present"
+	else
+	  cat > config/schedule.rb <<EOL
+env :PATH, ENV['PATH']
+
+every :sunday, at: '5:00 am' do
+  rake "decidim:delete_data_portability_files"
+end
+
+every :sunday, at: '4:00 am' do
+  rake "decidim:open_data:export"
+end
+
+every 1.day, at: '3:00 am' do
+  rake "decidim:metrics:all"
+end
+EOL
+
+	fi
 	if [ -f "./config/application.yml" ]; then
 		yellow "config/application.yml already present"
 	else
@@ -509,6 +534,9 @@ EOL
 	info "Delayed job status..."
 	bin/delayed_job_cron.sh
 	RAILS_ENV=production bin/delayed_job status
+
+	info "Updating whenever crontab"
+	bundle exec whenever --update-crontab
 
 	if [ -f /etc/nginx/sites-enabled/decidim.conf ]; then
 		yellow "decidim.conf Nginx file already configured in /etc/nginx/sites-enabled/decidim.conf"

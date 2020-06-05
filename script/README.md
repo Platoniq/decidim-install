@@ -4,10 +4,11 @@ Decidim installation script
 `install-decidim.sh` is a script that automates all the steps described in this guide.
 
 - It is indented to be idempotent, meaning that it can be run safely many times in case of failure.
-- It installs Decidim up to the point that it is up and running as a website. It does not configure any service (such as SMTP or Geolocation). 
+- It installs Decidim up to the point that it is up and running as a website. It does not configure extra services (such as SMTP or Geolocation). 
 - It does not configure SSL.
 - It does not configure any firewall (ie `ufw`)
 - It uses Passenger with Nginx as a proxy and `active_job_active_record` as a backend for job queue processing.
+- It configures the necessary crontabs jobs using a custom script to ensure `active_job` is running an the `whenever` gem to handle cron.
 
 ### DISCLAIMER
 
