@@ -156,9 +156,15 @@ cd_folder(){
 		info "Runt $0 with -h to view options for this script"
 		exit 0
 	fi
-	init_rbenv
-	cd $(realpath $FOLDER)
+
+	if [ -d "$FULLFOLDER" ]; then
+		green "changing to working dir [$FULLFOLDER] from [$PWD]"
+		cd $FULLFOLDER
+	else
+		red "Coudn't change to working dir! [$FULLFOLDER]"
+	fi
 }
+
 step_rbenv() {
 	# pause EXIT trap
 	trap - EXIT
@@ -270,7 +276,9 @@ step_decidim() {
 		info "Runt $0 with -h to view options for this script"
 		exit 0
 	fi
+
 	init_rbenv
+
 	green "Installing Decidim in $FOLDER"
 	if [ -d "$FOLDER" ]; then
 		yellow "$FOLDER already exists, trying to install gems anyway"
@@ -279,7 +287,7 @@ step_decidim() {
 		decidim "$FOLDER"
 	fi
 
-	cd $(realpath $FOLDER)
+	cd_folder
 
 	if grep -FA1 'BUNDLED WITH' Gemfile.lock | grep -Fq "1.17.3" ; then
 		yellow "Removing current Gemfile.lock file to use system bundler"
@@ -336,6 +344,7 @@ step_decidim() {
 
 get_conf_vars() {
 	cd_folder
+	init_rbenv
 
 	CONF_DATABASE=$(awk '/DATABASE_URL\:/{print $2}' config/application.yml)
 	re="postgres\:\/\/(.+):(.+)@(.+)/(.+)"
@@ -422,6 +431,7 @@ step_servers(){
 		exit
 	fi
 	cd_folder
+	init_rbenv
 
 	green "Installing Nginx"
 	sudo apt -y install nginx
@@ -459,8 +469,6 @@ step_servers(){
 		sudo sed -i '/^passenger_ruby/c\passenger_ruby $HOME/.rbenv/shims/ruby;' /etc/nginx/conf.d/mod-http-passenger.conf
 	fi
 
-	decidim_path=$(pwd)
-
 	if [ -x bin/delayed_job ]; then
 		yellow "delayed_job binary already installed"
 	else
@@ -478,7 +486,7 @@ step_servers(){
 
 export PATH="\$HOME/.rbenv/bin:\$PATH"
 eval "\$(rbenv init -)"
-APP_PATH="$decidim_path"
+APP_PATH="$PWD"
 
 if ! [ -s \$APP_PATH/tmp/pids/delayed_job.pid ]; then
   RAILS_ENV=production \$APP_PATH/bin/delayed_job start
@@ -495,7 +503,7 @@ EOL
 			current_crontab=$(crontab -l)
 		fi
 		green "Adding delayed_job_cron.sh to crontab to ensure it's up"
-		($current_crontab && echo "*/5 * * * * $decidim_path/bin/delayed_job_cron.sh") | crontab -
+		($current_crontab && echo "*/5 * * * * $PWD/bin/delayed_job_cron.sh") | crontab -
 	fi
 
 	info "Delayed job status..."
@@ -518,7 +526,7 @@ server {
     passenger_ruby $HOME/.rbenv/shims/ruby;
 
     rails_env    production;
-    root         $decidim_path/public;
+    root         $PWD/public;
 }
 EOL
 		info "Nginx configuration generated in /etc/nginx/sites-enabled/decidim.conf"
@@ -593,6 +601,7 @@ while getopts fhr:e:vs:o:u:p: option; do
 done
 shift $(($OPTIND - 1))
 FOLDER="$1"
+FULLFOLDER=$(realpath $FOLDER)
 
 if [ "$CONFIRM" == "1" ]; then
 	confirm
