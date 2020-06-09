@@ -87,9 +87,8 @@ Just specify with the `-e` option:
 
 Check additional configuration options in:
 
-- [basic configuration](../basic-config.md).
+- [Basic configuration](../basic-config.md).
+- [Deployment with Capistrano](../advanced-deploy.md).
 
 TODO:
-- Configure Metrics
-- Configure Capistrano
-- Configure backups
+- Configure sql backups
