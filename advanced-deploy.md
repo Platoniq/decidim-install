@@ -59,13 +59,80 @@ Execute this if not found:
 echo "/config/application.yml" >> ~/decidim-app/.gitignore
 ```
 
-Now, enter your application directory and add your first commit:
+The next action is to prepare the directory structure for the deployment with Capistrano. Until now, we've just used a single folder with the application. Any changes are made there and if something goes wrong... , well it can turn quickly into a mess. 
+
+The way Capistrano deals with deployments (and many other tools) is to separate application releases in different folders with some shared content between them (ie: configuration files or user uploads). Then creates a symbolic link to the last release and restarts the server. This way, if something goes wrong is very easy to simply point the server back to a previous release with minimal downtime.
+
+Let's get to it then, we will create a new deployment folder, for instance `app-deploy` and, in it, a config folder in which we will copy our configuration files:
+
+```bash
+mkdir -p ~/app-deploy/shared/config
+mkdir -p ~/app-deploy/shared/public
+mkdir -p ~/app-deploy/shared/log
+cp ~/decidim-app/config/application.yml ~/app-deploy/shared/config/
+cp ~/decidim-app/config/database.yml ~/app-deploy/shared/config/
+```
+
+Now, we will create the uploads and logs folder and move our stuff there:
+
+```bash
+mv ~/decidim-app/public/uploads ~/app-deploy/shared/public/
+mv ~/decidim-app/log ~/app-deploy/shared/
+```
+
+In case we don't want to break our current server just yet, we will add some temporary symlinks to the moved directories in the old system:
+
+```bash
+ln -s ~/app-deploy/shared/public/uploads ~/decidim-app/public/uploads
+ln -s ~/app-deploy/shared/log ~/decidim-app/log
+```
+
+Finally, we will prepare the server to look a the new directory, to start we will point the `current` release to our old `decidim-app` directory. Then, after the first Capistrano deploy, this will change automatically.
+
+First, create a symlink to our current installation:
+
+```bash
+ln -s ~/decidim-app ~/app-deploy/current
+```
+
+We need to reconfigure where nignx will look for files, assuming we've followed the "Ubuntu 18.04" guide, edit `decidim.conf` Nginx file:
 
 ```
-cd ~/decidim-app
-git add .
-git commit -m "Initial Decidim installation"
+sudo nano /etc/nginx/nginx/sites-enabled/decidim.conf
 ```
+
+Change the line with
+
+```
+root         /home/decidim/decidim-app/public;
+```
+
+with:
+ 
+```
+root         /home/decidim/app-deploy/current/public;
+```
+
+Let's check the file is correct with the command:
+
+```bash
+sudo nginx -t
+```
+
+It should respond something like this:
+
+```
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+```
+
+Then, restart Nginx:
+
+```
+sudo service nginx restart
+```
+
+At this point, we are ready to move the rest of the action to our computer. From now on, we won't make changes directly in the server anymore.
 
 #### Local actions
 
@@ -88,6 +155,13 @@ Now, we will move the content from the server to our computer with this command:
 mkdir decidim-my-app 
 cd decidim-my-app
 sudo scp -r decidim@myserver.org:decidim-app .
+```
+
+Now that we have the code on our computer, we need to start tracking it by making "commit" in the GIT history. We'll start with our first commit:
+
+```
+git add .
+git commit -m "Initial Decidim installation"
 ```
 
 At this, you have the code in your own computer, in the next steps we will add Capistrano to our project and then we will use it to mange the server updates for us.
@@ -191,7 +265,6 @@ require "whenever/capistrano"
 
 **Note**: The `rbenv` depends on how you've installed ruby in your system. Check that in the [official documentation](https://capistranorb.com/) if you are not using rbenv.
 
-
 Next is to edit the `config/production.rb` file, we will indicate the servers we are using there (in our case is only one). Let's add these lines in it at the end of the file:
 
 ```ruby
@@ -209,17 +282,59 @@ set :rbenv_type, :user # or :system, depends on your rbenv setup
 set :rbenv_ruby, '2.6.6'
 
 set :application, "decidim-my-app"
-set :repo_url, "git@github.com:YourUser/decidim-my-app.git"
+set :repo_url, "https://github.com/YourUser/decidim-my-app.git"
 
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/application.yml')
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads')
 
 set :passenger_restart_command, '/usr/bin/passenger-config restart-app'
 
+# This will use system configure bundle path, 
+# it is safe to remove if you want your gems 
+# in the folder ~/app-deploy/shared/bundle
+set :bundle_path, nil
+set :bundle_without, nil
+set :bundle_flags, nil
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/home/decidim/decidim-deploy"
+set :deploy_to, "/home/decidim/app-deploy"
 
 ```
+
+We've done, if everything is correct we should be able to make our first deploy with Capistrano with the command:
+
+```
+cap production deploy
+```
+
+The output will look like (it will take a while):
+
+```
+00:00 git:wrapper
+      01 mkdir -p /tmp
+    ✔ 01 decidim@myserver.org 0.137s
+      Uploading /tmp/git-ssh-decidim-my-app-decidim.sh 100.0%
+      02 chmod 700 /tmp/git-ssh-decidim-my-app-decidim.sh
+    ✔ 02 decidim@myserver.org 0.153s
+00:00 git:check
+      01 git ls-remote https://github.com/YourUser/decidim-my-app.git HEAD
+      01 1305546c96c556b6eaacdf9c2a6c952d4e64e092	HEAD
+    ✔ 01 decidim@myserver.org 0.677s
+00:01 deploy:check:directories
+...
+...
+...
+INFO [b0236541] Finished in 0.130 seconds with exit status 0 (successful).
+```
+
+### Conclusion
+
+Using an automated tool to deploy your applications is a step forward in terms of maintainability and security. Of course, this is the very basic start point. From this you can use this to split tasks between servers (for instance database in one server and code in another).
+
+Make sure that you read the Capistrano guide to know how to deal with rollbacks for instance:
+
+https://capistranorb.com/documentation/getting-started/rollbacks/
+
