@@ -132,6 +132,21 @@ Then, restart Nginx:
 sudo service nginx restart
 ```
 
+Here, if you have any other scripts that deal with the former route (`~/decidim-app`), you should edit them to point to the new deployment path (`~/app-deploy/current/`).
+
+If you have followe the "Ubuntu 18.04" guide or used the Automated script, you should look and edit these files:
+
+```bash
+nano ~/decidim-app/bin/delayed_job_cron.sh
+crontab -e
+```
+
+Change any reference to the path `~/decidim-app` for `/app-deploy/current` and ensure to kill the old instance of ActiveJob with this command:
+
+```bash
+kill -9 $(cat ~/decidim-test/tmp/pids/delayed_job.pid)
+```
+
 At this point, we are ready to move the rest of the action to our computer. From now on, we won't make changes directly in the server anymore.
 
 #### Local actions
