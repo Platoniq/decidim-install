@@ -134,10 +134,9 @@ sudo service nginx restart
 
 Here, if you have any other scripts that deal with the former route (`~/decidim-app`), you should edit them to point to the new deployment path (`~/app-deploy/current/`).
 
-If you have followe the "Ubuntu 18.04" guide or used the Automated script, you should look and edit these files:
+If you have followe the "Ubuntu 18.04" guide or used the Automated script, you should look and edit the crontab:
 
 ```bash
-nano ~/decidim-app/bin/delayed_job_cron.sh
 crontab -e
 ```
 
