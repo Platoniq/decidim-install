@@ -46,6 +46,12 @@ Port 80 is forwarded to 8080, you should be able to reach Nginx's Vagrant at htt
 
 ### Options
 
+The script generates automatically the first user for `/system`, it asks for the email and password. You can choose to specify user and password directly in arguments if you want:
+
+```
+./install-decidim.sh -u some@email.com -p some-password
+```
+
 If some step fails, it can be repeated specifically with the `-o` option:
 
 ```
@@ -58,11 +64,31 @@ Or you might want to skip some steps already succeeded with the option `-s`:
 ./install-decidim.sh -s prepare my-decidim
 ```
 
+To choose a specific version of Ruby to be installed you can run:
+
+```
+./install-decidim.sh -r 2.6.5
+```
+
 ## Fine-tuning
 
 By default, it installs the following gems:
 
-`figaro`, and generates a `config/application.yml` file with default values. You can choose to specify those value while running the script or you can just skip the `postgres` and `create` steps, edit the generated file and then run the missing steps:
+`figaro`,
+`passenger`,
+`delayed_job_active_record`,
+`daemons`,
+`whenever`
+
+and generates a these files extra:
+
+- `~/decidim-app/config/application.yml` default values for the database. 
+- `~/decidim-app/bin/delayed_job_cron.sh` script to ensure active_job is running as a backgroud process
+- `/etc/nginx/sites-available/decidim.conf` minimal ngnix configuration for Decidim
+- `/etc/nginx/conf.d/mod-http-passenger.conf` with the configuration for passenger in Nginx.
+- `~/.rbenv/*` files related with the installation of Rbenv. Gems are installed here too.
+
+One way to personalize the values in application.yml is to skip the `postgres` and `create` steps, edit the generated file and then run the missing steps:
 
 ```
 ./install-decidim.sh -s postgres -s create my-decidim
@@ -89,6 +115,3 @@ Check additional configuration options in:
 
 - [Basic configuration](../basic-config.md).
 - [Deployment with Capistrano](../advanced-deploy.md).
-
-TODO:
-- Configure sql backups
