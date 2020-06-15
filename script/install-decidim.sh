@@ -307,9 +307,11 @@ step_decidim() {
 		mkdir -p $FOLDER/shared/config
 		mkdir -p $FOLDER/shared/log
 		mkdir -p $FOLDER/shared/public/uploads
-		info "Symlink to Capistrano current version"
-		if [ ! -L "$INSTALL_FOLDER/current" ]; then
+		if [ ! -L "$FOLDER/current" ]; then
+			info "Symlink to Capistrano current version"
 			ln -s releases/initial $FOLDER/current
+		else
+			yellow "Capistrano current version already linked"
 		fi
 
 		if [ ! -L "$INSTALL_FOLDER/config/application.yml" ]; then

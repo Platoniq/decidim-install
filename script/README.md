@@ -94,9 +94,9 @@ When installing and creating the database, this script generates automatically a
 One way to personalize these values in `application.yml` is to skip the `postgres` and `create` steps, edit the generated file and then run the missing steps:
 
 ```
-./install-decidim.sh -s postgres -s create my-decidim
+./install-decidim.sh -s postgres -s create -s servers my-decidim
 nano my-decidim/config/application.yml
-./install-decidim.sh -o postgres -o create my-decidim
+./install-decidim.sh -o postgres -o create -o servers my-decidim
 ```
 
 ## Capistrano install mode
