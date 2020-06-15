@@ -18,7 +18,7 @@
 echo -e "***********************************************************************"
 echo -e "* \e[31mWARNING:\e[0m                                                 *"
 echo -e "* This program will try to install automatically Decidim and all      *"
-echo -e "* related software. This includes Nginx, Passenger, Ruby and other.   *"
+echo -e "* related software. This includes Nginx, Passenger, Ruby and others.   *"
 echo -e "* \e[33mUSE IT ONLY IN A FRESHLY INSTALLED UBUNTU 18.04 SYSTEM\e[0m   *"
 echo -e "* No guarantee whatsoever that it won't break your system!            *"
 echo -e "*                                                                     *"
@@ -79,6 +79,7 @@ exit_help() {
 	info "             specified with several -o options"
 	info " -u [email]  Specify Decidim system admin email"
 	info " -p [pass]   Specify Decidim system admin password"
+	info " -c          Install in Capistrano mode. releases and current will be used as suffix for the specified directory"
 	info "\nValid steps are (in order of execution):"
 	info " check     Checks if we are using Ubuntu 18.04"
 	info " prepare   Updates system, configure timezone"
@@ -152,16 +153,22 @@ init_rbenv() {
 
 cd_folder(){
 	if [ -z "$FOLDER" ]; then
-		yellow "Please specify a folder to install decidim"
+		yellow "Please specify a folder to install Decidim"
 		info "Runt $0 with -h to view options for this script"
 		exit 0
 	fi
 
-	if [ -d "$FULLFOLDER" ]; then
-		green "changing to working dir [$FULLFOLDER] from [$PWD]"
-		cd $FULLFOLDER
+	if [ -z "$CAPISTRANO" ]; then
+		INSTALL_FOLDER=$FULLFOLDER
 	else
-		red "Coudn't change to working dir! [$FULLFOLDER]"
+		INSTALL_FOLDER=$FULLFOLDER/current
+	fi
+
+	if [ -d "$INSTALL_FOLDER" ]; then
+		green "changing to working folder [$INSTALL_FOLDER] from [$PWD]"
+		cd $INSTALL_FOLDER
+	else
+		red "Couldn't change to working folder! [$INSTALL_FOLDER]"
 	fi
 }
 
@@ -270,21 +277,66 @@ CONF_DB_HOST=localhost
 CONF_DB_NAME=decidim_prod
 DECIDIM_EMAIL=
 DECIDIM_PASS=
+CAPISTRANO=
 step_decidim() {
 	if [ -z "$FOLDER" ]; then
-		yellow "Please specify a folder to install decidim"
+		yellow "Please specify a folder to install Decidim"
 		info "Runt $0 with -h to view options for this script"
 		exit 0
 	fi
 
 	init_rbenv
 
-	green "Installing Decidim in $FOLDER"
-	if [ -d "$FOLDER" ]; then
-		yellow "$FOLDER already exists, trying to install gems anyway"
+	if [ -z "$CAPISTRANO" ]; then
+		INSTALL_FOLDER=$FOLDER
+	else
+		INSTALL_FOLDER=$FOLDER/releases/initial
+	fi
+
+	green "Installing Decidim in $INSTALL_FOLDER"
+	if [ -d "$INSTALL_FOLDER" ]; then
+		yellow "$INSTALL_FOLDER already exists, trying to install gems anyway"
 	else
 		gem install bundler:1.17.3
-		decidim "$FOLDER"
+		decidim "$INSTALL_FOLDER"
+	fi
+
+	if [ ! -z "$CAPISTRANO" ]; then
+		green "Applying Capistrano enabled modifications..."
+		info "Creating Capistrano directories"
+		mkdir -p $FOLDER/shared/config
+		mkdir -p $FOLDER/shared/log
+		mkdir -p $FOLDER/shared/public/uploads
+		info "Symlink to Capistrano current version"
+		if [ ! -L "$INSTALL_FOLDER/current" ]; then
+			ln -s releases/initial $FOLDER/current
+		fi
+
+		if [ ! -L "$INSTALL_FOLDER/config/application.yml" ]; then
+			info "Creating application.yml file and Symlink to shared folder"
+			touch "$FOLDER/shared/config/application.yml"
+			ln -s $(realpath $FOLDER/shared/config/application.yml) "$INSTALL_FOLDER/config/application.yml"
+		else
+			yellow "application.yml is already a Symlink"
+		fi
+		if [ ! -L "$INSTALL_FOLDER/log" ]; then
+			info "Moving logs to shared folder and Symlink it"
+			mv "$INSTALL_FOLDER/log" "$FOLDER/shared/"
+			ln -s $(realpath $FOLDER/shared/log) "$INSTALL_FOLDER/log"
+		else
+			yellow "log is already a Symlink"
+		fi
+		if [ ! -L "$INSTALL_FOLDER/public/uploads" ]; then
+			info "Moving uploads to shared folder and Symlink it"
+			if [ -d "$INSTALL_FOLDER/public/uploads" ]; then
+				mv "$INSTALL_FOLDER/public/uploads" "$FOLDER/shared/public/"
+			else
+				mkdir -p "$INSTALL_FOLDER/public/uploads"
+			fi
+			ln -s $(realpath $FOLDER/shared/public/uploads) "$INSTALL_FOLDER/public/uploads"
+		else
+			yellow "uploads is already a Symlink"
+		fi
 	fi
 
 	cd_folder
@@ -318,6 +370,18 @@ step_decidim() {
 		info "Gem whenever already installed"
 	else
 		echo 'gem "whenever", require: false' >> Gemfile
+	fi
+
+	if [ ! -z "$CAPISTRANO" ]; then
+		if grep -Fq 'gem "capistrano"' Gemfile ; then
+			info "Gem capistrano already installed"
+		else
+			bundle add capistrano --group development --skip-install
+			bundle add capistrano-rbenv --group development --skip-install
+			bundle add capistrano-bundler --group development --skip-install
+			bundle add capistrano-passenger --group development --skip-install
+			bundle add capistrano-rails --group development --skip-install
+		fi
 	fi
 
 	bundle install
@@ -435,16 +499,16 @@ step_create(){
 	else
 		yellow "Using email [$email] from options"
 	fi
+	if [ -z "$pass" ]; then
+		read -p "Introduce your system admin password: " pass
+	else
+		yellow "Using password from options"
+	fi
 
+	info "Checking availability..."
 	if $(bin/rails runner -e $ENVIRONMENT "puts Decidim::System::Admin.exists?(email: '$email')") == "true"; then
 		yellow "System admin with email [$email] already exists!"
 	else
-		if [ -z "$pass" ]; then
-			read -p "Introduce your system admin password: " pass
-		else
-			yellow "Using password from options"
-		fi
-
 		info "Creating system admin with email [$email]"
 		bin/rails runner -e $ENVIRONMENT "Decidim::System::Admin.new(email: '$email', password: '$pass', password_confirmation: '$pass').save!"
 	fi
@@ -535,8 +599,17 @@ EOL
 	bin/delayed_job_cron.sh
 	RAILS_ENV=production bin/delayed_job status
 
-	info "Updating whenever crontab"
-	bundle exec whenever --update-crontab
+	if [ -z "$CAPISTRANO" ]; then
+		info "Updating whenever crontab"
+		bundle exec whenever --update-crontab
+	else
+		yellow "In Capistrano mode, Whenever has not been added to the Crontab"
+		yellow "Usually Capistrano does that every release"
+		yellow "If you still want to manually add whenever to the crontab just execute:"
+		info ""
+		info "bundle exec whenever --update-crontab"
+		info ""
+	fi
 
 	if [ -f /etc/nginx/sites-enabled/decidim.conf ]; then
 		yellow "decidim.conf Nginx file already configured in /etc/nginx/sites-enabled/decidim.conf"
@@ -568,7 +641,17 @@ EOL
 	sudo nginx -t
 	sudo service nginx restart
 
-	green "Servers installed successfully, you should be able to reach decidim website in one of these IP addresses:"
+	info "Current crontab is:"
+	info $(crontab -l)
+
+	if [ ! -z "$CAPISTRANO" ]; then
+		yellow "You've installed Decidim in Capistrano mode, you're not done!"
+		yellow "You still need to configure your computer locally and add the necessary"
+		yellow "Capfile and others in order to deploy using it."
+		yellow "You can check the guide at https://platoniq.github.io/decidim-install/advanced-deploy/ for more info"
+	fi
+
+	green "Servers installed successfully, you should be able to reach Decidim website in one of these IP addresses:"
 	info "$(hostname -I)"
 }
 
@@ -614,7 +697,7 @@ confirm() {
 	done
 }
 
-while getopts fhr:e:vs:o:u:p: option; do
+while getopts fhr:e:vs:o:u:p:c option; do
 	case "${option}" in
 		f ) yellow "No asking for confirmation"; CONFIRM=0;;
 		h ) exit_help;;
@@ -625,6 +708,7 @@ while getopts fhr:e:vs:o:u:p: option; do
 		o ) ONLY+=("$OPTARG");;
 		u ) DECIDIM_EMAIL="$OPTARG";;
 		p ) DECIDIM_PASS="$OPTARG";;
+		c ) CAPISTRANO=1;;
 	esac
 done
 shift $(($OPTIND - 1))

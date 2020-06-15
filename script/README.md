@@ -39,7 +39,8 @@ You can test the script in a Vagrant machine by using the provided `Vagranfile` 
 ```
 vagrant up
 vagrant ssh
-/vagrant/install-decidim.sh
+cd /vagrant/
+./install-decidim.sh -h
 ```
 
 Port 80 is forwarded to 8080, you should be able to reach Nginx's Vagrant at http://127.0.0.1:8080
@@ -88,13 +89,41 @@ and generates a these files extra:
 - `/etc/nginx/conf.d/mod-http-passenger.conf` with the configuration for passenger in Nginx.
 - `~/.rbenv/*` files related with the installation of Rbenv. Gems are installed here too.
 
-One way to personalize the values in application.yml is to skip the `postgres` and `create` steps, edit the generated file and then run the missing steps:
+When installing and creating the database, this script generates automatically a user name and a password, values are stored in the file `config/application.yml`.
+
+One way to personalize these values in `application.yml` is to skip the `postgres` and `create` steps, edit the generated file and then run the missing steps:
 
 ```
 ./install-decidim.sh -s postgres -s create my-decidim
 nano my-decidim/config/application.yml
 ./install-decidim.sh -o postgres -o create my-decidim
 ```
+
+## Capistrano install mode
+
+It is possible to install Decidim in order let it ready for a Capistrano style deployment. To do that just use the option `-c`. 
+
+With this option, the installation will be distributed in 3 folders created after the specified route. For instance, by running:
+
+```
+./install-decidim.sh -c my-folder
+```
+
+The installation will be created as:
+
+```
+my-folder/releases/initial/               <- here the main installation
+my-folder/current                         <- a symlink to releases/initial
+my-folder/shared/config/application.yml
+my-folder/shared/log
+my-folder/shared/public/uploads
+```
+
+Where the content in the folder `shared` will be symlink to their corresponding files in the main application folder in releases.
+
+Also the Gemfile will incorporate the necessary gems related to Capistrano in the development section.
+
+With these initial configuration, to [configure a Capistrano deployment](advanced-deploy.md) should be a breeze. Good luck!
 
 ## Non-production environments
 
