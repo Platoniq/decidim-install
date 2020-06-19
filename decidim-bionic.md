@@ -291,8 +291,8 @@ Now, it's time to create the configuration file with our custom values. We alrea
 Let's generate a random string by executing the command `rake secret` inside the app folder:
 
 ```bash
-decidim@decidim:~/decidim-app$ cd ~/decidim-app
-decidim@decidim:~/decidim-app$ rake secret
+cd ~/decidim-app
+rake secret
 e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc5362dc885a7a15f671e81f7d77bc98fa4d8abfd048f829a78d7ffd33cd8b4b287
 ```
 Copy that generated string, and create a new config file:
