@@ -205,7 +205,7 @@ gem install capistrano
 If you have succeeded, you should be able to run the next command and get the version of Capistrano installed:
 
 ```bash
-cap --version        
+cap --version
 Capistrano Version: 3.14.0 (Rake Version: 13.0.1)
 ```
 
@@ -298,7 +298,7 @@ set :rbenv_ruby, '2.6.6'
 set :application, "decidim-my-app"
 set :repo_url, "https://github.com/YourUser/decidim-my-app.git"
 
-set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/application.yml')
+set :linked_files, fetch(:linked_files, []).push('config/application.yml')
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads')
 
 set :passenger_restart_command, '/usr/bin/passenger-config restart-app'
