@@ -10,11 +10,16 @@ Decidim installation script
 - It uses Passenger with Nginx as a proxy and `active_job_active_record` as a backend for job queue processing.
 - It configures the necessary crontabs jobs using a custom script to ensure `active_job` is running an the `whenever` gem to handle cron.
 
+
 ### DISCLAIMER
 
 - It should be used only in a clean install using Ubuntu 18.04
 - It comes WITHOUT ANY WARRANTY.
 - Run it under your own responsibility.
+
+### Demos:
+
+[![asciicast](https://asciinema.org/a/X8A9sVj3gH9ZSqjQo2rBi58bn.svg)](https://asciinema.org/a/X8A9sVj3gH9ZSqjQo2rBi58bn)
 
 ### Usage
 
