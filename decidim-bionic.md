@@ -291,8 +291,8 @@ Now, it's time to create the configuration file with our custom values. We alrea
 Let's generate a random string by executing the command `rake secret` inside the app folder:
 
 ```bash
-decidim@decidim:~/decidim-app$ cd ~/decidim-app
-decidim@decidim:~/decidim-app$ rake secret
+$ cd ~/decidim-app
+$ rake secret
 e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc5362dc885a7a15f671e81f7d77bc98fa4d8abfd048f829a78d7ffd33cd8b4b287
 ```
 Copy that generated string, and create a new config file:
@@ -425,7 +425,7 @@ if [ ! -f /etc/nginx/modules-enabled/50-mod-http-passenger.conf ]; then sudo ln 
 You can check if the file is created successfully by using `ls` on that file, it should be something similar to this:
 
 ```bash
-decidim@decidim:~/decidim-app$ sudo ls /etc/nginx/conf.d/mod-http-passenger.conf
+$ sudo ls /etc/nginx/conf.d/mod-http-passenger.conf
 /etc/nginx/conf.d/mod-http-passenger.conf
 ```
 
@@ -435,10 +435,9 @@ For additional checks, restart nginx:
 sudo service nginx restart
 ```
 
-If you run the command `passenger-config validate-install` it should give you an answer like this:
+If you run the command `sudo /usr/bin/passenger-config validate-install` it should give you an answer like this:
 
 ```
-decidim@decidim:~/decidim-app$ sudo /usr/bin/passenger-config validate-install
 What would you like to validate?
 Use <space> to select.
 If the menu doesn't display correctly, press '!'
@@ -497,9 +496,10 @@ server {
 }
 ```
 
-Restart Nginx now:
+Give execute permissions to home folder and restart Nginx now:
 
 ```bash
+chmod o+x $HOME
 sudo service nginx restart
 ```
 
