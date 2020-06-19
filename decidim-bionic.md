@@ -295,7 +295,7 @@ decidim@decidim:~/decidim-app$ cd ~/decidim-app
 decidim@decidim:~/decidim-app$ rake secret
 e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc5362dc885a7a15f671e81f7d77bc98fa4d8abfd048f829a78d7ffd33cd8b4b287
 ```
-Copy that generated string and edit the new config file:
+Copy that generated string, and create a new config file:
 
 ```bash
 nano ~/decidim-app/config/application.yml
