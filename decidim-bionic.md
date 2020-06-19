@@ -249,22 +249,22 @@ source "https://rubygems.org"
 
 ruby RUBY_VERSION
 
-gem "decidim", "0.14.0"
-# gem "decidim-consultations", "0.14.0"
-# gem "decidim-initiatives", "0.14.0"
+gem "decidim", "0.21.0"
+# gem "decidim-consultations", "0.21.0"
+# gem "decidim-initiatives", "0.21.0"
 
-gem "bootsnap", "~> 1.3"
+gem "bootsnap", "~> 1.4"
 
-gem "puma", "~> 3.0"
+gem "puma", "~> 4.3"
 gem "uglifier", "~> 4.1"
 
-gem "faker", "~> 1.8"
+gem "faker", "~> 1.9"
 
 gem "figaro"
 
 group :development, :test do
-  gem "byebug", "~> 10.0", platform: :mri
-  gem "decidim-dev", "0.14.0"
+  gem "byebug", "~> 11.0", platform: :mri
+  gem "decidim-dev", "0.21.0"
 end
 
 group :development do
@@ -308,6 +308,15 @@ DATABASE_URL: postgres://decidim_app:Password1@localhost/decidim_prod
 
 SECRET_KEY_BASE: e2418a1987378e36f18740d25f0360a18099a5caa5d04700ea3336d9fdefadc5362dc885a7a15f671e81f7d77bc98fa4d8abfd048f829a78d7ffd33cd8b4b287
 ```
+
+Now, just for safety, include this file in the `.gitignore` file, in case in the future you want to use GIT to manage your app.
+
+Just execute:
+
+```
+echo "/config/application.yml" >> ~/decidim-app/.gitignore
+```
+
 
 > **Notes:**
 > - I've named my database `decidim_prod`, change that value to whatever you want for your decidim app.

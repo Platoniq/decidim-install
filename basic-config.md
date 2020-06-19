@@ -14,6 +14,9 @@ I'll assume here that you have a [running copy of Decidim](decidim-bionic.md) wi
 Email configuration
 -------------------
 
+> **UPDATE** In recent version of Decidim you can configure the SMTP server through the `/system/` administrator, and use a different one for every tenant.
+> If you follow the next steps, this will be used as a fallback.
+
 The most important thing to configure is the capability for sending emails, otherwise users won't be able to register.
 
 We'll configure here a Gmail account, which is suitable for small organizations in order to get started. Configure any other SMTP provider is analogous.
@@ -463,25 +466,31 @@ nano ~/decidim-app/config/application.yml
 And place these new extra lines at the bottom of the file:
 
 ```yaml
-GEOCODER_LOOKUP_APP_ID: <your-App-ID>
-GEOCODER_LOOKUP_APP_CODE: <your-App-Code>
+GEOCODER_LOOKUP_API_KEY: <your-App-Code>
 ```
+
+Also, ensure that the file `~/decidim-app/config/secrets.yml` has the appropiate variables configured, it should look like this:
+```yaml
+...
+  geocoder:
+    here_api_key: <%= ENV["GEOCODER_LOOKUP_API_KEY"] %>
+...
+```
+
 Either you use ENV variables or the `config/application.yml` file, you need to uncomment the following lines from the file `config/initializers/decidim.rb`:
 
 ```ruby
   # config.geocoder = {
-    #   static_map_url: "https://image.maps.cit.api.here.com/mia/1.6/mapview",
-  #   here_app_id: Rails.application.secrets.geocoder[:here_app_id],
-  #   here_app_code: Rails.application.secrets.geocoder[:here_app_code]
+  #  static_map_url: "https://image.maps.ls.hereapi.com/mia/1.6/mapview",
+  #  here_api_key: Rails.application.secrets.geocoder[:here_api_key]
   # }
 ```
 leave it like:
 
 ```ruby
   config.geocoder = {
-    static_map_url: "https://image.maps.cit.api.here.com/mia/1.6/mapview",
-    here_app_id: Rails.application.secrets.geocoder[:here_app_id],
-    here_app_code: Rails.application.secrets.geocoder[:here_app_code]
+    static_map_url: "https://image.maps.ls.hereapi.com/mia/1.6/mapview",
+    here_api_key: Rails.application.secrets.geocoder[:here_api_key]
   }
 ```
 > Create a commit and push to remote if you are using GIT.
@@ -491,3 +500,99 @@ Restart passenger (or deploy) and you're ready to use maps geolocation in Decidi
 ```bash
 sudo passenger-config restart-app ~/decidim-app
 ```
+
+CRON JOBS
+---------
+
+It is nice to have stats in your website, such as number of users, numbers of proposals, etc. Decidim has a system to generate various metrics to know the status of the platform at any specific day.
+
+These stats, however, should be generated in a specific job that must be run periodically in your server (once a day).
+
+Similarly, there are other processes that need background processing as well.
+
+In order to ensure our Decidim installation is fully working, we could use several options available to run cronjobs. We will use the gem [Whenever](https://github.com/javan/whenever) to take care of this (but there are several other methods available).
+
+After that you just need to edit the `Gemfile`, add this content:
+
+```bash
+nano ~/decidim-app/Gemfile
+```
+
+Add the line with `whenever`, such as:
+
+```ruby
+...
+gem "figaro"
+gem "whenever", require: false
+
+group :development, :test do
+...
+```
+
+Then run `bundle update` in the app's folder:
+
+```bash
+cd ~/decidim-app
+bundle update
+```
+
+Now, we need to create the cron schedule file that the gem will use to know when to run the background task. 
+Just create a new file in `config/schedule.rb` with this content:
+
+```bash
+nano ~/decidim-app/config/schedule.rb
+```
+
+```ruby
+env :PATH, ENV['PATH']
+
+every :sunday, at: '5:00 am' do
+  rake "decidim:delete_data_portability_files"
+end
+
+every :sunday, at: '4:00 am' do
+  rake "decidim:open_data:export"
+end
+
+every 1.day, at: '3:00 am' do
+  rake "decidim:metrics:all"
+end
+```
+
+
+Check if whenever is reading correctly everything correctly:
+
+```bash
+cd ~/decidim-app
+bundle exec whenever
+```
+
+It should show something like this:
+
+```
+PATH=/home/decidim/.rbenv/versions/2.6.3/lib/ruby/gems/2.6.0/bin:/home/decidim/.rbenv/versions/2.6.3/bin:/home/decidim/.rbenv/libexec:/home/decidim/.rbenv/plugins/ruby-build/bin:/home/decidim/.rbenv/plugins/rbenv-vars/bin:/home/decidim/.rbenv/shims:/home/decidim/.rbenv/bin:/home/decidim/.local/bin:/home/decidim/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+0 5 * * 0 /bin/bash -l -c 'cd /home/decidim/decidim-app && RAILS_ENV=production bundle exec rake decidim:delete_data_portability_files --silent'
+
+0 4 * * 0 /bin/bash -l -c 'cd /home/decidim/decidim-app && RAILS_ENV=production bundle exec rake decidim:open_data:export --silent'
+
+0 3 * * * /bin/bash -l -c 'cd /home/decidim/decidim-app && RAILS_ENV=production bundle exec rake decidim:metrics:all --silent'
+
+## [message] Above is your schedule file converted to cron syntax; your crontab file was not updated.
+## [message] Run `whenever --help' for more options.
+
+```
+
+Now, it is just a matter of adding it to the server's crontab, just execute:
+
+```
+bundle exec whenever --update-crontab
+```
+
+It is recommended to restart the server as well because we've modified the Gemfile:
+
+```bash
+sudo passenger-config restart-app ~/decidim-app
+```
+
+That will be all! Happy metrics!
