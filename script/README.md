@@ -19,7 +19,17 @@ Decidim installation script
 
 ### Demos:
 
+Running the script and the integrated help:
+
 [![asciicast](https://asciinema.org/a/X8A9sVj3gH9ZSqjQo2rBi58bn.svg)](https://asciinema.org/a/X8A9sVj3gH9ZSqjQo2rBi58bn)
+
+A long video of the whole process:
+
+[![asciicast](https://asciinema.org/a/341299.svg)](https://asciinema.org/a/341299)
+
+Final result in Vagrant:
+
+![System console](../assets/script/localhost.png)
 
 ### Usage
 
