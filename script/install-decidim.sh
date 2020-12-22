@@ -137,9 +137,9 @@ step_check() {
 
 step_prepare() {
 	green "Updating system"
-	sudo apt update
-	sudo apt -y upgrade
-	sudo apt -y autoremove
+	sudo apt-get update
+	sudo apt-get -y upgrade
+	sudo apt-get -y autoremove
 	green "Configuring timezone"
 	sudo dpkg-reconfigure tzdata
 	green "Installing necessary software"
@@ -243,7 +243,7 @@ step_rbenv() {
 step_gems() {
 	info "Installing generator dependencies"
 
-	sudo apt install -y nodejs imagemagick libpq-dev libicu-dev
+	sudo apt-get install -y nodejs imagemagick libpq-dev libicu-dev
 	init_rbenv
 
 	info "Installing bundler"
@@ -435,9 +435,9 @@ EOL
 
 
 	if grep -Fq '# config.force_ssl = true' ./config/initializers/decidim.rb ; then
-		red "\nDisabling SSL by default!!!"
-		yellow "NOTE: you should configure SSL in Nginx and then reenable 'config.force_ssl = true' in the file 'config/initializers/decidim.rb' again"
-		echo "You may follow this instructions for that: https://certbot.eff.org/lets-encrypt/snap-nginx"
+		red "Disabling SSL by default!!!"
+		red "NOTE: you should configure SSL in Nginx and then reenable 'config.force_ssl = true' in the file 'config/initializers/decidim.rb' again"
+		yellow "You may follow this instructions for that: https://certbot.eff.org/lets-encrypt/snap-nginx"
 		sed -i 's/# config.force_ssl = true/config.force_ssl = false/' ./config/initializers/decidim.rb
 	fi
 }
@@ -446,7 +446,7 @@ get_conf_vars() {
 	cd_folder
 	init_rbenv
 
-	CONF_DATABASE=$(awk '/DATABASE_URL\:/{print $2}' config/application.yml)
+	CONF_DATABASE=$(awk '/DATABASE_URL:/{print $2}' config/application.yml)
 	re="postgres\:\/\/(.+):(.+)@(.+)/(.+)"
 	if [[ "$CONF_DATABASE" =~ $re ]]; then
 		CONF_DB_USER="${BASH_REMATCH[1]}";
@@ -477,7 +477,9 @@ step_postgres() {
 	get_conf_vars
 
 	green "Installing PostgreSQL"
-	sudo apt -y install postgresql
+	sudo apt-get -y install postgresql
+	echo "Starting PostgreSQL"
+	sudo systemctl start postgresql.service
 
 	if sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$CONF_DB_USER'" | grep -q 1 ; then
 		yellow "User $CONF_DB_USER already exists in postgresql"
@@ -534,7 +536,7 @@ step_servers(){
 	init_rbenv
 
 	green "Installing Nginx"
-	sudo apt -y install nginx
+	sudo apt-get -y install nginx
 
 	if [ -f /etc/apt/sources.list.d/passenger.list ]; then
 		yellow "Passenger repositories already installed"
