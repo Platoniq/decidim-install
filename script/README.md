@@ -65,7 +65,7 @@ Port 80 is forwarded to 8080, you should be able to reach Nginx's Vagrant at htt
 The script generates automatically the first user for `/system`, it asks for the email and password. You can choose to specify user and password directly in arguments if you want:
 
 ```
-./install-decidim.sh -u some@email.com -p some-password
+./install-decidim.sh my-decidim -u some@email.com -p some-password
 ```
 
 If some step fails, it can be repeated specifically with the `-o` option:

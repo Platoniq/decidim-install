@@ -16,10 +16,10 @@
 #
 
 echo -e "***********************************************************************"
-echo -e "* \e[31mWARNING:\e[0m                                                 *"
+echo -e "* \e[31mWARNING:\e[0m                                                            *"
 echo -e "* This program will try to install automatically Decidim and all      *"
-echo -e "* related software. This includes Nginx, Passenger, Ruby and others.   *"
-echo -e "* \e[33mUSE IT ONLY IN A FRESHLY INSTALLED UBUNTU 18.04 SYSTEM\e[0m   *"
+echo -e "* related software. This includes Nginx, Passenger, Ruby and others.  *"
+echo -e "* \e[33mUSE IT ONLY IN A FRESHLY INSTALLED UBUNTU 18.04 or 20.04 SYSTEM\e[0m         *"
 echo -e "* No guarantee whatsoever that it won't break your system!            *"
 echo -e "*                                                                     *"
 echo -e "* (c) Ivan Vergés <ivan (at) platoniq.net>                            *"

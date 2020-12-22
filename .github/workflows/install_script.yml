@@ -14,8 +14,10 @@ jobs:
       - uses: actions/checkout@v2.0.0
         with:
           fetch-depth: 1
+      - name: Preparation
+        run: whereis realpath; echo $PATH
       - name: install
         run: |
-          ./script/install-decidim.sh -u admin@example.org -p decidim123456
+          ./script/install-decidim.sh -u admin@example.org -p decidim123456 -f test
       - name: curl check
         run: curl -Is http://localhost/ | head -1
