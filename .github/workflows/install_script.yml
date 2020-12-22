@@ -18,6 +18,6 @@ jobs:
         run: whereis realpath; echo $PATH
       - name: install
         run: |
-          ./script/install-decidim.sh -u admin@example.org -p decidim123456 -f test
+          ./script/install-decidim.sh -u admin@example.org -p decidim123456 -f decidim-app
       - name: curl check
         run: curl -Is http://localhost/system/admins/sign_in | head -1
