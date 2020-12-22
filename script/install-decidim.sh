@@ -16,10 +16,10 @@
 #
 
 echo -e "***********************************************************************"
-echo -e "* \e[31mWARNING:\e[0m                                                 *"
+echo -e "* \e[31mWARNING:\e[0m                                                            *"
 echo -e "* This program will try to install automatically Decidim and all      *"
-echo -e "* related software. This includes Nginx, Passenger, Ruby and others.   *"
-echo -e "* \e[33mUSE IT ONLY IN A FRESHLY INSTALLED UBUNTU 18.04 SYSTEM\e[0m   *"
+echo -e "* related software. This includes Nginx, Passenger, Ruby and others.  *"
+echo -e "* \e[33mUSE IT ONLY IN A FRESHLY INSTALLED UBUNTU 18.04 or 20.04 SYSTEM\e[0m         *"
 echo -e "* No guarantee whatsoever that it won't break your system!            *"
 echo -e "*                                                                     *"
 echo -e "* (c) Ivan Vergés <ivan (at) platoniq.net>                            *"
@@ -31,7 +31,7 @@ echo -e "***********************************************************************
 # Config vars & default values (use -h to view options)
 ########################################################
 
-RUBY_VERSION="2.6.6"
+RUBY_VERSION="2.7.2"
 VERBOSE=
 CONFIRM=1
 STEPS=("check" "prepare" "rbenv" "gems" "decidim" "postgres" "create" "servers")
@@ -126,8 +126,9 @@ step_check() {
 		cat /etc/os-release
 		exit 1
 	fi
-	if [ $(awk -F= '/^VERSION_ID=/{print $2}' /etc/os-release) != '"18.04"' ]; then
-		red "Not ubuntu 18.04!"
+	version=$(awk -F= '/^VERSION_ID=/{print $2}' /etc/os-release)
+	if [ "$version" != '"18.04"' ] && [ "$version" != '"20.04"' ]; then
+		red "Only Ubuntu 18.04 or 20.04 are supported!"
 		awk -F= '/^VERSION_ID=/{print $2}' /etc/os-release
 		exit 1
 	fi
@@ -136,9 +137,9 @@ step_check() {
 
 step_prepare() {
 	green "Updating system"
-	sudo apt update
-	sudo apt -y upgrade
-	sudo apt -y autoremove
+	sudo apt-get update
+	sudo apt-get -y upgrade
+	sudo apt-get -y autoremove
 	green "Configuring timezone"
 	sudo dpkg-reconfigure tzdata
 	green "Installing necessary software"
@@ -242,7 +243,7 @@ step_rbenv() {
 step_gems() {
 	info "Installing generator dependencies"
 
-	sudo apt install -y nodejs imagemagick libpq-dev libicu-dev
+	sudo apt-get install -y nodejs imagemagick libpq-dev libicu-dev
 	init_rbenv
 
 	info "Installing bundler"
@@ -255,7 +256,7 @@ step_gems() {
 	fi
 
 	info "Installing bundler"
-	gem install bundler
+	gem install bundler --version 2.1.4
 	gem update --system
 
 	if [[ $(gem env home) == *".rbenv/versions/$RUBY_VERSION/lib/ruby/gems/"* ]]; then
@@ -297,7 +298,7 @@ step_decidim() {
 	if [ -d "$INSTALL_FOLDER" ]; then
 		yellow "$INSTALL_FOLDER already exists, trying to install gems anyway"
 	else
-		gem install bundler:1.17.3
+		gem install bundler
 		decidim "$INSTALL_FOLDER"
 	fi
 
@@ -391,7 +392,7 @@ step_decidim() {
 	if [ -f "./config/schedule.rb" ]; then
 		yellow "config/schedule.rb already present"
 	else
-	  cat > config/schedule.rb <<EOL
+	  cat > ./config/schedule.rb <<EOL
 env :PATH, ENV['PATH']
 
 every :sunday, at: '5:00 am' do
@@ -431,13 +432,21 @@ EOL
 	if ! grep -Fq 'DATABASE_URL:' ./config/application.yml ; then
 		echo "DATABASE_URL: postgres://$CONF_DB_USER:$CONF_DB_PASS@$CONF_DB_HOST/$CONF_DB_NAME" >> ./config/application.yml
 	fi
+
+
+	if grep -Fq '# config.force_ssl = true' ./config/initializers/decidim.rb ; then
+		red "Disabling SSL by default!!!"
+		red "NOTE: you should configure SSL in Nginx and then reenable 'config.force_ssl = true' in the file 'config/initializers/decidim.rb' again"
+		yellow "You may follow this instructions for that: https://certbot.eff.org/lets-encrypt/snap-nginx"
+		sed -i 's/# config.force_ssl = true/config.force_ssl = false/' ./config/initializers/decidim.rb
+	fi
 }
 
 get_conf_vars() {
 	cd_folder
 	init_rbenv
 
-	CONF_DATABASE=$(awk '/DATABASE_URL\:/{print $2}' config/application.yml)
+	CONF_DATABASE=$(awk '/DATABASE_URL:/{print $2}' config/application.yml)
 	re="postgres\:\/\/(.+):(.+)@(.+)/(.+)"
 	if [[ "$CONF_DATABASE" =~ $re ]]; then
 		CONF_DB_USER="${BASH_REMATCH[1]}";
@@ -468,7 +477,9 @@ step_postgres() {
 	get_conf_vars
 
 	green "Installing PostgreSQL"
-	sudo apt -y install postgresql
+	sudo apt-get -y install postgresql
+	echo "Starting PostgreSQL"
+	sudo systemctl start postgresql.service
 
 	if sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$CONF_DB_USER'" | grep -q 1 ; then
 		yellow "User $CONF_DB_USER already exists in postgresql"
@@ -525,7 +536,7 @@ step_servers(){
 	init_rbenv
 
 	green "Installing Nginx"
-	sudo apt -y install nginx
+	sudo apt-get -y install nginx
 
 	if [ -f /etc/apt/sources.list.d/passenger.list ]; then
 		yellow "Passenger repositories already installed"
@@ -534,7 +545,7 @@ step_servers(){
 		sudo apt-get install -y dirmngr gnupg
 		sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
 		sudo apt-get install -y apt-transport-https ca-certificates
-		sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger bionic main > /etc/apt/sources.list.d/passenger.list'
+		sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger $(lsb_release -cs) main > /etc/apt/sources.list.d/passenger.list'
 		sudo apt-get update
 	fi
 
