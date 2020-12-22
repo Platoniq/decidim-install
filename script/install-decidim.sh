@@ -392,7 +392,7 @@ step_decidim() {
 	if [ -f "./config/schedule.rb" ]; then
 		yellow "config/schedule.rb already present"
 	else
-	  cat > config/schedule.rb <<EOL
+	  cat > ./config/schedule.rb <<EOL
 env :PATH, ENV['PATH']
 
 every :sunday, at: '5:00 am' do
