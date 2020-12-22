@@ -1,6 +1,8 @@
 Decidim installation script
 ===========================
 
+![[CI] Install Script](https://github.com/Platoniq/decidim-install/workflows/%5BCI%5D%20Install%20Script/badge.svg)
+
 `install-decidim.sh` is a script that automates all the steps described in this guide.
 
 - It is indented to be idempotent, meaning that it can be run safely many times in case of failure.
