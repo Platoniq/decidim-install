@@ -1,0 +1,21 @@
+name: "[CI] Install Script"
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  script:
+    name: Script
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2.0.0
+        with:
+          fetch-depth: 1
+      - name: install
+        run: |
+          ./script/install-decidim.sh -u admin@example.org -p decidim123456
+      - name: curl check
+        run: curl -Is http://localhost/ | head -1

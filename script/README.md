@@ -13,7 +13,7 @@ Decidim installation script
 
 ### DISCLAIMER
 
-- It should be used only in a clean install using Ubuntu 18.04
+- It should be used only in a clean install using Ubuntu 18.04 or 20.04 only
 - It comes WITHOUT ANY WARRANTY.
 - Run it under your own responsibility.
 

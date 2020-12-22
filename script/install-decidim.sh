@@ -31,7 +31,7 @@ echo -e "***********************************************************************
 # Config vars & default values (use -h to view options)
 ########################################################
 
-RUBY_VERSION="2.6.6"
+RUBY_VERSION="2.7.2"
 VERBOSE=
 CONFIRM=1
 STEPS=("check" "prepare" "rbenv" "gems" "decidim" "postgres" "create" "servers")
@@ -126,8 +126,9 @@ step_check() {
 		cat /etc/os-release
 		exit 1
 	fi
-	if [ $(awk -F= '/^VERSION_ID=/{print $2}' /etc/os-release) != '"18.04"' ]; then
-		red "Not ubuntu 18.04!"
+	version=$(awk -F= '/^VERSION_ID=/{print $2}' /etc/os-release)
+	if [ "$version" != '"18.04"' ] && [ "$version" != '"20.04"' ]; then
+		red "Only Ubuntu 18.04 or 20.04 are supported!"
 		awk -F= '/^VERSION_ID=/{print $2}' /etc/os-release
 		exit 1
 	fi
@@ -255,7 +256,7 @@ step_gems() {
 	fi
 
 	info "Installing bundler"
-	gem install bundler
+	gem install bundler --version 2.1.4
 	gem update --system
 
 	if [[ $(gem env home) == *".rbenv/versions/$RUBY_VERSION/lib/ruby/gems/"* ]]; then
@@ -297,7 +298,7 @@ step_decidim() {
 	if [ -d "$INSTALL_FOLDER" ]; then
 		yellow "$INSTALL_FOLDER already exists, trying to install gems anyway"
 	else
-		gem install bundler:1.17.3
+		gem install bundler
 		decidim "$INSTALL_FOLDER"
 	fi
 
@@ -430,6 +431,14 @@ EOL
 
 	if ! grep -Fq 'DATABASE_URL:' ./config/application.yml ; then
 		echo "DATABASE_URL: postgres://$CONF_DB_USER:$CONF_DB_PASS@$CONF_DB_HOST/$CONF_DB_NAME" >> ./config/application.yml
+	fi
+
+
+	if grep -Fq '# config.force_ssl = true' ./config/initializers/decidim.rb ; then
+		red "\nDisabling SSL by default!!!"
+		yellow "NOTE: you should configure SSL in Nginx and then reenable 'config.force_ssl = true' in the file 'config/initializers/decidim.rb' again"
+		echo "You may follow this instructions for that: https://certbot.eff.org/lets-encrypt/snap-nginx"
+		sed -i 's/# config.force_ssl = true/config.force_ssl = false/' ./config/initializers/decidim.rb
 	fi
 }
 
