@@ -33,6 +33,7 @@ echo -e "***********************************************************************
 
 RUBY_VERSION="2.7.2"
 DECIDIM_VERSION="0.23.1"
+BUNDLER_VERSION="2.1.4"
 VERBOSE=
 CONFIRM=1
 STEPS=("check" "prepare" "rbenv" "gems" "decidim" "postgres" "create" "servers")
@@ -257,8 +258,7 @@ step_gems() {
 	fi
 
 	info "Installing bundler"
-	gem install bundler --version 2.1.4
-	gem update --system
+	gem install bundler --version $BUNDLER_VERSION
 
 	if [[ $(gem env home) == *".rbenv/versions/$RUBY_VERSION/lib/ruby/gems/"* ]]; then
 		green "Gems environment installed successfully"
@@ -299,7 +299,7 @@ step_decidim() {
 	if [ -d "$INSTALL_FOLDER" ]; then
 		yellow "$INSTALL_FOLDER already exists, trying to install gems anyway"
 	else
-		gem install bundler
+		gem install bundler --version $BUNDLER_VERSION
 		decidim "$INSTALL_FOLDER"
 	fi
 
