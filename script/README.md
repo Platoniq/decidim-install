@@ -39,11 +39,13 @@ Copy the script somewhere and run it:
 
 ```
 wget -O install-decidim.sh https://raw.githubusercontent.com/Platoniq/decidim-install/master/script/install-decidim.sh
-chmod +x decidim-install.sh
+chmod +x install-decidim.sh
 ./install-decidim.sh -h
 ```
 
 `-h` will list all available options.
+
+> Note: be sure to have git installed: `apt install git`
 
 To perform all the steps just run with the name of the directory where to install it as the argument (use any name you want for the name where Decidim will be installed):
 
