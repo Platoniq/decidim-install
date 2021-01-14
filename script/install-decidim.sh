@@ -32,6 +32,7 @@ echo -e "***********************************************************************
 ########################################################
 
 RUBY_VERSION="2.7.2"
+DECIDIM_VERSION="0.23.1"
 VERBOSE=
 CONFIRM=1
 STEPS=("check" "prepare" "rbenv" "gems" "decidim" "postgres" "create" "servers")
@@ -266,7 +267,7 @@ step_gems() {
 		exit 1
 	fi
 	info "Installing Decidim gem"
-	gem install decidim
+	gem install decidim -v $DECIDIM_VERSION
 }
 
 FOLDER=
