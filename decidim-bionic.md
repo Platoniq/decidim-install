@@ -234,7 +234,6 @@ Add at the end of the `Gemfile`:
 
 ```ruby
 group :production do
-  gem "passenger"
   gem 'delayed_job_active_record'
   gem "daemons"
 end
