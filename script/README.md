@@ -142,7 +142,7 @@ Where the content in the folder `shared` will be symlink to their corresponding 
 
 Also the Gemfile will incorporate the necessary gems related to Capistrano in the development section.
 
-With these initial configuration, to [configure a Capistrano deployment](advanced-deploy.md) should be a breeze. Good luck!
+With these initial configuration, to [configure a Capistrano deployment](../advanced-deploy.md) should be a breeze. Good luck!
 
 ## Non-production environments
 
