@@ -284,7 +284,7 @@ step_gems() {
 	# Therefore, if rails 6.1 is installed it will fail
 	set +e
 	gem list -e rails --versions | grep 6.1 -q
-	if [ "$?" -ne 0  ]; then
+	if [ "$?" -eq 0  ]; then
 		red "Rails 6.1 is installed. Please uninstall this version before using this script"
 		gem list -e rails
 		exit 1
