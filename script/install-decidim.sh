@@ -257,6 +257,8 @@ step_gems() {
 
 	info "Installing generator dependencies"
 	sudo apt-get install -y nodejs imagemagick libpq-dev libicu-dev
+	whereis node
+	node --version
 	init_rbenv
 
 	info "Installing bundler"
