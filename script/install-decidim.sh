@@ -31,9 +31,9 @@ echo -e "***********************************************************************
 # Config vars & default values (use -h to view options)
 ########################################################
 
-RUBY_VERSION="2.7.2"
-DECIDIM_VERSION="0.23.1"
-BUNDLER_VERSION="2.1.4"
+RUBY_VERSION="2.7.4"
+DECIDIM_VERSION="0.25"
+BUNDLER_VERSION="2.2.18"
 VERBOSE=
 CONFIRM=1
 STEPS=("check" "prepare" "rbenv" "gems" "decidim" "postgres" "create" "servers")
