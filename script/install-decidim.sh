@@ -250,10 +250,10 @@ step_gems() {
 	sudo apt update
 	sudo apt install --no-install-recommends yarn
 
-	info "installing Node 14"
-	curl -sL https://deb.nodesource.com/setup_14.x -o setup_14.sh
-	chmod +x setup_14.sh
-	sudo ./setup_14.sh
+	info "installing Node 16"
+	curl -sL https://deb.nodesource.com/setup_16.x -o setup_16.sh
+	chmod +x setup_16.sh
+	sudo ./setup_16.sh
 
 	info "Installing generator dependencies"
 	sudo apt-get install -y nodejs imagemagick libpq-dev libicu-dev
@@ -522,6 +522,10 @@ step_create(){
 
 	bin/rails db:create RAILS_ENV=$ENVIRONMENT
 	bin/rails db:migrate RAILS_ENV=$ENVIRONMENT
+
+	info "Ensure yarn is working"
+	yarn add rails-ujs
+	yarn install
 
 	if [ "production" == "$ENVIRONMENT" ]; then
 		green "Asset compiling in production mode"
