@@ -527,6 +527,21 @@ step_create(){
 	yarn add rails-ujs
 	yarn install
 
+	info "Fixing config/application.rb"
+	yellow "This shouldn't be necessary but there's a bug in 0.25 version https://github.com/decidim/decidim/issues/8395"
+	if grep -Fq 'action_cable/engine' ./config/application.rb ; then
+		yellow "require action_cable already done"
+	else
+		green "adding require action_cable"
+		sed -i 's/require "decidim\/rails"/require "decidim\/rails"\nrequire "action_cable\/engine"/' config/application.rb
+	fi
+	if grep -Fq 'Rails.autoloaders' ./config/application.rb ; then
+		yellow "Autoloaders ignore already done"
+	else
+		green "adding autoloaders ignore"
+		echo 'Rails.autoloaders.main.ignore(Gem::Specification.find_by_name("decidim-core").gem_dir + "/app/packs")' >> config/application.rb
+	fi
+
 	if [ "production" == "$ENVIRONMENT" ]; then
 		green "Asset compiling in production mode"
 		bin/rails assets:precompile RAILS_ENV=$ENVIRONMENT
