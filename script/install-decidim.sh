@@ -282,14 +282,14 @@ step_gems() {
 
 	# Version 0.25 has a bug and do not limit the version o rails to 6.0 in the generator
 	# Therefore, if rails 6.1 is installed it will fail
-	trap - EXIT
+	set +e
 	gem list -e rails --versions | grep 6.1 -q
 	if [ "$?" -ne 0  ]; then
 		red "Rails 6.1 is installed. Please uninstall this version before using this script"
 		gem list -e rails
 		exit 1
 	fi
-	trap cleanup EXIT
+	set -e
 
 	info "Installing Decidim gem"
 	gem install decidim -v $DECIDIM_VERSION
