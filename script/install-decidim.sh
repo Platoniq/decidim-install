@@ -31,9 +31,10 @@ echo -e "***********************************************************************
 # Config vars & default values (use -h to view options)
 ########################################################
 
-RUBY_VERSION="2.7.2"
-DECIDIM_VERSION="0.23.1"
-BUNDLER_VERSION="2.1.4"
+RUBY_VERSION="2.7.4"
+DECIDIM_VERSION="0.25"
+BUNDLER_VERSION="2.2.18"
+RAILS_VERSION="6.0.4"
 VERBOSE=
 CONFIRM=1
 STEPS=("check" "prepare" "rbenv" "gems" "decidim" "postgres" "create" "servers")
@@ -243,9 +244,21 @@ step_rbenv() {
 }
 
 step_gems() {
-	info "Installing generator dependencies"
+	info "installing Yarn"
+	curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+	echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+	sudo apt update
+	sudo apt install --no-install-recommends yarn
 
+	info "installing Node 16"
+	curl -sL https://deb.nodesource.com/setup_16.x -o setup_16.sh
+	chmod +x setup_16.sh
+	sudo ./setup_16.sh
+
+	info "Installing generator dependencies"
 	sudo apt-get install -y nodejs imagemagick libpq-dev libicu-dev
+	whereis node
+	node --version
 	init_rbenv
 
 	info "Installing bundler"
@@ -266,6 +279,20 @@ step_gems() {
 		red "gem home failed! $(gem env home)!"
 		exit 1
 	fi
+	info "Installing Rails, version $RAILS_VERSION"
+	gem install rails --version $RAILS_VERSION
+
+	# Version 0.25 has a bug and do not limit the version o rails to 6.0 in the generator
+	# Therefore, if rails 6.1 is installed it will fail
+	set +e
+	gem list -e rails --versions | grep 6.1 -q
+	if [ "$?" -eq 0  ]; then
+		red "Rails 6.1 is installed. Please uninstall this version before using this script"
+		gem list -e rails
+		exit 1
+	fi
+	set -e
+
 	info "Installing Decidim gem"
 	gem install decidim -v $DECIDIM_VERSION
 }
@@ -299,8 +326,8 @@ step_decidim() {
 	if [ -d "$INSTALL_FOLDER" ]; then
 		yellow "$INSTALL_FOLDER already exists, trying to install gems anyway"
 	else
-		gem install bundler --version $BUNDLER_VERSION
 		decidim "$INSTALL_FOLDER"
+		sed -i 's/    config.load_defaults 6.1/    config.load_defaults 6.0/' $INSTALL_FOLDER/config/application.rb
 	fi
 
 	if [ ! -z "$CAPISTRANO" ]; then
@@ -497,6 +524,25 @@ step_create(){
 
 	bin/rails db:create RAILS_ENV=$ENVIRONMENT
 	bin/rails db:migrate RAILS_ENV=$ENVIRONMENT
+
+	info "Ensure yarn is working"
+	yarn add rails-ujs
+	yarn install
+
+	info "Fixing config/application.rb"
+	yellow "This shouldn't be necessary but there's a bug in 0.25 version https://github.com/decidim/decidim/issues/8395"
+	if grep -Fq 'action_cable/engine' ./config/application.rb ; then
+		yellow "require action_cable already done"
+	else
+		green "adding require action_cable"
+		sed -i 's/require "decidim\/rails"/require "decidim\/rails"\nrequire "action_cable\/engine"/' config/application.rb
+	fi
+	if grep -Fq 'Rails.autoloaders' ./config/application.rb ; then
+		yellow "Autoloaders ignore already done"
+	else
+		green "adding autoloaders ignore"
+		echo 'Rails.autoloaders.main.ignore(Gem::Specification.find_by_name("decidim-core").gem_dir + "/app/packs")' >> config/application.rb
+	fi
 
 	if [ "production" == "$ENVIRONMENT" ]; then
 		green "Asset compiling in production mode"
