@@ -32,10 +32,10 @@ echo -e "***********************************************************************
 ########################################################
 
 RUBY_VERSION="2.7.4"
-DECIDIM_VERSION="0.25"
-BUNDLER_VERSION="2.2.18"
-RAILS_VERSION="6.0.4"
-VERBOSE=
+DECIDIM_VERSION="0.25.1"
+# BUNDLER_VERSION="2.2.18"
+# RAILS_VERSION="6.0.4"
+# VERBOSE=
 CONFIRM=1
 STEPS=("check" "prepare" "rbenv" "gems" "decidim" "postgres" "create" "servers")
 # default environment to be configured
@@ -279,8 +279,8 @@ step_gems() {
 		red "gem home failed! $(gem env home)!"
 		exit 1
 	fi
-	info "Installing Rails, version $RAILS_VERSION"
-	gem install rails --version $RAILS_VERSION
+	# info "Installing Rails, version $RAILS_VERSION"
+	# gem install rails --version $RAILS_VERSION
 
 	# Version 0.25 has a bug and do not limit the version o rails to 6.0 in the generator
 	# Therefore, if rails 6.1 is installed it will fail
@@ -327,7 +327,7 @@ step_decidim() {
 		yellow "$INSTALL_FOLDER already exists, trying to install gems anyway"
 	else
 		decidim "$INSTALL_FOLDER"
-		sed -i 's/    config.load_defaults 6.1/    config.load_defaults 6.0/' $INSTALL_FOLDER/config/application.rb
+		# sed -i 's/    config.load_defaults 6.1/    config.load_defaults 6.0/' $INSTALL_FOLDER/config/application.rb
 	fi
 
 	if [ ! -z "$CAPISTRANO" ]; then
