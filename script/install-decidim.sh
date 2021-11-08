@@ -33,7 +33,7 @@ echo -e "***********************************************************************
 
 RUBY_VERSION="2.7.4"
 DECIDIM_VERSION="0.25.1"
-# BUNDLER_VERSION="2.2.18"
+BUNDLER_VERSION="2.2.18"
 # RAILS_VERSION="6.0.4"
 # VERBOSE=
 CONFIRM=1
