@@ -32,7 +32,7 @@ echo -e "***********************************************************************
 ########################################################
 
 RUBY_VERSION="2.7.4"
-DECIDIM_VERSION="0.25"
+DECIDIM_VERSION="0.26"
 BUNDLER_VERSION="2.2.18"
 RAILS_VERSION="6.0.4"
 VERBOSE=
@@ -282,7 +282,7 @@ step_gems() {
 	info "Installing Rails, version $RAILS_VERSION"
 	gem install rails --version $RAILS_VERSION
 
-	# Version 0.25 has a bug and do not limit the version o rails to 6.0 in the generator
+	# Version 0.25 had a bug and do not limit the version o rails to 6.0 in the generator
 	# Therefore, if rails 6.1 is installed it will fail
 	set +e
 	gem list -e rails --versions | grep 6.1 -q
@@ -530,7 +530,7 @@ step_create(){
 	yarn install
 
 	info "Fixing config/application.rb"
-	yellow "This shouldn't be necessary but there's a bug in 0.25 version https://github.com/decidim/decidim/issues/8395"
+	yellow "This shouldn't be necessary but there was a bug in 0.25 version https://github.com/decidim/decidim/issues/8395"
 	if grep -Fq 'action_cable/engine' ./config/application.rb ; then
 		yellow "require action_cable already done"
 	else
