@@ -5,7 +5,7 @@ Decidim installation script
 
 `install-decidim.sh` is a script that automates all the steps described in this guide.
 
-- It is indented to be idempotent, meaning that it can be run safely many times in case of failure.
+- It is intended to be idempotent, meaning that it can be run safely many times in case of failure.
 - It installs Decidim up to the point that it is up and running as a website. It does not configure extra services (such as SMTP or Geolocation). 
 - It does not configure SSL.
 - It does not configure any firewall (ie `ufw`)
