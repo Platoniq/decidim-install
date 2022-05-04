@@ -245,13 +245,17 @@ You can follow [this guide from DigitalOcean](https://www.digitalocean.com/commu
 
 We are going to use the official Certbot from the [Let's Encrypt](https://letsencrypt.org/) project.
 
-First, we install the latests version with these commands:
+First, we install the latests version with these commands for Ubuntu 18.04:
 
 ```bash
 sudo add-apt-repository -y ppa:certbot/certbot
 sudo apt install -y python-certbot-nginx
 ```
+or on Ubuntu 20.04
 
+```bash
+sudo apt install -y python3-certbot-nginx
+```
 The original guide has now some step to check our domain name and our firewall configuration, if you've followed the [previous tutorial](decidim-bionic.md) we have this already covered.
 
 So, let's run the certbot script (change `my-decidim.org` with your own full URL):
