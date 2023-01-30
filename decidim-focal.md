@@ -392,6 +392,9 @@ Write `quit` or press *CTRL+D* to exit the rails console.
 
 If everything went fine, a very basic Decidim installation is ready to be shown to the world. We only are one step away from the glory, that is to configure an http web server to proxy our ruby application and handle the user petitions.
 
+> note that if you are going to serve Decidim behind a reverse-proxy, you'll need to disable the `config.force_ssl` option (or else you'll get a redirect error when accessing your site.
+> edit `config/environments/production.rb` and `config/initializers/decidim.rb` and change the setting to `config.force_ssl = false`
+
 ## 4. Installing Nginx
 
 As a web server we will use Nginx. To install Nginx execute the next commands (the first installs nginx, the others enables the public ports in the firewall, otherwise our webserver won't be accessible):
@@ -416,6 +419,8 @@ sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger foc
 sudo apt update
 sudo apt install -y libnginx-mod-http-passenger
 ```
+
+> if you get an error when starting Passenger (you can check the `/var/log/nginx/error.log`) you may need to manually add the run directory for Passenger: `mkdir /var/run/passenger-instreg`
 
 Next is to activate passenger, execute this (it's one line):
 
