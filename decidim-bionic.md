@@ -197,7 +197,14 @@ Now, run the generator to create our app:
 decidim decidim-app
 ```
 
-At this point, we have created a new folder in `~/decidim-app` with our code. We need to setup the database now.
+At this point, we have created a new folder in `~/decidim-app` with our code. 
+
+If you'd like to change the default Decidim locale, edit the relevant lines in `decidim.rb` file:
+
+```bash
+nano decidim-app/config/initializers/decidim.rb
+```
+We need to setup the database now.
 
 To do that, first we create the user and password in the database:
 
